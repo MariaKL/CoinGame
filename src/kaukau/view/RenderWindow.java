@@ -3,9 +3,13 @@ package kaukau.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -17,6 +21,9 @@ import javax.swing.JPanel;
  *
  */
 public class RenderWindow extends JPanel {
+	
+	// path to the images folder
+	private static final String IMAGE_PATH = "images/";
 	
 	/* Field to store 2D array representation of the game level data.	
 	 * 	KEY:
@@ -35,17 +42,18 @@ public class RenderWindow extends JPanel {
 		                                     {6,1,1,1,1,5}}; 
 	
 	// Field to store the board margin in pixels
-	private static final int MARGIN = 22;
+	private static final int MARGIN = 275;
 	
 	// Fields to store the tile width & height in pixels
-	private static final int tileWidth = 65;
-	private static final int tileHeight = 65;
+	private static final int tileWidth = 50;
+	private static final int tileHeight = 50;
 	
 	// Field to store all the tiles in the current level
 	List<Tile> allTiles = new ArrayList<Tile>();
 	
 	public RenderWindow(){
 		//Setting a border
+		// FIXME: Stop border resizing with window
 		setBorder(BorderFactory.createCompoundBorder(
 						      BorderFactory.createEmptyBorder(16, 16, 16, 16),
 						      BorderFactory.createLineBorder(Color.BLACK, 2)
@@ -72,23 +80,23 @@ public class RenderWindow extends JPanel {
 				int tileType = levelData[i][j];
 				
 				// creating and adding the tile to the current level board
-				placeTile(tileType, x, y);
+				placeTile(tileType, twoDToIso(new Point(x, y)));
 			}
 		}	
 	}
 	
 	/**This method creates and adds a tile to a list
-	 *  of tiles which make up the current game level
+	 *  of all tiles which make up the current game level
 	 * 
 	 * @param tileType
-	 * @param x position
-	 * @param y position
+	 * @param tile position point
 	 */
-	private void placeTile(int tileType, int x, int y) {
+	private void placeTile(int tileType, Point pt) {
 		// Creating a new tiles
-		Tile t = new Tile(tileType, x, y);
+		Tile t = new Tile(tileType, pt.x, pt.y);
 		// Adding the tile to the current level
 		allTiles.add(t);
+		
 	}
 	
 	/**This method is used to convert from the 2D coordinate 
@@ -97,7 +105,7 @@ public class RenderWindow extends JPanel {
 	 * @param 2D coordinate point
 	 * @return isometric coordinate point
 	 */
-	private Point twoDtoISO (Point pt){
+	private Point twoDToIso (Point pt){
 		Point result = new Point(0,0);
 		result.x = pt.x - pt.y;
 		result.y = (pt.x + pt.y) / 2;
@@ -120,15 +128,17 @@ public class RenderWindow extends JPanel {
 	@Override
 	 public void paintComponent(Graphics g) {
 	     super.paintComponent(g);
-	
-	     // Drawing all level tiles onto the rendering panel
-	     for(Tile t: allTiles){
-	    	 if(t.getTileType() == 0){
-	    		 g.setColor(Color.GREEN);
-	    	 } else {
-	    		 g.setColor(Color.RED);
-	    	 }
-	    	 g.fillRect(t.X() + MARGIN, t.Y() + MARGIN, tileWidth, tileHeight);
-	     }
+	     
+	     try {
+			BufferedImage image = ImageIO.read(new File(IMAGE_PATH + "grass-tile.png"));
+			 // Drawing all level tiles onto the rendering panel
+		     for(Tile t: allTiles){
+		    	 if(image != null){
+		    		 g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/3), this);
+		    	 }
+		     }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}   
 	 }
 }

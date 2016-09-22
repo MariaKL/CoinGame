@@ -19,6 +19,6 @@ public class Tile {
 	 */
 	public int getTileType() { return tileType;	}
 	public int X() { return x; }
-	public int Y() {	return y; }
+	public int Y() { return y; }
 
 }
