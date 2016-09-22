@@ -25,6 +25,9 @@ public class ApplicationWindow extends JFrame {
 	
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
+	
+	// Field to store the rendering window for the game
+	RenderWindow rw = new RenderWindow();
 
 	public ApplicationWindow(){
 		super("Kaukau");
@@ -32,10 +35,13 @@ public class ApplicationWindow extends JFrame {
 		// creating a menu
 		initMenu();
 		
+		// adding the rendering window to the application
+		add(rw);
+		
 		// setting title
 		setTitle("Kaukau");
 		// set size
-		setSize(400, 400);
+		setSize(450, 495);
 		// set display location
 		setLocationRelativeTo(null);
 		// set close operation
@@ -49,7 +55,7 @@ public class ApplicationWindow extends JFrame {
             public void windowClosing(WindowEvent evt){
                 confirmExit();
             }
-        });
+        });	
 	}
 
 	/**
