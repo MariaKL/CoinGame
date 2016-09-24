@@ -34,16 +34,16 @@ public class RenderWindow extends JPanel {
 	 * 	5 - bottom right corner tile
 	 * 	6 - bottom left corner tile
 	 */
-	private static final int[][] levelData = {{0,2,0,0,0,0,9},
-		                                     {2,2,0,0,0,0,9},
-		                                     {2,0,0,0,0,0,9},
+	private static final int[][] levelData = {{0,2,0,0,0,2,9},
+		                                     {2,2,0,0,0,2,9},
+		                                     {2,0,0,0,2,0,9},
 		                                     {0,0,0,0,0,0,9},
-		                                     {0,0,0,0,0,0,9},
-		                                     {0,0,0,0,0,0,9},
-		                                     {0,0,0,0,0,0,9}}; 
+		                                     {0,2,2,0,2,2,9},
+		                                     {2,0,0,2,2,2,9},
+		                                     {0,2,0,0,2,0,9}}; 
 	
 	// Field to store the board margin in pixels
-	private static final int MARGIN = 300;
+	private static final int MARGIN = 325;
 	
 	// Fields to store the tile width & height in pixels
 	private static final int tileWidth = 50;
@@ -56,7 +56,7 @@ public class RenderWindow extends JPanel {
 		//Setting a border
 		// FIXME: Stop border resizing with window
 		setBorder(BorderFactory.createCompoundBorder(
-						      BorderFactory.createEmptyBorder(16, 16, 16, 16),
+						      BorderFactory.createEmptyBorder(0, 0, 32, 0),
 						      BorderFactory.createLineBorder(Color.BLACK, 2)
 						   ));
 		
@@ -99,64 +99,85 @@ public class RenderWindow extends JPanel {
 		allTiles.add(t);
 		
 	}
-	
-	/**This method is used to convert from the 2D coordinate 
-	 *  system to the isometric coordinate system.
-	 * 
-	 * @param 2D coordinate point
-	 * @return isometric coordinate point
-	 */
-	private Point twoDToIso (Point pt){
-		Point result = new Point(0,0);
-		result.x = pt.x - pt.y;
-		result.y = (pt.x + pt.y) / 2;
-		return(result);
-	}
-	
-	/**This method is used to convert from the isometric coordinate 
-	 *  system to the 2D coordinate system.
-	 * 
-	 * @param 2D coordinate point
-	 * @return isometric coordinate point
-	 */
-	private Point isoTo2D(Point pt) {
-		Point result = new Point(0, 0);
-		result.x = (2 * pt.y + pt.x) / 2;
-		result.y = (2 * pt.y - pt.x) / 2;
-		return(result);
-	}
 
 	@Override
 	 public void paintComponent(Graphics g) {
 	     super.paintComponent(g);
 	     
 	     try {
+	    	 
 	    	//FIXME: drawing walls
-	    	BufferedImage wallImg = ImageIO.read(new File(IMAGE_PATH + "wall.png"));
-	    	g.drawImage(wallImg, 36, -81, this);
-	    	g.drawImage(wallImg, -26, -50, this);
-	    	g.drawImage(wallImg, -88, -20, this);
-	    	
+	    	BufferedImage wallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
+	    	int x = 284;
+	    	int y = -66;
+	    	for(int i = 0; i != 8; i++){
+	    		g.drawImage(wallImg, x, y, this);
+	    		x = x - 42;
+	    		y = y + 22;
+	    	}
 			
-			 // Drawing all level tiles onto the rendering panel
+			// FIXME: tile randomisation
+	    	// Drawing all level tiles onto the rendering panel
 	    	BufferedImage image;
 		    for(Tile t: allTiles){
 		    	if(t.getTileType()==9){
 		    		image = null;
 		    	} else if(t.getTileType() == 0){
-		    		image = ImageIO.read(new File(IMAGE_PATH + "tile.png"));
+		    		image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
 		    	} else {
-		    		image = ImageIO.read(new File(IMAGE_PATH + "ice.png"));
+		    		image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
 		    	}
 		    	if(image != null){
-		    		g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/5), this);
+		    		g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/4), this);
 		    	}
 		    }
+		    
 		    // FIXME: drawing character sprite to board.
 		    image = ImageIO.read(new File(IMAGE_PATH + "man-se-64.png"));
-    		g.drawImage(image, 331, -24, this);
+    		g.drawImage(image, 342, -6, this);
+    		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}   
 	 }
+	
+	/*
+	 * HELPER METHODS
+	 */
+	/**
+     * convert a 2d point to isometric
+     */
+	private static Point twoDToIso (Point pt){
+		Point result = new Point(0,0);
+		result.x = pt.x - pt.y;
+		result.y = (pt.x + pt.y) / 2;
+		return(result);
+	}
+	/**
+     * convert an isometric point to 2D
+     * */
+	private static Point isoTo2D(Point pt) {
+		Point result = new Point(0, 0);
+		result.x = (2 * pt.y + pt.x) / 2;
+		result.y = (2 * pt.y - pt.x) / 2;
+		return(result);
+	}
+    /**
+     * convert a 2d point to specific tile row/column
+     * */
+    public static Point getTileCoordinates(Point pt, int tileHeight) {
+        Point result = new Point(0,0);
+        result.x=(int) Math.floor(pt.x/tileHeight);
+        result.y=(int) Math.floor(pt.y/tileHeight);
+        return(result);
+    }
+    /**
+     * convert specific tile row/column to 2d point
+     * */
+    public static Point get2dFromTileCoordinates(Point pt, int tileHeight) {
+        Point result = new Point(0,0);
+        result.x=pt.x*tileHeight;
+        result.y=pt.y*tileHeight;
+        return(result);
+    }
 }
