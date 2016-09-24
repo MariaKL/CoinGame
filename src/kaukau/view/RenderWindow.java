@@ -34,15 +34,16 @@ public class RenderWindow extends JPanel {
 	 * 	5 - bottom right corner tile
 	 * 	6 - bottom left corner tile
 	 */
-	private static final int[][] levelData = {{3,1,1,1,1,4},
-		                                     {2,0,0,0,0,2},
-		                                     {2,0,0,0,0,2},
-		                                     {2,0,0,0,0,2},
-		                                     {2,0,0,0,0,2},
-		                                     {6,1,1,1,1,5}}; 
+	private static final int[][] levelData = {{0,2,0,0,0,0,9},
+		                                     {2,2,0,0,0,0,9},
+		                                     {2,0,0,0,0,0,9},
+		                                     {0,0,0,0,0,0,9},
+		                                     {0,0,0,0,0,0,9},
+		                                     {0,0,0,0,0,0,9},
+		                                     {0,0,0,0,0,0,9}}; 
 	
 	// Field to store the board margin in pixels
-	private static final int MARGIN = 275;
+	private static final int MARGIN = 300;
 	
 	// Fields to store the tile width & height in pixels
 	private static final int tileWidth = 50;
@@ -130,13 +131,30 @@ public class RenderWindow extends JPanel {
 	     super.paintComponent(g);
 	     
 	     try {
-			BufferedImage image = ImageIO.read(new File(IMAGE_PATH + "grass-tile.png"));
+	    	//FIXME: drawing walls
+	    	BufferedImage wallImg = ImageIO.read(new File(IMAGE_PATH + "wall.png"));
+	    	g.drawImage(wallImg, 36, -81, this);
+	    	g.drawImage(wallImg, -26, -50, this);
+	    	g.drawImage(wallImg, -88, -20, this);
+	    	
+			
 			 // Drawing all level tiles onto the rendering panel
-		     for(Tile t: allTiles){
-		    	 if(image != null){
-		    		 g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/3), this);
-		    	 }
-		     }
+	    	BufferedImage image;
+		    for(Tile t: allTiles){
+		    	if(t.getTileType()==9){
+		    		image = null;
+		    	} else if(t.getTileType() == 0){
+		    		image = ImageIO.read(new File(IMAGE_PATH + "tile.png"));
+		    	} else {
+		    		image = ImageIO.read(new File(IMAGE_PATH + "ice.png"));
+		    	}
+		    	if(image != null){
+		    		g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/5), this);
+		    	}
+		    }
+		    // FIXME: drawing character sprite to board.
+		    image = ImageIO.read(new File(IMAGE_PATH + "man-se-64.png"));
+    		g.drawImage(image, 331, -24, this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}   
