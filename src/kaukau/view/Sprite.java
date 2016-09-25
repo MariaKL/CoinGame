@@ -4,8 +4,8 @@ public class Sprite {
 	// Field for type of sprite
 	private final int spriteType;
 	// Fields for x & y position of tile
-	private final int x;
-	private final int y;
+	int x;
+	int y;
 	
 	public Sprite(int spriteType, int x, int y) {
 		this.spriteType = spriteType;

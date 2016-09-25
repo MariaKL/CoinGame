@@ -40,15 +40,15 @@ public class RenderWindow extends JPanel {
 		                                     {0,0,0,0,0,0,9},
 		                                     {0,2,2,0,2,2,9},
 		                                     {2,0,0,2,2,2,9},
-		                                     {0,2,0,0,2,0,9}}; 
+		                                     {2,2,0,0,2,0,9}}; 
 	
-	private static final int[][] spriteData = {{1,0,0,0,0,1,0},
+	private static final int[][] spriteData = {{1,0,0,0,0,0,0},
 											   {0,0,0,0,0,0,0},
-									           {1,0,0,0,0,0,0},
-									           {0,0,0,1,0,0,0},
-									           {1,0,0,0,0,0,0},
 									           {0,0,0,0,0,0,0},
-									           {1,0,0,0,0,1,0}};
+									           {0,0,0,0,0,0,0},
+									           {0,0,0,0,0,0,0},
+									           {0,0,0,0,0,0,0},
+									           {0,0,0,0,0,0,0}};
 	
 	// Field to store the board margins in pixels
 	private static final int MARGIN = 324;
@@ -62,6 +62,9 @@ public class RenderWindow extends JPanel {
 	List<Tile> allTiles = new ArrayList<Tile>();
 	// Field to store all the sprites in the current level
 	List<Sprite> allSprites = new ArrayList<Sprite>();
+	
+	// Field to store the current player
+	Sprite player;
 	
 	public RenderWindow(){
 		//Setting a border
@@ -99,6 +102,7 @@ public class RenderWindow extends JPanel {
 	private void placeSprite(int spriteType, Point pt) {
 		// Creating a new sprite
 		Sprite s = new Sprite(spriteType, pt.x, pt.y);
+		this.player = s;
 		// Adding the sprite to the current level
 		allSprites.add(s);
 	}

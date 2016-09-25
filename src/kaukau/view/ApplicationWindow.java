@@ -3,9 +3,9 @@ package kaukau.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
  * @author Patrick
  *
  */
-public class ApplicationWindow extends JFrame {
+public class ApplicationWindow extends JFrame implements KeyListener {
 	
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
@@ -36,8 +36,11 @@ public class ApplicationWindow extends JFrame {
 		initMenu();
 		
 		// adding the rendering window to the application
+		rw.setFocusable(true);
+		rw.requestFocusInWindow();
+		rw.addKeyListener(this);
 		add(rw);
-		
+			
 		// setting title
 		setTitle("Kaukau");
 		// set size
@@ -119,4 +122,49 @@ public class ApplicationWindow extends JFrame {
 			dispose();
 		}
 	}
+	
+	/* Keylistner methods
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		switch(keyCode){
+			// key up
+			case KeyEvent.VK_W:
+			case KeyEvent.VK_UP:
+				// move player up
+				rw.player.y--;
+				rw.repaint();
+				break;
+			// key down
+			case KeyEvent.VK_S:
+			case KeyEvent.VK_DOWN:
+				// move player down
+				rw.player.y++;
+				rw.repaint();
+				break;
+			// key left
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
+				// move player left
+				rw.player.x--;
+				rw.repaint();
+				break;
+			// key right
+			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:
+				// move player right
+				rw.player.x++;
+				rw.repaint();
+				break;
+			default:
+				break;
+		}	
+	}
+	/* unimplemented methods.
+	 */
+	@Override
+	public void keyTyped(KeyEvent e) { }
+	@Override
+	public void keyReleased(KeyEvent e) { }
 }
