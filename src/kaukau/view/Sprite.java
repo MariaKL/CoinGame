@@ -1,5 +1,7 @@
 package kaukau.view;
 
+import java.awt.Point;
+
 public class Sprite {
 	// Field for type of sprite
 	private final int spriteType;
@@ -19,4 +21,14 @@ public class Sprite {
 	public int getSpriteType() { return spriteType;	}
 	public int X() { return x; }
 	public int Y() { return y; }
+	public Point getTilePos(){
+		Point p = RenderWindow.isoTo2D(new Point(this.x, this.y));
+		Point result = RenderWindow.getTileCoordinates(p, 50);
+		return result;
+	}
+	public void setPosFromTilePos(Point p) {
+		Point pos = RenderWindow.twoDToIso(RenderWindow.get2dFromTileCoordinates(p, 50));
+		this.x = pos.x;
+		this.y = pos.y;
+	}
 }

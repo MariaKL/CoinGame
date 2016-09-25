@@ -1,5 +1,6 @@
 package kaukau.view;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -128,19 +129,25 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
+		// getting player tile position
+		Point p = rw.player.getTilePos();
 		switch(keyCode){
 			// key up
 			case KeyEvent.VK_W:
 			case KeyEvent.VK_UP:
 				// move player up
-				rw.player.y--;
+				//rw.player.y--;
+				Point updatedPos = new Point(p.x - 1, p.y - 1);
+				rw.player.setPosFromTilePos(updatedPos);
 				rw.repaint();
 				break;
 			// key down
 			case KeyEvent.VK_S:
 			case KeyEvent.VK_DOWN:
 				// move player down
-				rw.player.y++;
+				//rw.player.y++;
+				updatedPos = new Point(p.x + 1, p.y + 1);
+				rw.player.setPosFromTilePos(updatedPos);
 				rw.repaint();
 				break;
 			// key left

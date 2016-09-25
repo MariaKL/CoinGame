@@ -142,7 +142,7 @@ public class RenderWindow extends JPanel {
 	}
 
 	@Override
-	 public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 	     super.paintComponent(g);
 	     
 	     try {
@@ -190,7 +190,7 @@ public class RenderWindow extends JPanel {
 	/**
      * convert a 2d point to isometric
      */
-	private static Point twoDToIso (Point pt){
+	static Point twoDToIso (Point pt){
 		Point result = new Point(0,0);
 		result.x = pt.x - pt.y;
 		result.y = (pt.x + pt.y) / 2;
@@ -199,7 +199,7 @@ public class RenderWindow extends JPanel {
 	/**
      * convert an isometric point to 2D
      * */
-	private static Point isoTo2D(Point pt) {
+	static Point isoTo2D(Point pt) {
 		Point result = new Point(0, 0);
 		result.x = (2 * pt.y + pt.x) / 2;
 		result.y = (2 * pt.y - pt.x) / 2;
@@ -208,7 +208,7 @@ public class RenderWindow extends JPanel {
     /**
      * convert a 2d point to specific tile row/column
      * */
-    private static Point getTileCoordinates(Point pt, int tileHeight) {
+    static Point getTileCoordinates(Point pt, int tileHeight) {
         Point result = new Point(0,0);
         result.x=(int) Math.floor(pt.x/tileHeight);
         result.y=(int) Math.floor(pt.y/tileHeight);
@@ -217,7 +217,7 @@ public class RenderWindow extends JPanel {
     /**
      * convert specific tile row/column to 2d point
      * */
-    private static Point get2dFromTileCoordinates(Point pt, int tileHeight) {
+    static Point get2dFromTileCoordinates(Point pt, int tileHeight) {
         Point result = new Point(0,0);
         result.x=pt.x*tileHeight;
         result.y=pt.y*tileHeight;
