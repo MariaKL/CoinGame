@@ -35,15 +35,24 @@ public class RenderWindow extends JPanel {
 	 * 	6 - bottom left corner tile
 	 */
 	private static final int[][] levelData = {{0,2,0,0,0,2,9},
-		                                     {2,2,0,0,0,2,9},
-		                                     {2,0,0,0,2,0,9},
+		                                     {2,2,0,2,0,2,9},
+		                                     {2,0,2,0,2,0,9},
 		                                     {0,0,0,0,0,0,9},
 		                                     {0,2,2,0,2,2,9},
 		                                     {2,0,0,2,2,2,9},
 		                                     {0,2,0,0,2,0,9}}; 
 	
-	// Field to store the board margin in pixels
-	private static final int MARGIN = 325;
+	private static final int[][] spriteData = {{1,0,0,0,0,1,0},
+											   {0,0,0,0,0,0,0},
+									           {1,0,0,0,0,0,0},
+									           {0,0,0,1,0,0,0},
+									           {1,0,0,0,0,0,0},
+									           {0,0,0,0,0,0,0},
+									           {1,0,0,0,0,1,0}};
+	
+	// Field to store the board margins in pixels
+	private static final int MARGIN = 324;
+	private static final int SPRITE_MARGIN = 16;
 	
 	// Fields to store the tile width & height in pixels
 	private static final int tileWidth = 50;
@@ -51,6 +60,8 @@ public class RenderWindow extends JPanel {
 	
 	// Field to store all the tiles in the current level
 	List<Tile> allTiles = new ArrayList<Tile>();
+	// Field to store all the sprites in the current level
+	List<Sprite> allSprites = new ArrayList<Sprite>();
 	
 	public RenderWindow(){
 		//Setting a border
@@ -62,7 +73,34 @@ public class RenderWindow extends JPanel {
 		
 		// initilising the level from 2D level data array
 		initLevel();
+		initSprites();
 		repaint();
+	}
+
+	private void initSprites() {
+		for (int i = 0; i<spriteData.length; i++){
+			for (int j = 0; j<spriteData[0].length; j++){
+				
+				// getting the x & y position of the tile
+				int x = j * tileWidth;
+				int y = i * tileHeight;
+				
+				// getting the type type
+				int spriteType = spriteData[i][j];
+				if(spriteType == 0) continue;
+				
+				// creating and adding the tile to the current level board
+				placeSprite(spriteType, twoDToIso(new Point(x, y)));
+			}
+		}
+		
+	}
+
+	private void placeSprite(int spriteType, Point pt) {
+		// Creating a new sprite
+		Sprite s = new Sprite(spriteType, pt.x, pt.y);
+		// Adding the sprite to the current level
+		allSprites.add(s);
 	}
 
 	/**
@@ -97,7 +135,6 @@ public class RenderWindow extends JPanel {
 		Tile t = new Tile(tileType, pt.x, pt.y);
 		// Adding the tile to the current level
 		allTiles.add(t);
-		
 	}
 
 	@Override
@@ -106,7 +143,7 @@ public class RenderWindow extends JPanel {
 	     
 	     try {
 	    	 
-	    	//FIXME: drawing walls
+	    	//FIXME: drawing walls without hardcoded values.
 	    	BufferedImage wallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
 	    	int x = 284;
 	    	int y = -66;
@@ -116,7 +153,7 @@ public class RenderWindow extends JPanel {
 	    		y = y + 22;
 	    	}
 			
-			// FIXME: tile randomisation
+			// FIXME: tile randomisation & board rotation.
 	    	// Drawing all level tiles onto the rendering panel
 	    	BufferedImage image;
 		    for(Tile t: allTiles){
@@ -132,10 +169,12 @@ public class RenderWindow extends JPanel {
 		    	}
 		    }
 		    
-		    // FIXME: drawing character sprite to board.
+		    // TODO: add player sprite movement
 		    image = ImageIO.read(new File(IMAGE_PATH + "man-se-64.png"));
-    		g.drawImage(image, 342, -6, this);
-    		
+		    for(Sprite s: allSprites){
+		    	g.drawImage(image, s.X() + (720/2) - SPRITE_MARGIN, s.Y() - (SPRITE_MARGIN/2), this);
+		    }
+    			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}   
@@ -165,7 +204,7 @@ public class RenderWindow extends JPanel {
     /**
      * convert a 2d point to specific tile row/column
      * */
-    public static Point getTileCoordinates(Point pt, int tileHeight) {
+    private static Point getTileCoordinates(Point pt, int tileHeight) {
         Point result = new Point(0,0);
         result.x=(int) Math.floor(pt.x/tileHeight);
         result.y=(int) Math.floor(pt.y/tileHeight);
@@ -174,7 +213,7 @@ public class RenderWindow extends JPanel {
     /**
      * convert specific tile row/column to 2d point
      * */
-    public static Point get2dFromTileCoordinates(Point pt, int tileHeight) {
+    private static Point get2dFromTileCoordinates(Point pt, int tileHeight) {
         Point result = new Point(0,0);
         result.x=pt.x*tileHeight;
         result.y=pt.y*tileHeight;
