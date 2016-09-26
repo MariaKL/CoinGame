@@ -76,10 +76,15 @@ public class RenderWindow extends JPanel {
 		
 		// initilising the level from 2D level data array
 		initLevel();
+		// initilising level sprites from 2D sprite data array
 		initSprites();
 		repaint();
 	}
-
+	
+	/**
+	 * Initilising the game sprites on the current level
+	 *  from the 2D sprite data array.
+	 */
 	private void initSprites() {
 		for (int i = 0; i<spriteData.length; i++){
 			for (int j = 0; j<spriteData[0].length; j++){
@@ -99,6 +104,12 @@ public class RenderWindow extends JPanel {
 		
 	}
 
+	/**This method creates and adds a sprite to a list
+	 *  of all sprites which make up the current game level.
+	 * 
+	 * @param spriteType
+	 * @param pt
+	 */
 	private void placeSprite(int spriteType, Point pt) {
 		// Creating a new sprite
 		Sprite s = new Sprite(spriteType, pt.x, pt.y);

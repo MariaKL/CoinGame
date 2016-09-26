@@ -36,10 +36,11 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 		// creating a menu
 		initMenu();
 		
-		// adding the rendering window to the application
+		// adding this as a key listener on the render window
 		rw.setFocusable(true);
 		rw.requestFocusInWindow();
 		rw.addKeyListener(this);
+		// adding the rendering window to the application
 		add(rw);
 			
 		// setting title
@@ -154,14 +155,18 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 			case KeyEvent.VK_A:
 			case KeyEvent.VK_LEFT:
 				// move player left
-				rw.player.x--;
+				//rw.player.x--;
+				updatedPos = new Point(p.x - 1, p.y + 1);
+				rw.player.setPosFromTilePos(updatedPos);
 				rw.repaint();
 				break;
 			// key right
 			case KeyEvent.VK_D:
 			case KeyEvent.VK_RIGHT:
 				// move player right
-				rw.player.x++;
+				//rw.player.x++;
+				updatedPos = new Point(p.x + 1, p.y - 1);
+				rw.player.setPosFromTilePos(updatedPos);
 				rw.repaint();
 				break;
 			default:
