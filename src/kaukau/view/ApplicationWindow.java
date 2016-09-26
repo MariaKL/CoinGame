@@ -3,6 +3,7 @@ package kaukau.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -21,7 +22,7 @@ import javax.swing.JOptionPane;
  * @author Patrick
  *
  */
-public class ApplicationWindow extends JFrame {
+public class ApplicationWindow extends JFrame{
 	
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
@@ -40,8 +41,8 @@ public class ApplicationWindow extends JFrame {
 		
 		// setting title
 		setTitle("Kaukau");
-		// set size
-		setSize(710, 550);
+		// set size, prev was 710, 550
+		setSize(710, 650);
 		// set display location
 		setLocationRelativeTo(null);
 		// set close operation

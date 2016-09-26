@@ -3,7 +3,7 @@ package kaukau.view;
 public class Tile {
 	
 	// Field for type of tile
-	private final int tileType;
+	private int tileType;
 	// Fields for x & y position of tile
 	private final int x;
 	private final int y;
@@ -12,6 +12,14 @@ public class Tile {
 		this.tileType = tileType;
 		this.x = x;
 		this.y = y;
+	}
+	
+	/*
+	 * Setter methods
+	 */
+	
+	public void setTileType(int tType){
+		this.tileType = tType;
 	}
 
 	/*

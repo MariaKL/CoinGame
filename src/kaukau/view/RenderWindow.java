@@ -3,6 +3,8 @@ package kaukau.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 /**This class handles the rendering of the game levels
  * 	in the Kaukau game. This class interacts with the
@@ -34,13 +38,15 @@ public class RenderWindow extends JPanel {
 	 * 	5 - bottom right corner tile
 	 * 	6 - bottom left corner tile
 	 */
-	private static final int[][] levelData = {{0,2,0,0,0,2,9},
-		                                     {2,2,0,0,0,2,9},
-		                                     {2,0,0,0,2,0,9},
-		                                     {0,0,0,0,0,0,9},
-		                                     {0,2,2,0,2,2,9},
-		                                     {2,0,0,2,2,2,9},
-		                                     {0,2,0,0,2,0,9}}; 
+	
+	//later, get this from game world class in game package
+	private static int[][] levelData = {{0,2,0,0,2,0,0},
+		                                {2,2,0,0,0,2,0},
+		                                {2,0,0,0,2,0,0},
+		                                {0,0,0,0,0,0,0},
+		                                {0,2,2,0,2,2,0},
+		                                {2,0,0,2,2,2,0},
+		                                {0,2,0,0,2,0,0}}; 
 	
 	// Field to store the board margin in pixels
 	private static final int MARGIN = 325;
@@ -62,7 +68,29 @@ public class RenderWindow extends JPanel {
 		
 		// initilising the level from 2D level data array
 		initLevel();
+		//attach keys to keyboard actions
+		attachBindings();
 		repaint();
+	}
+
+	/**
+	 * assign key to actions using key bindings
+	 */
+	private void attachBindings() {
+		
+		//rotate world binding
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_R, 0),
+                "rotate");
+		this.getActionMap().put("rotate", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				rotateWorld();
+				repaint();
+			}
+		});
+		
+		//add more bindings later here
+		
 	}
 
 	/**
@@ -77,7 +105,7 @@ public class RenderWindow extends JPanel {
 				int x = j * tileWidth;
 				int y = i * tileHeight;
 				
-				// getting the type type
+				// getting the tile type
 				int tileType = levelData[i][j];
 				
 				// creating and adding the tile to the current level board
@@ -98,6 +126,41 @@ public class RenderWindow extends JPanel {
 		// Adding the tile to the current level
 		allTiles.add(t);
 		
+	}
+	
+	/**
+	 * rotate game world 90 degrees
+	 */
+	public void rotateWorld() {
+		//rotate int[][] 90 degrees into new 2d array
+		final int M = levelData.length;
+	    final int N = levelData[0].length;
+	    int[][] ret = new int[N][M];
+	    for (int r = 0; r < M; r++) {
+	        for (int c = 0; c < N; c++) {
+	            ret[c][M-1-r] = levelData[r][c];
+	        }
+	    }
+	    //clear old list, insert new tile arrangement
+	    allTiles.clear();
+	    for (int i = 0; i<ret.length; i++){
+			for (int j = 0; j<ret[0].length; j++){
+				
+				// getting the x & y position of the tile
+				int x = j * tileWidth;
+				int y = i * tileHeight;
+				
+				// getting the tile type
+				int tileType = ret[i][j];
+				
+				// creating and adding the tile to the current level board
+				placeTile(tileType, twoDToIso(new Point(x, y)));
+			}
+	    }
+	    //replace levelData with new 2d array for future rotations
+	    for(int a=0; a<levelData.length; a++)
+	    	  for(int b=0; b<levelData[0].length; b++)
+	    	    levelData[a][b]=ret[a][b];    
 	}
 
 	@Override
@@ -133,6 +196,8 @@ public class RenderWindow extends JPanel {
 		    }
 		    
 		    // FIXME: drawing character sprite to board.
+		    // Maybe draw to 2d array matching board, easier to
+		    // rotate this way.
 		    image = ImageIO.read(new File(IMAGE_PATH + "man-se-64.png"));
     		g.drawImage(image, 342, -6, this);
     		
@@ -180,4 +245,9 @@ public class RenderWindow extends JPanel {
         result.y=pt.y*tileHeight;
         return(result);
     }
+    
+    /**
+     * rotate game world, redrawing tiles and transparent walls
+     */
+    
 }
