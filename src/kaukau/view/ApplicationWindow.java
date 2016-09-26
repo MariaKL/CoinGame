@@ -129,7 +129,7 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 		}
 	}
 	
-	// TODO: Mouse listener
+	// TODO: add mouse listener
 	
     // Set of currently pressed keys
     private final Set<Integer> pressed = new HashSet<Integer>();
