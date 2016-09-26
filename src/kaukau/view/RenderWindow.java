@@ -24,6 +24,7 @@ import javax.swing.KeyStroke;
  * @author Patrick
  *
  */
+@SuppressWarnings("serial")
 public class RenderWindow extends JPanel {
 	
 	// path to the images folder
@@ -31,25 +32,33 @@ public class RenderWindow extends JPanel {
 	
 	/* Field to store 2D array representation of the game level data.	
 	 * 	KEY:
-	 * 	1 - horizontal wall tile
-	 * 	2 - vertical wall tile
-	 * 	3 - top left corner tile
-	 * 	4 - top right corner tile
-	 * 	5 - bottom right corner tile
-	 * 	6 - bottom left corner tile
+	 *  0 - blue tile
+	 * 	1..8 - cracked tile
+	 * 	9 - no tile (null)
 	 */
+	private static int[][] levelData = {{0,2,0,0,0,2,9},
+		                                {2,2,0,2,0,2,9},
+		                                {2,0,2,0,2,0,9},
+		                                {0,0,0,0,0,0,9},
+		                                {0,2,2,0,2,2,9},
+		                                {2,0,0,2,2,2,9},
+		                                {2,2,0,0,2,0,9}}; 
 	
-	//later, get this from game world class in game package
-	private static int[][] levelData = {{0,2,0,0,2,0,0},
-		                                {2,2,0,0,0,2,0},
-		                                {2,0,0,0,2,0,0},
-		                                {0,0,0,0,0,0,0},
-		                                {0,2,2,0,2,2,0},
-		                                {2,0,0,2,2,2,0},
-		                                {0,2,0,0,2,0,0}}; 
+	/* Field to store 2D array representation of the level sprite data.
+	* KEY: 
+	* 1 - player
+	*/
+	private static int[][] spriteData = {{1,0,0,0,0,0,0},
+										 {0,0,0,0,0,0,0},
+								         {0,0,0,0,0,0,0},
+						                 {0,0,0,0,0,0,0},
+                            	         {0,0,0,0,0,0,0},
+								         {0,0,0,0,0,0,0},
+							             {0,0,0,0,0,0,0}};
 	
-	// Field to store the board margin in pixels
-	private static final int MARGIN = 325;
+	// Field to store the board margins in pixels
+	private static final int MARGIN = 324;
+	private static final int SPRITE_MARGIN = 16;
 	
 	// Fields to store the tile width & height in pixels
 	private static final int tileWidth = 50;
@@ -57,6 +66,11 @@ public class RenderWindow extends JPanel {
 	
 	// Field to store all the tiles in the current level
 	List<Tile> allTiles = new ArrayList<Tile>();
+	// Field to store all the sprites in the current level
+	List<Sprite> allSprites = new ArrayList<Sprite>();
+	
+	// Field to store the current player
+	Sprite player;
 	
 	public RenderWindow(){
 		//Setting a border
@@ -68,29 +82,49 @@ public class RenderWindow extends JPanel {
 		
 		// initilising the level from 2D level data array
 		initLevel();
-		//attach keys to keyboard actions
+		// initilising level sprites from 2D sprite data array
+		initSprites();
+		// attach keys to keyboard actions
 		attachBindings();
+		// repaint board
 		repaint();
 	}
-
+	
 	/**
-	 * assign key to actions using key bindings
+	 * Initilising the game sprites on the current level
+	 *  from the 2D sprite data array.
 	 */
-	private void attachBindings() {
-		
-		//rotate world binding
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-                KeyEvent.VK_R, 0),
-                "rotate");
-		this.getActionMap().put("rotate", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				rotateWorld();
-				repaint();
+	private void initSprites() {
+		for (int i = 0; i<spriteData.length; i++){
+			for (int j = 0; j<spriteData[0].length; j++){
+				
+				// getting the x & y position of the tile
+				int x = j * tileWidth;
+				int y = i * tileHeight;
+				
+				// getting the type type
+				int spriteType = spriteData[i][j];
+				if(spriteType == 0) continue;
+				
+				// creating and adding the tile to the current level board
+				placeSprite(spriteType, twoDToIso(new Point(x, y)));
 			}
-		});
+		}
 		
-		//add more bindings later here
-		
+	}
+
+	/**This method creates and adds a sprite to a list
+	 *  of all sprites which make up the current game level.
+	 * 
+	 * @param spriteType
+	 * @param pt
+	 */
+	private void placeSprite(int spriteType, Point pt) {
+		// Creating a new sprite
+		Sprite s = new Sprite(spriteType, pt.x, pt.y);
+		if(spriteType == 1) this.player = s;
+		// Adding the sprite to the current level
+		allSprites.add(s);
 	}
 
 	/**
@@ -105,7 +139,7 @@ public class RenderWindow extends JPanel {
 				int x = j * tileWidth;
 				int y = i * tileHeight;
 				
-				// getting the tile type
+				// getting the type type
 				int tileType = levelData[i][j];
 				
 				// creating and adding the tile to the current level board
@@ -125,7 +159,70 @@ public class RenderWindow extends JPanel {
 		Tile t = new Tile(tileType, pt.x, pt.y);
 		// Adding the tile to the current level
 		allTiles.add(t);
+	}
+	
+	/**
+	 * assign key to actions using key bindings
+	 */
+	private void attachBindings() {
 		
+		//rotate world binding
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_R, 0), "rotate");
+		this.getActionMap().put("rotate", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				rotateWorld();
+				repaint();
+			}
+		});
+		
+		//player move up
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_W, 0), "moveUp");
+		this.getActionMap().put("moveUp", new AbstractAction() {
+			public void actionPerformed(ActionEvent e){
+				Point p = player.getTilePos();
+				Point updatedPos = new Point(p.x, p.y - 1);
+				player.setPosFromTilePos(updatedPos);
+				repaint();
+			}
+		});
+		
+		//player move down
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_S, 0), "moveDown");
+		this.getActionMap().put("moveDown", new AbstractAction() {
+			public void actionPerformed(ActionEvent e){
+				Point p = player.getTilePos();
+				Point updatedPos = new Point(p.x, p.y + 1);
+				player.setPosFromTilePos(updatedPos);
+				repaint();
+			}
+		});
+		
+		//player move left
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_A, 0), "moveLeft");
+		this.getActionMap().put("moveLeft", new AbstractAction() {
+			public void actionPerformed(ActionEvent e){
+				Point p = player.getTilePos();
+				Point updatedPos = new Point(p.x - 1, p.y);
+				player.setPosFromTilePos(updatedPos);
+				repaint();
+			}
+		});
+		
+		//player move right
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_D, 0), "moveRight");
+		this.getActionMap().put("moveRight", new AbstractAction() {
+			public void actionPerformed(ActionEvent e){
+				Point p = player.getTilePos();
+				Point updatedPos = new Point(p.x + 1, p.y);
+				player.setPosFromTilePos(updatedPos);
+				repaint();			
+			}
+		});
 	}
 	
 	/**
@@ -164,12 +261,12 @@ public class RenderWindow extends JPanel {
 	}
 
 	@Override
-	 public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 	     super.paintComponent(g);
 	     
 	     try {
 	    	 
-	    	//FIXME: drawing walls
+	    	//FIXME: drawing walls without hardcoded values.
 	    	BufferedImage wallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
 	    	int x = 284;
 	    	int y = -66;
@@ -179,7 +276,7 @@ public class RenderWindow extends JPanel {
 	    		y = y + 22;
 	    	}
 			
-			// FIXME: tile randomisation
+			// TODO: tile randomisation & board rotation.
 	    	// Drawing all level tiles onto the rendering panel
 	    	BufferedImage image;
 		    for(Tile t: allTiles){
@@ -195,12 +292,15 @@ public class RenderWindow extends JPanel {
 		    	}
 		    }
 		    
-		    // FIXME: drawing character sprite to board.
-		    // Maybe draw to 2d array matching board, easier to
-		    // rotate this way.
+		    // Drawing the game sprites onto the level
+		    // TODO: More sprites and player animation
 		    image = ImageIO.read(new File(IMAGE_PATH + "man-se-64.png"));
-    		g.drawImage(image, 342, -6, this);
-    		
+		    for(Sprite s: allSprites){
+		    	if(s.getSpriteType() == 1){
+		    		g.drawImage(image, s.X() + (720/2) - SPRITE_MARGIN, s.Y() - (SPRITE_MARGIN/2), this);
+		    	} 
+		    }
+    			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}   
@@ -212,7 +312,7 @@ public class RenderWindow extends JPanel {
 	/**
      * convert a 2d point to isometric
      */
-	private static Point twoDToIso (Point pt){
+	static Point twoDToIso (Point pt){
 		Point result = new Point(0,0);
 		result.x = pt.x - pt.y;
 		result.y = (pt.x + pt.y) / 2;
@@ -221,7 +321,7 @@ public class RenderWindow extends JPanel {
 	/**
      * convert an isometric point to 2D
      * */
-	private static Point isoTo2D(Point pt) {
+	static Point isoTo2D(Point pt) {
 		Point result = new Point(0, 0);
 		result.x = (2 * pt.y + pt.x) / 2;
 		result.y = (2 * pt.y - pt.x) / 2;
@@ -230,7 +330,7 @@ public class RenderWindow extends JPanel {
     /**
      * convert a 2d point to specific tile row/column
      * */
-    public static Point getTileCoordinates(Point pt, int tileHeight) {
+    static Point getTileCoordinates(Point pt, int tileHeight) {
         Point result = new Point(0,0);
         result.x=(int) Math.floor(pt.x/tileHeight);
         result.y=(int) Math.floor(pt.y/tileHeight);
@@ -239,15 +339,10 @@ public class RenderWindow extends JPanel {
     /**
      * convert specific tile row/column to 2d point
      * */
-    public static Point get2dFromTileCoordinates(Point pt, int tileHeight) {
+    static Point get2dFromTileCoordinates(Point pt, int tileHeight) {
         Point result = new Point(0,0);
         result.x=pt.x*tileHeight;
         result.y=pt.y*tileHeight;
         return(result);
     }
-    
-    /**
-     * rotate game world, redrawing tiles and transparent walls
-     */
-    
 }

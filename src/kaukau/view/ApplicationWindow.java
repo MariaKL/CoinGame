@@ -1,11 +1,14 @@
 package kaukau.view;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -22,6 +25,7 @@ import javax.swing.JOptionPane;
  * @author Patrick
  *
  */
+@SuppressWarnings("serial")
 public class ApplicationWindow extends JFrame{
 	
 	// path to the images folder
@@ -36,13 +40,18 @@ public class ApplicationWindow extends JFrame{
 		// creating a menu
 		initMenu();
 		
+		/* adding this as a key listener on the render window
+		rw.setFocusable(true);
+		rw.requestFocusInWindow();
+		rw.addKeyListener(this);
+		*/
 		// adding the rendering window to the application
 		add(rw);
-		
+			
 		// setting title
 		setTitle("Kaukau");
-		// set size, prev was 710, 550
-		setSize(710, 650);
+		// set size
+		setSize(710, 550);
 		// set display location
 		setLocationRelativeTo(null);
 		// set close operation
@@ -120,4 +129,75 @@ public class ApplicationWindow extends JFrame{
 			dispose();
 		}
 	}
+	
+	// TODO: add mouse listener
+	
+    // Set of currently pressed keys
+    private final Set<Integer> pressed = new HashSet<Integer>();
+	
+	/* 
+	 * Keylistner methods
+	 */
+    /*
+	@Override
+	public synchronized void keyPressed(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		// getting player tile position
+		Point p = rw.player.getTilePos();
+		pressed.add(keyCode);
+        if (pressed.size() > 1) {
+            // More than one key is currently pressed.
+            // Iterate over pressed to get the keys.
+        	//
+        }
+		switch(keyCode){
+			// key up
+			case KeyEvent.VK_W:
+			case KeyEvent.VK_UP:
+				// move player up
+				//rw.player.y--;
+				Point updatedPos = new Point(p.x, p.y - 1);
+				rw.player.setPosFromTilePos(updatedPos);
+				rw.repaint();
+				break;
+			// key down
+			case KeyEvent.VK_S:
+			case KeyEvent.VK_DOWN:
+				// move player down
+				//rw.player.y++;
+				updatedPos = new Point(p.x, p.y + 1);
+				rw.player.setPosFromTilePos(updatedPos);
+				rw.repaint();
+				break;
+			// key left
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
+				// move player left
+				//rw.player.x--;
+				updatedPos = new Point(p.x - 1, p.y);
+				rw.player.setPosFromTilePos(updatedPos);
+				rw.repaint();
+				break;
+			// key right
+			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:
+				// move player right
+				//rw.player.x++;
+				updatedPos = new Point(p.x + 1, p.y);
+				rw.player.setPosFromTilePos(updatedPos);
+				rw.repaint();
+				break;
+			default:
+				break;
+		}	
+	}
+	*/
+    /*
+	@Override
+	public synchronized void keyReleased(KeyEvent e) { 
+		pressed.remove(e.getKeyCode());
+	}
+	@Override
+	public void keyTyped(KeyEvent e) { /* not used  }
+	*/
 }
