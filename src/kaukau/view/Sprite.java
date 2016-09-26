@@ -27,7 +27,8 @@ public class Sprite {
 		return result;
 	}
 	public void setPosFromTilePos(Point p) {
-		Point pos = RenderWindow.twoDToIso(RenderWindow.get2dFromTileCoordinates(p, 50));
+		Point twoD = RenderWindow.get2dFromTileCoordinates(p, 50);
+		Point pos = RenderWindow.twoDToIso(twoD);
 		this.x = pos.x;
 		this.y = pos.y;
 	}

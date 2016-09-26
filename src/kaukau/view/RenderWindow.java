@@ -20,6 +20,7 @@ import javax.swing.JPanel;
  * @author Patrick
  *
  */
+@SuppressWarnings("serial")
 public class RenderWindow extends JPanel {
 	
 	// path to the images folder
@@ -27,12 +28,9 @@ public class RenderWindow extends JPanel {
 	
 	/* Field to store 2D array representation of the game level data.	
 	 * 	KEY:
-	 * 	1 - horizontal wall tile
-	 * 	2 - vertical wall tile
-	 * 	3 - top left corner tile
-	 * 	4 - top right corner tile
-	 * 	5 - bottom right corner tile
-	 * 	6 - bottom left corner tile
+	 *  0 - blue tile
+	 * 	1..8 - cracked tile
+	 * 	9 - no tile (null)
 	 */
 	private static final int[][] levelData = {{0,2,0,0,0,2,9},
 		                                     {2,2,0,2,0,2,9},
@@ -42,6 +40,10 @@ public class RenderWindow extends JPanel {
 		                                     {2,0,0,2,2,2,9},
 		                                     {2,2,0,0,2,0,9}}; 
 	
+	/* Field to store 2D array representation of the level sprite data.
+	* KEY: 
+	* 1 - player
+	*/
 	private static final int[][] spriteData = {{1,0,0,0,0,0,0},
 											   {0,0,0,0,0,0,0},
 									           {0,0,0,0,0,0,0},
@@ -113,7 +115,7 @@ public class RenderWindow extends JPanel {
 	private void placeSprite(int spriteType, Point pt) {
 		// Creating a new sprite
 		Sprite s = new Sprite(spriteType, pt.x, pt.y);
-		this.player = s;
+		if(spriteType == 1) this.player = s;
 		// Adding the sprite to the current level
 		allSprites.add(s);
 	}
@@ -168,7 +170,7 @@ public class RenderWindow extends JPanel {
 	    		y = y + 22;
 	    	}
 			
-			// FIXME: tile randomisation & board rotation.
+			// TODO: tile randomisation & board rotation.
 	    	// Drawing all level tiles onto the rendering panel
 	    	BufferedImage image;
 		    for(Tile t: allTiles){
@@ -184,10 +186,13 @@ public class RenderWindow extends JPanel {
 		    	}
 		    }
 		    
-		    // TODO: add player sprite movement
+		    // Drawing the game sprites onto the level
+		    // TODO: More sprites and player animation
 		    image = ImageIO.read(new File(IMAGE_PATH + "man-se-64.png"));
 		    for(Sprite s: allSprites){
-		    	g.drawImage(image, s.X() + (720/2) - SPRITE_MARGIN, s.Y() - (SPRITE_MARGIN/2), this);
+		    	if(s.getSpriteType() == 1){
+		    		g.drawImage(image, s.X() + (720/2) - SPRITE_MARGIN, s.Y() - (SPRITE_MARGIN/2), this);
+		    	} 
 		    }
     			
 		} catch (IOException e) {

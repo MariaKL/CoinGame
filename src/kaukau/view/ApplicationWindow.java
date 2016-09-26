@@ -7,6 +7,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,6 +25,7 @@ import javax.swing.JOptionPane;
  * @author Patrick
  *
  */
+@SuppressWarnings("serial")
 public class ApplicationWindow extends JFrame implements KeyListener {
 	
 	// path to the images folder
@@ -125,20 +129,31 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 		}
 	}
 	
+	// TODO: Mouse listener
+	
+    // Set of currently pressed keys
+    private final Set<Integer> pressed = new HashSet<Integer>();
+	
 	/* Keylistner methods
 	 */
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public synchronized void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		// getting player tile position
 		Point p = rw.player.getTilePos();
+		pressed.add(keyCode);
+        if (pressed.size() > 1) {
+            // More than one key is currently pressed.
+            // Iterate over pressed to get the keys.
+        	//
+        }
 		switch(keyCode){
 			// key up
 			case KeyEvent.VK_W:
 			case KeyEvent.VK_UP:
 				// move player up
 				//rw.player.y--;
-				Point updatedPos = new Point(p.x - 1, p.y - 1);
+				Point updatedPos = new Point(p.x, p.y - 1);
 				rw.player.setPosFromTilePos(updatedPos);
 				rw.repaint();
 				break;
@@ -147,7 +162,7 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 			case KeyEvent.VK_DOWN:
 				// move player down
 				//rw.player.y++;
-				updatedPos = new Point(p.x + 1, p.y + 1);
+				updatedPos = new Point(p.x, p.y + 1);
 				rw.player.setPosFromTilePos(updatedPos);
 				rw.repaint();
 				break;
@@ -156,7 +171,7 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 			case KeyEvent.VK_LEFT:
 				// move player left
 				//rw.player.x--;
-				updatedPos = new Point(p.x - 1, p.y + 1);
+				updatedPos = new Point(p.x - 1, p.y);
 				rw.player.setPosFromTilePos(updatedPos);
 				rw.repaint();
 				break;
@@ -165,7 +180,7 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 			case KeyEvent.VK_RIGHT:
 				// move player right
 				//rw.player.x++;
-				updatedPos = new Point(p.x + 1, p.y - 1);
+				updatedPos = new Point(p.x + 1, p.y);
 				rw.player.setPosFromTilePos(updatedPos);
 				rw.repaint();
 				break;
@@ -173,10 +188,11 @@ public class ApplicationWindow extends JFrame implements KeyListener {
 				break;
 		}	
 	}
-	/* unimplemented methods.
-	 */
 	@Override
-	public void keyTyped(KeyEvent e) { }
+	public synchronized void keyReleased(KeyEvent e) { 
+		pressed.remove(e.getKeyCode());
+	}
 	@Override
-	public void keyReleased(KeyEvent e) { }
+	public void keyTyped(KeyEvent e) { /* not used */ }
+
 }
