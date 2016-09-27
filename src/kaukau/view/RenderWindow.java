@@ -71,6 +71,8 @@ public class RenderWindow extends JPanel {
 	
 	// Field to store the current player
 	Sprite player;
+	// Field to store the current direction of the player
+	private char playerDir = 'S';
 	
 	public RenderWindow(){
 		//Setting a border
@@ -186,6 +188,9 @@ public class RenderWindow extends JPanel {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
 				
+				// update player direction
+				playerDir = 'E';
+				
 				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x, p.y - 1);
@@ -215,6 +220,9 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveDown", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
+
+				// update player direction
+				playerDir = 'W';
 				
 				// update sprite array position
 				Point p = player.getTilePos();
@@ -246,6 +254,9 @@ public class RenderWindow extends JPanel {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
 				
+				// update player direction
+				playerDir = 'S';
+				
 				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x+1, p.y );
@@ -275,6 +286,9 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveRight", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
+				
+				// update player direction
+				playerDir = 'N';
 				
 				// update sprite array position
 				Point p = player.getTilePos();
@@ -337,6 +351,21 @@ public class RenderWindow extends JPanel {
 	 * rotate game world 90 degrees
 	 */
 	public void rotateSprites() {
+		//first, rotate player direction
+		switch(playerDir){
+		case 'N':
+			playerDir = 'E';
+			break;
+		case 'E':
+			playerDir = 'S';
+			break;
+		case 'S':
+			playerDir = 'W';
+			break;
+		case 'W':
+			playerDir = 'N';
+			break;
+		}
 		//rotate int[][] 90 degrees into new 2d array
 		final int M = spriteData.length;
 	    final int N = spriteData[0].length;
@@ -384,7 +413,7 @@ public class RenderWindow extends JPanel {
 	    		y = y + 22;
 	    	}
 			
-			// TODO: tile randomisation & board rotation.
+			// TODO: tile randomisation.
 	    	// Drawing all level tiles onto the rendering panel
 	    	BufferedImage image;
 		    for(Tile t: allTiles){
@@ -402,10 +431,26 @@ public class RenderWindow extends JPanel {
 		    
 		    // Drawing the game sprites onto the level
 		    // TODO: More sprites and player animation
-		    image = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
 		    for(Sprite s: allSprites){
-		    	if(s.getSpriteType() == 1){
-		    		g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3), this);
+		    	image = null;
+		    	if(s.getSpriteType() == 1){ 
+		    		switch(playerDir){
+		    			case 'N':
+		    				image = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png"));
+		    				break;
+		    			case 'E':
+		    				image = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
+		    				break;
+		    			case 'S':
+		    				image = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
+		    				break;
+		    			case 'W':
+		    				image = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png"));
+		    				break;
+		    		}
+		    		if(image != null){
+		    			g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3), this);
+		    		}		
 		    	}
 		    }
     			
