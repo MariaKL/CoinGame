@@ -203,16 +203,6 @@ public class RenderWindow extends JPanel {
 					}
 				}
 				spriteData[r1-1][c1] = 1;
-				
-				for (int a=0;a<spriteData.length;a++){
-					for (int b=0;b<spriteData[0].length;b++){
-						System.out.print(spriteData[a][b]+"");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
-				System.out.println("");
-				
 				repaint();
 			}
 		});
@@ -241,16 +231,6 @@ public class RenderWindow extends JPanel {
 					}
 				}
 				spriteData[r1+1][c1] = 1;
-				
-				for (int a=0;a<spriteData.length;a++){
-					for (int b=0;b<spriteData[0].length;b++){
-						System.out.print(spriteData[a][b]+"");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
-				System.out.println("");
-				
 				repaint();
 			}
 		});
@@ -279,16 +259,6 @@ public class RenderWindow extends JPanel {
 					}
 				}
 				spriteData[r1][c1+1] = 1;
-				
-				for (int a=0;a<spriteData.length;a++){
-					for (int b=0;b<spriteData[0].length;b++){
-						System.out.print(spriteData[a][b]+"");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
-				System.out.println("");
-				
 				repaint();
 			}
 		});
@@ -317,16 +287,6 @@ public class RenderWindow extends JPanel {
 					}
 				}
 				spriteData[r1][c1-1] = 1;
-				
-				for (int a=0;a<spriteData.length;a++){
-					for (int b=0;b<spriteData[0].length;b++){
-						System.out.print(spriteData[a][b]+"");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
-				System.out.println("");
-				
 				repaint();			
 			}
 		});
@@ -400,15 +360,6 @@ public class RenderWindow extends JPanel {
 	    for(int a=0; a<spriteData.length; a++)
 	    	  for(int b=0; b<spriteData[0].length; b++)
 	    	    spriteData[a][b]=ret[a][b];    
-	    
-	    for (int a=0;a<spriteData.length;a++){
-			for (int b=0;b<spriteData[0].length;b++){
-				System.out.print(spriteData[a][b]+"");
-			}
-			System.out.println("");
-		}
-		System.out.println("");
-		System.out.println("");
 	}
 
 	@Override
