@@ -179,6 +179,8 @@ public class RenderWindow extends JPanel {
 		
 		//player move up
 		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_UP, 0), "moveUp");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
 				KeyEvent.VK_W, 0), "moveUp");
 		this.getActionMap().put("moveUp", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
@@ -206,6 +208,8 @@ public class RenderWindow extends JPanel {
 		});
 		
 		//player move down
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_DOWN, 0), "moveDown");
 		this.getInputMap().put(KeyStroke.getKeyStroke(
 				KeyEvent.VK_S, 0), "moveDown");
 		this.getActionMap().put("moveDown", new AbstractAction() {
@@ -235,6 +239,8 @@ public class RenderWindow extends JPanel {
 		
 		//player move left
 		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_RIGHT, 0), "moveLeft");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
 				KeyEvent.VK_D, 0), "moveLeft");
 		this.getActionMap().put("moveLeft", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
@@ -262,6 +268,8 @@ public class RenderWindow extends JPanel {
 		});
 		
 		//player move right
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_LEFT, 0), "moveRight");
 		this.getInputMap().put(KeyStroke.getKeyStroke(
 				KeyEvent.VK_A, 0), "moveRight");
 		this.getActionMap().put("moveRight", new AbstractAction() {
