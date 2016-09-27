@@ -65,14 +65,14 @@ public class RenderWindow extends JPanel {
 	private static final int tileHeight = 50;
 	
 	// Field to store all the tiles in the current level
-	List<Tile> allTiles = new ArrayList<Tile>();
+	private List<Tile> allTiles = new ArrayList<Tile>();
 	// Field to store all the sprites in the current level
-	List<Sprite> allSprites = new ArrayList<Sprite>();
+	private List<Sprite> allSprites = new ArrayList<Sprite>();
 	
-	// Field to store the current player
-	Sprite player;
 	// Field to store the current direction of the player
 	private char playerDir = 'S';
+	// Field to store the current player
+	Sprite player;
 	
 	public RenderWindow(){
 		//Setting a border
@@ -247,10 +247,10 @@ public class RenderWindow extends JPanel {
 		
 		//player move left
 		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_RIGHT, 0), "moveLeft");
+				KeyEvent.VK_RIGHT, 0), "moveRight");
 		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_D, 0), "moveLeft");
-		this.getActionMap().put("moveLeft", new AbstractAction() {
+				KeyEvent.VK_D, 0), "moveRight");
+		this.getActionMap().put("moveRight", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
 				
@@ -280,10 +280,10 @@ public class RenderWindow extends JPanel {
 		
 		//player move right
 		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_LEFT, 0), "moveRight");
+				KeyEvent.VK_LEFT, 0), "moveLeft");
 		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_A, 0), "moveRight");
-		this.getActionMap().put("moveRight", new AbstractAction() {
+				KeyEvent.VK_A, 0), "moveLeft");
+		this.getActionMap().put("moveLeft", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
 				
@@ -409,11 +409,13 @@ public class RenderWindow extends JPanel {
 	    	BufferedImage lockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "locked-door.png"));
 	    	int x = 284;
 	    	int y = -66;
-	    	Point tile5 = new Point(0,0);;
+	    	// door draw point
+	    	Point door = new Point(0,0);
+	    	// drawing north wall
 	    	for(int i = 0; i != 8; i++){
 	    		if(i==5){
-	    			tile5.x=x;
-	    			tile5.y=y;
+	    			door.x=x;
+	    			door.y=y;
 	    		}
 	    		g.drawImage(northWallImg, x, y, this);
 	    		x = x - 42;
@@ -421,12 +423,14 @@ public class RenderWindow extends JPanel {
 	    	}
 	    	x = 356;
 	    	y = -66;
+	    	// drawing east wall
 	    	for(int i = 0; i != 8; i++){
 	    		g.drawImage(eastWallImg, x, y, this);
 	    		x = x + 43;
 	    		y = y + 22;
 	    	}
-	    	g.drawImage(lockedDoorImg, tile5.x+(SPRITE_MARGIN/4), tile5.y+(SPRITE_MARGIN/2), this);
+	    	// drawing locked door
+	    	g.drawImage(lockedDoorImg, door.x+(SPRITE_MARGIN/4), door.y+(SPRITE_MARGIN/2), this);
 			
 			// TODO: tile randomisation.
 	    	// Drawing all level tiles onto the rendering panel
