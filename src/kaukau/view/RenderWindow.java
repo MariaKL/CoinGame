@@ -78,7 +78,7 @@ public class RenderWindow extends JPanel {
 		//Setting a border
 		// FIXME: Stop border resizing with window
 		setBorder(BorderFactory.createCompoundBorder(
-						      BorderFactory.createEmptyBorder(0, 0, 32, 0),
+						      BorderFactory.createEmptyBorder(0, 2, 2, 2),
 						      BorderFactory.createLineBorder(Color.BLACK, 2)
 						   ));
 		
@@ -404,7 +404,8 @@ public class RenderWindow extends JPanel {
 	     try {
 	    	 
 	    	//FIXME: drawing walls without hardcoded values.
-	    	BufferedImage wallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
+	    	BufferedImage northWallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
+	    	BufferedImage eastWallImg = ImageIO.read(new File(IMAGE_PATH + "east-wall.png"));
 	    	BufferedImage lockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "locked-door.png"));
 	    	int x = 284;
 	    	int y = -66;
@@ -414,8 +415,15 @@ public class RenderWindow extends JPanel {
 	    			tile5.x=x;
 	    			tile5.y=y;
 	    		}
-	    		g.drawImage(wallImg, x, y, this);
+	    		g.drawImage(northWallImg, x, y, this);
 	    		x = x - 42;
+	    		y = y + 22;
+	    	}
+	    	x = 356;
+	    	y = -66;
+	    	for(int i = 0; i != 8; i++){
+	    		g.drawImage(eastWallImg, x, y, this);
+	    		x = x + 43;
 	    		y = y + 22;
 	    	}
 	    	g.drawImage(lockedDoorImg, tile5.x+(SPRITE_MARGIN/4), tile5.y+(SPRITE_MARGIN/2), this);

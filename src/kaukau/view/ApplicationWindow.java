@@ -36,18 +36,13 @@ public class ApplicationWindow extends JFrame{
 		// creating a menu
 		initMenu();
 		
-		/* adding this as a key listener on the render window
-		rw.setFocusable(true);
-		rw.requestFocusInWindow();
-		rw.addKeyListener(this);
-		*/
 		// adding the rendering window to the application
 		add(rw);
 			
 		// setting title
 		setTitle("Kaukau");
 		// set size
-		setSize(710, 550);
+		setSize(765, 525);
 		// set display location
 		setLocationRelativeTo(null);
 		// set close operation
