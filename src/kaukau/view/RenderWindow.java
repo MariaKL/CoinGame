@@ -400,7 +400,7 @@ public class RenderWindow extends JPanel {
 		    for(Sprite s: allSprites){
 		    	if(s.getSpriteType() == 1){
 		    		g.drawImage(image, s.X() + (720/2) - SPRITE_MARGIN, s.Y() - (SPRITE_MARGIN/2), this);
-		    	} 
+		    	}
 		    }
     			
 		} catch (IOException e) {
