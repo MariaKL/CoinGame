@@ -182,9 +182,25 @@ public class RenderWindow extends JPanel {
 				KeyEvent.VK_W, 0), "moveUp");
 		this.getActionMap().put("moveUp", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
+				// TODO: check if action is legal
+				
+				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x, p.y - 1);
 				player.setPosFromTilePos(updatedPos);
+				// update 2d array position
+				int r1 = 0;
+				int c1 = 0;
+				for (int r=0;r<spriteData.length;r++){
+					for (int c=0;c<spriteData[0].length;c++){
+						if (spriteData[r][c] == 1){
+							r1 = r;
+							c1 = c;
+							spriteData[r][c] = 0;
+						}
+					}
+				}
+				spriteData[r1][c1-1] = 1;
 				repaint();
 			}
 		});
@@ -194,9 +210,25 @@ public class RenderWindow extends JPanel {
 				KeyEvent.VK_S, 0), "moveDown");
 		this.getActionMap().put("moveDown", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
+				// TODO: check if action is legal
+				
+				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x, p.y + 1);
 				player.setPosFromTilePos(updatedPos);
+				// update 2d array position
+				int r1 = 0;
+				int c1 = 0;
+				for (int r=0;r<spriteData.length;r++){
+					for (int c=0;c<spriteData[0].length;c++){
+						if (spriteData[r][c] == 1){
+							r1 = r;
+							c1 = c;
+							spriteData[r][c] = 0;
+						}
+					}
+				}
+				spriteData[r1][c1+1] = 1;
 				repaint();
 			}
 		});
@@ -206,9 +238,25 @@ public class RenderWindow extends JPanel {
 				KeyEvent.VK_A, 0), "moveLeft");
 		this.getActionMap().put("moveLeft", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
+				// TODO: check if action is legal
+				
+				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x - 1, p.y);
 				player.setPosFromTilePos(updatedPos);
+				// update 2d array position
+				int r1 = 0;
+				int c1 = 0;
+				for (int r=0;r<spriteData.length;r++){
+					for (int c=0;c<spriteData[0].length;c++){
+						if (spriteData[r][c] == 1){
+							r1 = r;
+							c1 = c;
+							spriteData[r][c] = 0;
+						}
+					}
+				}
+				spriteData[r1-1][c1] = 1;
 				repaint();
 			}
 		});
@@ -218,9 +266,25 @@ public class RenderWindow extends JPanel {
 				KeyEvent.VK_D, 0), "moveRight");
 		this.getActionMap().put("moveRight", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
+				// TODO: check if action is legal
+				
+				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x + 1, p.y);
 				player.setPosFromTilePos(updatedPos);
+				// update 2d array position
+				int r1 = 0;
+				int c1 = 0;
+				for (int r=0;r<spriteData.length;r++){
+					for (int c=0;c<spriteData[0].length;c++){
+						if (spriteData[r][c] == 1){
+							r1 = r;
+							c1 = c;
+							spriteData[r][c] = 0;
+						}
+					}
+				}
+				spriteData[r1+1][c1] = 1;
 				repaint();			
 			}
 		});
@@ -290,7 +354,7 @@ public class RenderWindow extends JPanel {
 				placeSprite(spriteType, twoDToIso(new Point(x, y)));
 			}
 	    }
-	    //replace levelData with new 2d array for future rotations
+	    //replace spriteData with new 2d array for future rotations
 	    for(int a=0; a<spriteData.length; a++)
 	    	  for(int b=0; b<spriteData[0].length; b++)
 	    	    spriteData[a][b]=ret[a][b];    
