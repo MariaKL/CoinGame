@@ -36,7 +36,7 @@ public class RenderWindow extends JPanel {
 	 * 	1..8 - cracked tile
 	 * 	9 - no tile (null)
 	 */
-	private static int[][] levelData = {{0,2,0,0,0,2,2},
+	private static int[][] levelData = {{2,2,0,0,0,0,2},
 		                                {2,2,0,0,0,0,2},
 		                                {0,0,0,2,0,0,0},
 		                                {0,0,2,2,2,0,0},
@@ -186,6 +186,8 @@ public class RenderWindow extends JPanel {
 				
 				// update sprite array position
 				Point p = player.getTilePos();
+				////////////////////////////////////////////
+				////////////////////////////////////////////
 				Point updatedPos = new Point(p.x, p.y - 1);
 				player.setPosFromTilePos(updatedPos);
 				// update 2d array position
@@ -200,7 +202,17 @@ public class RenderWindow extends JPanel {
 						}
 					}
 				}
-				spriteData[r1][c1-1] = 1;
+				spriteData[r1-1][c1] = 1;
+				
+				for (int a=0;a<spriteData.length;a++){
+					for (int b=0;b<spriteData[0].length;b++){
+						System.out.print(spriteData[a][b]+"");
+					}
+					System.out.println("");
+				}
+				System.out.println("");
+				System.out.println("");
+				
 				repaint();
 			}
 		});
@@ -228,21 +240,31 @@ public class RenderWindow extends JPanel {
 						}
 					}
 				}
-				spriteData[r1][c1+1] = 1;
+				spriteData[r1+1][c1] = 1;
+				
+				for (int a=0;a<spriteData.length;a++){
+					for (int b=0;b<spriteData[0].length;b++){
+						System.out.print(spriteData[a][b]+"");
+					}
+					System.out.println("");
+				}
+				System.out.println("");
+				System.out.println("");
+				
 				repaint();
 			}
 		});
 		
 		//player move left
 		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_A, 0), "moveLeft");
+				KeyEvent.VK_D, 0), "moveLeft");
 		this.getActionMap().put("moveLeft", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
 				
 				// update sprite array position
 				Point p = player.getTilePos();
-				Point updatedPos = new Point(p.x - 1, p.y);
+				Point updatedPos = new Point(p.x+1, p.y );
 				player.setPosFromTilePos(updatedPos);
 				// update 2d array position
 				int r1 = 0;
@@ -256,21 +278,31 @@ public class RenderWindow extends JPanel {
 						}
 					}
 				}
-				spriteData[r1-1][c1] = 1;
+				spriteData[r1][c1+1] = 1;
+				
+				for (int a=0;a<spriteData.length;a++){
+					for (int b=0;b<spriteData[0].length;b++){
+						System.out.print(spriteData[a][b]+"");
+					}
+					System.out.println("");
+				}
+				System.out.println("");
+				System.out.println("");
+				
 				repaint();
 			}
 		});
 		
 		//player move right
 		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_D, 0), "moveRight");
+				KeyEvent.VK_A, 0), "moveRight");
 		this.getActionMap().put("moveRight", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
 				
 				// update sprite array position
 				Point p = player.getTilePos();
-				Point updatedPos = new Point(p.x + 1, p.y);
+				Point updatedPos = new Point(p.x-1, p.y);
 				player.setPosFromTilePos(updatedPos);
 				// update 2d array position
 				int r1 = 0;
@@ -284,7 +316,17 @@ public class RenderWindow extends JPanel {
 						}
 					}
 				}
-				spriteData[r1+1][c1] = 1;
+				spriteData[r1][c1-1] = 1;
+				
+				for (int a=0;a<spriteData.length;a++){
+					for (int b=0;b<spriteData[0].length;b++){
+						System.out.print(spriteData[a][b]+"");
+					}
+					System.out.println("");
+				}
+				System.out.println("");
+				System.out.println("");
+				
 				repaint();			
 			}
 		});
@@ -358,6 +400,15 @@ public class RenderWindow extends JPanel {
 	    for(int a=0; a<spriteData.length; a++)
 	    	  for(int b=0; b<spriteData[0].length; b++)
 	    	    spriteData[a][b]=ret[a][b];    
+	    
+	    for (int a=0;a<spriteData.length;a++){
+			for (int b=0;b<spriteData[0].length;b++){
+				System.out.print(spriteData[a][b]+"");
+			}
+			System.out.println("");
+		}
+		System.out.println("");
+		System.out.println("");
 	}
 
 	@Override
