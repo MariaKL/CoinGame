@@ -37,9 +37,9 @@ public class RenderWindow extends JPanel {
 	 * 	9 - no tile (null)
 	 */
 	private static int[][] levelData = {{2,2,0,0,0,0,2},
-		                                {2,2,0,0,0,0,2},
+		                                {2,0,0,0,0,0,2},
 		                                {0,0,0,2,0,0,0},
-		                                {0,0,0,2,0,0,0},
+		                                {2,0,0,2,0,0,0},
 		                                {0,0,0,2,0,0,0},
 		                                {0,0,0,0,0,0,2},
 		                                {2,0,0,0,0,2,0}}; 
@@ -48,10 +48,10 @@ public class RenderWindow extends JPanel {
 	* KEY: 
 	* 1 - player
 	*/
-	private static int[][] spriteData = {{1,0,0,0,0,0,0},
+	private static int[][] spriteData = {{0,0,0,0,0,0,0},
 										 {0,0,0,0,0,0,0},
 								         {0,0,0,0,0,0,0},
-						                 {0,0,0,0,0,0,0},
+						                 {0,0,0,1,0,0,0},
                             	         {0,0,0,0,0,0,0},
 								         {0,0,0,0,0,0,0},
 							             {0,0,0,0,0,0,0}};
@@ -405,13 +405,20 @@ public class RenderWindow extends JPanel {
 	    	 
 	    	//FIXME: drawing walls without hardcoded values.
 	    	BufferedImage wallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
+	    	BufferedImage lockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "locked-door.png"));
 	    	int x = 284;
 	    	int y = -66;
+	    	Point tile5 = new Point(0,0);;
 	    	for(int i = 0; i != 8; i++){
+	    		if(i==5){
+	    			tile5.x=x;
+	    			tile5.y=y;
+	    		}
 	    		g.drawImage(wallImg, x, y, this);
 	    		x = x - 42;
 	    		y = y + 22;
 	    	}
+	    	g.drawImage(lockedDoorImg, tile5.x+(SPRITE_MARGIN/4), tile5.y+(SPRITE_MARGIN/2), this);
 			
 			// TODO: tile randomisation.
 	    	// Drawing all level tiles onto the rendering panel
@@ -449,7 +456,7 @@ public class RenderWindow extends JPanel {
 		    				break;
 		    		}
 		    		if(image != null){
-		    			g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3), this);
+		    			g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3-3), this);
 		    		}		
 		    	}
 		    }
