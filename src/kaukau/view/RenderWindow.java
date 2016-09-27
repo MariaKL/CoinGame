@@ -39,10 +39,10 @@ public class RenderWindow extends JPanel {
 	private static int[][] levelData = {{0,2,0,0,0,2,2},
 		                                {2,2,0,0,0,0,2},
 		                                {0,0,0,2,0,0,0},
-		                                {0,0,2,2,2,0,0},
 		                                {0,0,0,2,0,0,0},
-		                                {2,0,0,0,0,2,2},
-		                                {2,2,0,0,0,2,0}}; 
+		                                {0,0,0,2,0,0,0},
+		                                {0,0,0,0,0,0,2},
+		                                {2,0,0,0,0,2,0}}; 
 	
 	/* Field to store 2D array representation of the level sprite data.
 	* KEY: 
@@ -394,10 +394,10 @@ public class RenderWindow extends JPanel {
 		    
 		    // Drawing the game sprites onto the level
 		    // TODO: More sprites and player animation
-		    image = ImageIO.read(new File(IMAGE_PATH + "man-se-64.png"));
+		    image = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
 		    for(Sprite s: allSprites){
 		    	if(s.getSpriteType() == 1){
-		    		g.drawImage(image, s.X() + (720/2) - SPRITE_MARGIN, s.Y() - (SPRITE_MARGIN/2), this);
+		    		g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3), this);
 		    	}
 		    }
     			
