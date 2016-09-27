@@ -36,13 +36,13 @@ public class RenderWindow extends JPanel {
 	 * 	1..8 - cracked tile
 	 * 	9 - no tile (null)
 	 */
-	private static int[][] levelData = {{0,2,0,0,0,2,9},
-		                                {2,2,0,2,0,2,9},
-		                                {2,0,2,0,2,0,9},
-		                                {0,0,0,0,0,0,9},
-		                                {0,2,2,0,2,2,9},
-		                                {2,0,0,2,2,2,9},
-		                                {2,2,0,0,2,0,9}}; 
+	private static int[][] levelData = {{0,2,0,0,0,2,2},
+		                                {2,2,0,0,0,0,2},
+		                                {0,0,0,2,0,0,0},
+		                                {0,0,2,2,2,0,0},
+		                                {0,0,0,2,0,0,0},
+		                                {2,0,0,0,0,2,2},
+		                                {2,2,0,0,0,2,0}}; 
 	
 	/* Field to store 2D array representation of the level sprite data.
 	* KEY: 
@@ -172,6 +172,7 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("rotate", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				rotateWorld();
+				rotateSprites();
 				repaint();
 			}
 		});
@@ -258,6 +259,41 @@ public class RenderWindow extends JPanel {
 	    for(int a=0; a<levelData.length; a++)
 	    	  for(int b=0; b<levelData[0].length; b++)
 	    	    levelData[a][b]=ret[a][b];    
+	}
+	
+	/**
+	 * rotate game world 90 degrees
+	 */
+	public void rotateSprites() {
+		//rotate int[][] 90 degrees into new 2d array
+		final int M = spriteData.length;
+	    final int N = spriteData[0].length;
+	    int[][] ret = new int[N][M];
+	    for (int r = 0; r < M; r++) {
+	        for (int c = 0; c < N; c++) {
+	            ret[c][M-1-r] = spriteData[r][c];
+	        }
+	    }
+	    //clear old list, insert new tile arrangement
+	    allSprites.clear();
+	    for (int i = 0; i<ret.length; i++){
+			for (int j = 0; j<ret[0].length; j++){
+				
+				// getting the x & y position of the tile
+				int x = j * tileWidth;
+				int y = i * tileHeight;
+				
+				// getting the tile type
+				int spriteType = ret[i][j];
+				
+				// creating and adding the tile to the current level board
+				placeSprite(spriteType, twoDToIso(new Point(x, y)));
+			}
+	    }
+	    //replace levelData with new 2d array for future rotations
+	    for(int a=0; a<spriteData.length; a++)
+	    	  for(int b=0; b<spriteData[0].length; b++)
+	    	    spriteData[a][b]=ret[a][b];    
 	}
 
 	@Override
