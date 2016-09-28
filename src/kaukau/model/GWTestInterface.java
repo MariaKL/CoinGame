@@ -3,8 +3,11 @@ package kaukau.model;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import pacman.ui.Board;
 
@@ -19,53 +22,19 @@ public class GWTestInterface implements KeyListener {
 	}
 
 	private void loadBoard(){
-		FileReader fr = new FileReader(filename);
-		BufferedReader br = new BufferedReader(fr);
-		ArrayList<String> lines = new ArrayList<String>();
-		int width = -1;
-		String line;
-		while((line = br.readLine()) != null) {
-			lines.add(line);
-
-			// now sanity check
-
-			if(width == -1) {
-				width = line.length();
-			} else if(width != line.length()) {
-				throw new IllegalArgumentException("Input file \"" + filename + "\" is malformed; line " + lines.size() + " incorrect width.");
-			}
-		}
-
-		Board board = new Board(width,lines.size());
-		for(int y=0;y!=lines.size();++y) {
-			line = lines.get(y);
-			for(int x=0;x!=width;++x) {
-				char c = line.charAt(x);
-				switch (c) {
-					case 'W' :
-						board.addWall(x, y);
-						break;
-					case 'P':
-						board.addPill(x, y);
-						break;
-					case 'X':
-						board.registerPacPortal(x, y);
-						break;
-					case 'G':
-						board.registerGhostPortal(x,y);
-						break;
-				}
-			}
-		}
-
-		for(int i=0;i!=nHomerGhosts;++i) {
-			board.registerGhost(true);
-		}
-		for(int i=0;i!=nRandomGhosts;++i) {
-			board.registerGhost(false);
-		}
-
-		return board;
+		File file = new File("Tile.txt");
+	    try {
+	        Scanner sc = new Scanner(file);
+	        int row = 0;
+	        while (sc.hasNextLine()) {
+	            String i = sc.next();
+	            this.board.addTile(new Tile(), row, col);
+	        }
+	        sc.close();
+	    }
+	    catch (FileNotFoundException e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	private void redraw() {
