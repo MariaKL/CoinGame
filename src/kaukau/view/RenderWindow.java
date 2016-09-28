@@ -83,6 +83,9 @@ public class RenderWindow extends JPanel {
 	// Field to store all the sprites in the current level
 	private List<Sprite> allSprites = new ArrayList<Sprite>();
 	
+	// Field to store the current direction of the board
+	private char gameDir = 'S';
+	
 	// Field to store the current direction of the player
 	private char playerDir = 'S';
 	// Field to store the current player
@@ -365,6 +368,21 @@ public class RenderWindow extends JPanel {
 	 * rotate game world 90 degrees
 	 */
 	public void rotateWorld() {
+		//first, rotate game direction
+		switch(gameDir){
+		case 'N':
+			gameDir = 'E';
+			break;
+		case 'E':
+			gameDir = 'S';
+			break;
+		case 'S':
+			gameDir = 'W';
+			break;
+		case 'W':
+			gameDir = 'N';
+			break;
+		}
 		//rotate int[][] 90 degrees into new 2d array
 		final int M = levelData.length;
 	    final int N = levelData[0].length;
@@ -453,19 +471,30 @@ public class RenderWindow extends JPanel {
 	     try {
 	    	 
 	    	//FIXME: drawing walls without hardcoded values.
+	    	 
+	    	// creating wall images
 	    	BufferedImage northWallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
 	    	BufferedImage eastWallImg = ImageIO.read(new File(IMAGE_PATH + "east-wall.png"));
-	    	BufferedImage lockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "locked-door.png"));
+	    	BufferedImage northLockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "north-locked-door.png"));
+	    	BufferedImage eastLockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "east-locked-door.png"));
+	    	
+	    	// positioning values
 	    	int nx = 284; // stores the starting x pos for the north walls
 	    	int ny = -66; // stores the starting y pos for the north walls
 	    	int ex = 356; // stores the starting x pos for the east walls
 	    	int ey = -66; // stores the starting y pos for the east walls
-	    	Point door = new Point(0,0);
+	    	Point doorN = new Point(0,0); // stores the position of the locked door on the north wall
+	    	Point doorE = new Point(0,0); // stores the position of the locked door on the east wall
+	    	
 	    	// drawing walls
 	    	for(int i=0; i<=wallData.length; i++){
+	    		if(i==2){
+	    			doorE.x=ex;
+	    			doorE.y=ey;
+	    		}
 	    		if(i==5){
-	    			door.x=nx;
-	    			door.y=ny;
+	    			doorN.x=nx;
+	    			doorN.y=ny;
 	    		}
 	    		g.drawImage(northWallImg, nx, ny, this);
 	    		g.drawImage(eastWallImg, ex, ey, this);
@@ -475,7 +504,11 @@ public class RenderWindow extends JPanel {
 	    		ey = ey + 22;
 	    	}
 	    	// drawing locked door
-	    	g.drawImage(lockedDoorImg, door.x+(SPRITE_MARGIN/4), door.y+(SPRITE_MARGIN/2), this);
+	    	if(gameDir == 'S'){
+	    		g.drawImage(northLockedDoorImg, doorN.x+(SPRITE_MARGIN/4), doorN.y+(SPRITE_MARGIN/2), this);
+	    	} else if(gameDir == 'W'){
+	    		g.drawImage(eastLockedDoorImg, doorE.x-(SPRITE_MARGIN), doorE.y-(SPRITE_MARGIN/4)+4, this);
+	    	}
 			
 			// TODO: tile randomisation.
 	    	// Drawing all level tiles onto the rendering panel
