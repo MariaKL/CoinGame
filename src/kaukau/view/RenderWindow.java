@@ -56,28 +56,25 @@ public class RenderWindow extends JPanel {
 								         {0,0,0,0,0,0,0},
 							             {0,0,0,0,0,0,0}};
 	
-	/* Field to store 2D array representation of the level wall data.
+	/* Fields to store array representation of the level wall data.
 	* KEY: 
 	* 1 - wall
+	* 2 - door
 	*/
-	private static int[][] wallData = {{0,2,2,2,2,2,2},
-									   {1,0,0,0,0,0,0},
-								       {1,0,0,0,0,0,0},
-						               {1,0,0,0,0,0,0},
-                            	       {1,0,0,0,0,0,0},
-								       {1,0,0,0,0,0,0},
-							           {1,0,0,0,0,0,0}};
+	private static int[] northWall = {1,1,1,1,1,2,1};
+	private static int[] eastWall  = {1,1,1,2,1,1,1};
+	private static int[] southWall = {1,1,1,1,1,1,1};
+	private static int[] westWall  = {1,1,1,2,1,1,1};
 	
 	// Field to store the board margins in pixels
 	private static final int MARGIN = 324;
 	private static final int SPRITE_MARGIN = 16;
+	private static final int WALL_Y = -66;
 	
 	// Fields to store the tile width & height in pixels
 	private static final int tileWidth = 50;
 	private static final int tileHeight = 50;
 	
-	// Field to store all the walls in the current level
-	private List<Wall> allWalls = new ArrayList<Wall>();
 	// Field to store all the tiles in the current level
 	private List<Tile> allTiles = new ArrayList<Tile>();
 	// Field to store all the sprites in the current level
@@ -88,6 +85,7 @@ public class RenderWindow extends JPanel {
 	
 	// Field to store the current direction of the player
 	private char playerDir = 'S';
+	
 	// Field to store the current player
 	Sprite player;
 	
@@ -98,9 +96,7 @@ public class RenderWindow extends JPanel {
 						      BorderFactory.createEmptyBorder(0, 2, 2, 2),
 						      BorderFactory.createLineBorder(Color.BLACK, 2)
 						   ));
-		
-		// initilising the wall from 2D level data array
-		initWalls();
+
 		// initilising the level from 2D level data array
 		initLevel();
 		// initilising level sprites from 2D sprite data array
@@ -109,40 +105,6 @@ public class RenderWindow extends JPanel {
 		attachBindings();
 		// repaint board
 		repaint();
-	}
-	
-	/**
-	 * Initilising the walls on the current level
-	 *  from the 2D wall data array.
-	 */
-	private void initWalls() {
-		for (int i = 0; i<wallData.length; i++){
-			for (int j = 0; j<wallData[0].length; j++){
-				
-				// getting the x & y position of the tile
-				int x = j * tileWidth;
-				int y = i * tileHeight;
-				
-				// getting the type type
-				int wallType = wallData[i][j];
-				
-				// creating and adding the tile to the current level board
-				placeWall(wallType, twoDToIso(new Point(x, y)));
-			}
-		}	
-	}
-	
-	/**This method creates and adds a wall to a list
-	 *  of all walls which make up the current game level.
-	 * 
-	 * @param wallType
-	 * @param pt
-	 */
-	private void placeWall(int wallType, Point pt) {
-		// Creating a new sprite
-		Wall w = new Wall(wallType, pt.x, pt.y);
-		// Adding the sprite to the current level
-		allWalls.add(w);
 	}
 
 	/**
@@ -470,44 +432,112 @@ public class RenderWindow extends JPanel {
 	     
 	     try {
 	    	 
-	    	//FIXME: drawing walls without hardcoded values.
+	    	//FIXME: drawing walls from the wall arrays
 	    	 
 	    	// creating wall images
 	    	BufferedImage northWallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
 	    	BufferedImage eastWallImg = ImageIO.read(new File(IMAGE_PATH + "east-wall.png"));
+	    	// creating locked door images
 	    	BufferedImage northLockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "north-locked-door.png"));
 	    	BufferedImage eastLockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "east-locked-door.png"));
+	    	// creating door images
+	    	BufferedImage northDoorImg = ImageIO.read(new File(IMAGE_PATH + "north-door.png"));
+	    	BufferedImage eastDoorImg = ImageIO.read(new File(IMAGE_PATH + "east-door.png"));
 	    	
-	    	// positioning values
+	    	// wall positioning values
 	    	int nx = 284; // stores the starting x pos for the north walls
-	    	int ny = -66; // stores the starting y pos for the north walls
 	    	int ex = 356; // stores the starting x pos for the east walls
-	    	int ey = -66; // stores the starting y pos for the east walls
+	    	int ny = WALL_Y, ey = WALL_Y; // stores the starting y pos for the north & east walls
+	    	
+	    	// FIXME: position doors without these points
+	    	// door positioning values
 	    	Point doorN = new Point(0,0); // stores the position of the locked door on the north wall
 	    	Point doorE = new Point(0,0); // stores the position of the locked door on the east wall
 	    	
-	    	// drawing walls
-	    	for(int i=0; i<=wallData.length; i++){
-	    		if(i==2){
-	    			doorE.x=ex;
-	    			doorE.y=ey;
-	    		}
-	    		if(i==5){
-	    			doorN.x=nx;
-	    			doorN.y=ny;
-	    		}
-	    		g.drawImage(northWallImg, nx, ny, this);
-	    		g.drawImage(eastWallImg, ex, ey, this);
-	    		nx = nx - 42;
-	    		ny = ny + 22;
-	    		ex = ex + 43;
-	    		ey = ey + 22;
-	    	}
-	    	// drawing locked door
-	    	if(gameDir == 'S'){
-	    		g.drawImage(northLockedDoorImg, doorN.x+(SPRITE_MARGIN/4), doorN.y+(SPRITE_MARGIN/2), this);
-	    	} else if(gameDir == 'W'){
-	    		g.drawImage(eastLockedDoorImg, doorE.x-(SPRITE_MARGIN), doorE.y-(SPRITE_MARGIN/4)+4, this);
+	    	// draw walls based on current game view
+	    	switch(gameDir){
+	    		case 'S':
+	    			// draw north and east walls
+	    			for(int i=0; i<=northWall.length; i++){
+	    				if(i<northWall.length && northWall[i] != 1){
+	    					doorN.x = nx;
+	    					doorN.y = ny;
+	    				}
+	    				if(i<eastWall.length && eastWall[i] != 1){
+	    					doorE.x = ex;
+	    					doorE.y = ey;
+	    				}
+	    				// drawing walls
+	    	    		g.drawImage(northWallImg, nx, ny, this);
+	    	    		g.drawImage(eastWallImg, ex, ey, this);
+	    	    		nx = nx - 42;
+	    	    		ny = ny + 22;
+	    	    		ex = ex + 43;
+	    	    		ey = ey + 22;
+	    			}
+	    			// drawing doors
+	    			g.drawImage(northLockedDoorImg, doorN.x+(SPRITE_MARGIN/4), doorN.y+(SPRITE_MARGIN/2), this);
+	    			g.drawImage(eastDoorImg, doorE.x+(SPRITE_MARGIN*2+4), doorE.y+(SPRITE_MARGIN+8), this);
+	    			break;
+	    		case 'W':
+	    			// draw west and north walls
+	    			for(int i=0; i<=westWall.length; i++){
+	    				if(i<westWall.length && westWall[i] != 1){
+	    					doorN.x = nx;
+	    					doorN.y = ny;
+	    				}
+	    				if(i<northWall.length && northWall[i] != 1){
+	    					doorE.x = ex;
+	    					doorE.y = ey;
+	    				}
+	    				// drawing walls
+	    	    		g.drawImage(northWallImg, nx, ny, this);
+	    	    		g.drawImage(eastWallImg, ex, ey, this);
+	    	    		nx = nx - 42;
+	    	    		ny = ny + 22;
+	    	    		ex = ex + 43;
+	    	    		ey = ey + 22;
+	    			}
+	    			// drawing doors
+	    			g.drawImage(northDoorImg, doorN.x+(SPRITE_MARGIN), doorN.y+(SPRITE_MARGIN+8), this);
+	    			g.drawImage(eastLockedDoorImg, doorE.x-(SPRITE_MARGIN*9), doorE.y-(SPRITE_MARGIN*4), this);
+	    			break;
+	    		case 'N':
+	    			// draw south and west walls
+	    			for(int i=0; i<=southWall.length; i++){
+	    				if(i<westWall.length && westWall[i] != 1){
+	    					doorE.x = ex;
+	    					doorE.y = ey;
+	    				}
+	    				// drawing walls
+	    	    		g.drawImage(northWallImg, nx, ny, this);
+	    	    		g.drawImage(eastWallImg, ex, ey, this);
+	    	    		nx = nx - 42;
+	    	    		ny = ny + 22;
+	    	    		ex = ex + 43;
+	    	    		ey = ey + 22;
+	    			}
+	    			// drawing doors
+	    			g.drawImage(eastDoorImg, doorE.x+(SPRITE_MARGIN*2+4), doorE.y+(SPRITE_MARGIN+8), this);
+	    			break;
+	    		case 'E':
+	    			// draw east and south walls
+	    			for(int i=0; i<=eastWall.length; i++){
+	    				if(i<eastWall.length && eastWall[i] != 1){
+	    					doorN.x = nx;
+	    					doorN.y = ny;
+	    				}
+	    				// drawing walls
+	    	    		g.drawImage(northWallImg, nx, ny, this);
+	    	    		g.drawImage(eastWallImg, ex, ey, this);
+	    	    		nx = nx - 42;
+	    	    		ny = ny + 22;
+	    	    		ex = ex + 43;
+	    	    		ey = ey + 22;
+	    			}
+	    			// drawing doors
+	    			g.drawImage(northDoorImg, doorN.x+(SPRITE_MARGIN), doorN.y+(SPRITE_MARGIN+8), this);
+	    			break;
 	    	}
 			
 			// TODO: tile randomisation.
