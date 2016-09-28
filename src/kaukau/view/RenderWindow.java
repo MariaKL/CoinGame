@@ -56,6 +56,18 @@ public class RenderWindow extends JPanel {
 								         {0,0,0,0,0,0,0},
 							             {0,0,0,0,0,0,0}};
 	
+	/* Field to store 2D array representation of the level wall data.
+	* KEY: 
+	* 1 - wall
+	*/
+	private static int[][] wallData = {{0,2,2,2,2,2,2},
+									   {1,0,0,0,0,0,0},
+								       {1,0,0,0,0,0,0},
+						               {1,0,0,0,0,0,0},
+                            	       {1,0,0,0,0,0,0},
+								       {1,0,0,0,0,0,0},
+							           {1,0,0,0,0,0,0}};
+	
 	// Field to store the board margins in pixels
 	private static final int MARGIN = 324;
 	private static final int SPRITE_MARGIN = 16;
@@ -64,6 +76,8 @@ public class RenderWindow extends JPanel {
 	private static final int tileWidth = 50;
 	private static final int tileHeight = 50;
 	
+	// Field to store all the walls in the current level
+	private List<Wall> allWalls = new ArrayList<Wall>();
 	// Field to store all the tiles in the current level
 	private List<Tile> allTiles = new ArrayList<Tile>();
 	// Field to store all the sprites in the current level
@@ -82,6 +96,8 @@ public class RenderWindow extends JPanel {
 						      BorderFactory.createLineBorder(Color.BLACK, 2)
 						   ));
 		
+		// initilising the wall from 2D level data array
+		initWalls();
 		// initilising the level from 2D level data array
 		initLevel();
 		// initilising level sprites from 2D sprite data array
@@ -92,6 +108,40 @@ public class RenderWindow extends JPanel {
 		repaint();
 	}
 	
+	/**
+	 * Initilising the walls on the current level
+	 *  from the 2D wall data array.
+	 */
+	private void initWalls() {
+		for (int i = 0; i<wallData.length; i++){
+			for (int j = 0; j<wallData[0].length; j++){
+				
+				// getting the x & y position of the tile
+				int x = j * tileWidth;
+				int y = i * tileHeight;
+				
+				// getting the type type
+				int wallType = wallData[i][j];
+				
+				// creating and adding the tile to the current level board
+				placeWall(wallType, twoDToIso(new Point(x, y)));
+			}
+		}	
+	}
+	
+	/**This method creates and adds a wall to a list
+	 *  of all walls which make up the current game level.
+	 * 
+	 * @param wallType
+	 * @param pt
+	 */
+	private void placeWall(int wallType, Point pt) {
+		// Creating a new sprite
+		Wall w = new Wall(wallType, pt.x, pt.y);
+		// Adding the sprite to the current level
+		allWalls.add(w);
+	}
+
 	/**
 	 * Initilising the game sprites on the current level
 	 *  from the 2D sprite data array.
@@ -111,8 +161,7 @@ public class RenderWindow extends JPanel {
 				// creating and adding the tile to the current level board
 				placeSprite(spriteType, twoDToIso(new Point(x, y)));
 			}
-		}
-		
+		}	
 	}
 
 	/**This method creates and adds a sprite to a list
@@ -407,27 +456,23 @@ public class RenderWindow extends JPanel {
 	    	BufferedImage northWallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
 	    	BufferedImage eastWallImg = ImageIO.read(new File(IMAGE_PATH + "east-wall.png"));
 	    	BufferedImage lockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "locked-door.png"));
-	    	int x = 284;
-	    	int y = -66;
-	    	// door draw point
+	    	int nx = 284; // stores the starting x pos for the north walls
+	    	int ny = -66; // stores the starting y pos for the north walls
+	    	int ex = 356; // stores the starting x pos for the east walls
+	    	int ey = -66; // stores the starting y pos for the east walls
 	    	Point door = new Point(0,0);
-	    	// drawing north wall
-	    	for(int i = 0; i != 8; i++){
+	    	// drawing walls
+	    	for(int i=0; i<=wallData.length; i++){
 	    		if(i==5){
-	    			door.x=x;
-	    			door.y=y;
+	    			door.x=nx;
+	    			door.y=ny;
 	    		}
-	    		g.drawImage(northWallImg, x, y, this);
-	    		x = x - 42;
-	    		y = y + 22;
-	    	}
-	    	x = 356;
-	    	y = -66;
-	    	// drawing east wall
-	    	for(int i = 0; i != 8; i++){
-	    		g.drawImage(eastWallImg, x, y, this);
-	    		x = x + 43;
-	    		y = y + 22;
+	    		g.drawImage(northWallImg, nx, ny, this);
+	    		g.drawImage(eastWallImg, ex, ey, this);
+	    		nx = nx - 42;
+	    		ny = ny + 22;
+	    		ex = ex + 43;
+	    		ey = ey + 22;
 	    	}
 	    	// drawing locked door
 	    	g.drawImage(lockedDoorImg, door.x+(SPRITE_MARGIN/4), door.y+(SPRITE_MARGIN/2), this);
