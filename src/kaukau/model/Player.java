@@ -1,6 +1,6 @@
 package kaukau.model;
 
-public class Player {
+public class Player implements Item{
 	private String name;
 	private Tile location;
 	private Bag bag;
@@ -16,6 +16,7 @@ public class Player {
 	/**
 	 * Sets the items location to be the argument
 	 * */
+	@Override
 	public void setLocation(Tile loc) {
 		if(loc != null){
 			this.location = loc;
@@ -27,6 +28,7 @@ public class Player {
 	 * Gets the item name
 	 * @return String name
 	 * */
+	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -34,6 +36,7 @@ public class Player {
 	/**
 	 * Gets the items location
 	 * @return Tile*/
+	@Override
 	public Tile getLocation() {
 		return this.location;
 	}

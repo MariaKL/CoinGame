@@ -9,9 +9,9 @@ public class Note extends PickupableItem{
 	private ArrayList <Note> noteBook = new ArrayList <Note> ();
 	private int pageNumber;
 
-	public Note (String name, Tile loc, Player player, ArrayList <Note> pages, int page){
+	public Note (String name, Tile loc, Player player, int page){
 		super(name, loc, player);
-		this.noteBook = pages;
+		//this.noteBook = pages;
 		this.pageNumber = page;
 	}
 
