@@ -4,26 +4,22 @@ import java.awt.Point;
 
 public class GameMap {
 
-	private Room[][] rooms;
-	private int width, height;
+	private static final int ROOM_WIDTH = 7;
+	private static final int ROOM_HEIGHT = 7;
+	private static final int WIDTH = ROOM_WIDTH * 2;
+	private static final int HEIGHT = ROOM_HEIGHT * 2;
 	
-	public GameMap(int width, int height){
-		this.width = width;
-		this.height = height;
-		this.rooms = new Room[width][height];
+	private Room[][] rooms = new Room[2][2];
+	
+	public GameMap(){
+		this.rooms = new Room[ROOM_WIDTH][ROOM_WIDTH];
 	}
 	
-	public int width(){ 
-		int totalWidth = 0; 
-		for (int i = 0; i < rooms[0].length; i++){
-			totalWidth += rooms[0][i].width();
-		}
-		return totalWidth; 
-	}
-	public int height(){ return height; }
+	public int width(){ return ROOM_WIDTH * rooms.length; }
+	public int height(){ return ROOM_HEIGHT * rooms[0].length; }
 	
 	public Room getRoom(Point p){
-		if (p.x > width || p.y > height) return null;
+		if (p.x >= WIDTH || p.y > HEIGHT) return null;
 		return rooms[p.x][p.y];
 	}
 }

@@ -29,4 +29,10 @@ public class MapPiece extends PickupableItem{
 	public String toString(){
 		return "This is piece "+this.pieceNumber+"of "+this.mapPieces.size()+ " pieces of map "+this.getName()+".";
 	}
+
+	@Override
+	public String[] getActions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

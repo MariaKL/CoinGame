@@ -52,5 +52,4 @@ public class Door implements Item{
 	public String toString(){
 		return "Door at "+this.location.toString();
 	}
-
 }

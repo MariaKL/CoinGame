@@ -15,4 +15,10 @@ public class Key extends PickupableItem{
 		owner = player;
 	}
 
+	@Override
+	public String[] getActions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

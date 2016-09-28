@@ -92,6 +92,21 @@ public class Room {
 		return board[p.x][p.y];
 	}
 	
+	public boolean isTileOccupied(Point p){
+		if (!items.containsKey(p) && board[p.x][p.y].getTileType() == TileType.EMPTY) return false;
+		return true;
+	}
+	
+	/**
+	 * Determines if the point of this room contains an item or not.
+	 * @param p 
+	 * @return TRUE if there is one, otherwise FALSE
+	 */
+	public boolean containsItem(Point p){
+		if (items.containsKey(p)) return true;
+		return false;
+	}
+	
 	public int width(){ return width; }
 	public int height(){ return height; }
 }

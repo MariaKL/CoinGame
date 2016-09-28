@@ -2,7 +2,7 @@ package kaukau.model;
 
 import java.awt.Point;
 
-public class Player implements Item{
+public class Player {
 	private String name;
 	private Tile location;
 	private Bag bag;
@@ -20,7 +20,6 @@ public class Player implements Item{
 	/**
 	 * Sets the items location to be the argument
 	 * */
-	@Override
 	public void setLocation(Tile loc) {
 		if(loc != null){
 			this.location = loc;
@@ -49,7 +48,6 @@ public class Player implements Item{
 	 * Gets the item name
 	 * @return String name
 	 * */
-	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -57,7 +55,6 @@ public class Player implements Item{
 	/**
 	 * Gets the items location
 	 * @return Tile*/
-	@Override
 	public Tile getLocation() {
 		return this.location;
 	}

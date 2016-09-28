@@ -42,7 +42,7 @@ public class Tile {
 	}
 
 	public String toString(){
-		return "row = "+this.row+", col = "+this.col;
+		return "row = "+this.x+", col = "+this.y;
 	}
 	
 	public TileType getTileType() { return type;	}

@@ -28,4 +28,10 @@ public class Note extends PickupableItem{
 	public String toString(){
 		return "This is note is page "+this.pageNumber+"of "+this.noteBook.size()+ " pages of the notebook "+this.getName()+".";
 	}
+
+	@Override
+	public String[] getActions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

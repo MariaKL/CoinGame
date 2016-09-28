@@ -1,11 +1,9 @@
 package kaukau.model;
 
-import java.util.ArrayList;
-
 /**
- * A collectable object is something a player can pick up, inspect, store in a container or drop.
- * Collectable items include Keys, pieces of maps, notes and clues.*/
-public class PickupableItem implements Item{
+ * A cPickupable object is something a player can pick up, inspect, store in a container or drop.
+ * Pickupable items include Keys, pieces of maps, notes and clues.*/
+public abstract class PickupableItem implements Item{
 	private Tile location;
 	private String name;
 	private String code;
@@ -52,5 +50,13 @@ public class PickupableItem implements Item{
 	public void setOwner(Player owner){
 		this.owner = owner;
 	}
+
+	/**
+	 * Get the list of actions which can be performed on this item. This list
+	 * can be empty, though it should never be null.
+	 * 
+	 * @return
+	 */
+	public abstract String[] getActions();
 
 }
