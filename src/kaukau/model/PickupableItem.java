@@ -17,6 +17,10 @@ public class PickupableItem implements Item{
 			this.location = loc;
 		}
 	}
+	
+	public PickupableItem (String name){
+		this.name = name;
+	}
 
 	@Override
 	public void setLocation(Tile loc) {

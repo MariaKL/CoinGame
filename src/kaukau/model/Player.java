@@ -1,16 +1,20 @@
 package kaukau.model;
 
+import java.awt.Point;
+
 public class Player implements Item{
 	private String name;
 	private Tile location;
 	private Bag bag;
+	private Direction facing;
 
-	public Player (String name, Tile startLocation){
+	public Player (String name, Tile startLocation, Direction facing){
 		if(name != null && startLocation != null){
 			this.name = name;
 			this.location = startLocation;
 		}
 		bag = new Bag(this.name+"'s Bag", this.location, this);
+		this.facing = facing;
 	}
 
 	/**
@@ -22,6 +26,23 @@ public class Player implements Item{
 			this.location = loc;
 			this.bag.setLocation(loc);
 		}
+		setFacingDirection(loc);
+	}
+	
+	public void setFacingDirection(Tile loc){
+		if (location.X() == loc.X()){
+			if (location.Y() - loc.Y() == 1)
+				facing = Direction.WEST;
+			else facing = Direction.EAST;
+		} else {
+			if (location.X() - loc.X() == 1)
+				facing = Direction.NORTH;
+			else facing = Direction.SOUTH;
+		}
+	}
+	
+	public Direction facingDirection(){
+		return facing;
 	}
 
 	/**

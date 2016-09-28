@@ -1,9 +1,20 @@
 package kaukau.model;
 
+import kaukau.model.Room.TileType;
+
 public class Tile {
 	private Item item;
 	private float row, col;
 	private char code;
+	
+	private TileType type;
+	private int x, y;
+	
+	public Tile(TileType type, int x, int y){
+		this.type = type;
+		this.x = x;
+		this.y = y;
+	}
 
 	public Tile (float row, float col, char code){
 		this.code = code;
@@ -20,7 +31,7 @@ public class Tile {
 		}else if (this.code == 'D'){
 			this.item = new Door("Locked Door", 123, true);
 		}else if (this.code == 'P'){
-			this.item = new Player("Player 1", this);
+			//this.item = new Player("Player 1", this);
 		}else if (this.code == 'N'){
 			this.item = new Note("You're fucked", this, null, 1);
 		}
@@ -33,5 +44,9 @@ public class Tile {
 	public String toString(){
 		return "row = "+this.row+", col = "+this.col;
 	}
+	
+	public TileType getTileType() { return type;	}
+	public int X() { return x; }
+	public int Y() { return y; }
 
 }
