@@ -1,8 +1,7 @@
 package kaukau.model;
 
-import java.awt.Point;
-
 public class Player {
+
 	private String name;
 	private Tile location;
 	private Bag bag;
@@ -27,19 +26,19 @@ public class Player {
 		}
 		setFacingDirection(loc);
 	}
-	
+
 	public void setFacingDirection(Tile loc){
-		if (location.X() == loc.X()){
-			if (location.Y() - loc.Y() == 1)
+		if (location.Y() == loc.Y()){
+			if (location.X() - loc.X() == 1)
 				facing = Direction.WEST;
 			else facing = Direction.EAST;
 		} else {
-			if (location.X() - loc.X() == 1)
+			if (location.Y() - loc.Y() == 1)
 				facing = Direction.NORTH;
 			else facing = Direction.SOUTH;
 		}
 	}
-	
+
 	public Direction facingDirection(){
 		return facing;
 	}
@@ -71,6 +70,13 @@ public class Player {
 	 * */
 	public void removeFromBag(PickupableItem item){
 		this.bag.removeCollectable(item);
+	}
+
+	/**
+	 * adds item to players bag
+	 * */
+	public Bag getBag(){
+		return bag;
 	}
 
 	/**

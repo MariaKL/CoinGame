@@ -6,7 +6,7 @@ public class Door implements Item{
 	private int key;
 	private boolean locked;
 
-	public Door (String name, int key, boolean locked){
+	public Door(String name, int key, boolean locked){
 		if(name != null && key > 0){
 			this.name = name;
 			this.key = key;

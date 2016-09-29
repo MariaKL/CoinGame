@@ -6,10 +6,10 @@ public class Tile {
 	private Item item;
 	private float row, col;
 	private char code;
-	
+
 	private TileType type;
 	private int x, y;
-	
+
 	public Tile(TileType type, int x, int y){
 		this.type = type;
 		this.x = x;
@@ -44,8 +44,8 @@ public class Tile {
 	public String toString(){
 		return "row = "+this.x+", col = "+this.y;
 	}
-	
-	public TileType getTileType() { return type;	}
+
+	public TileType getTileType() { return type; }
 	public int X() { return x; }
 	public int Y() { return y; }
 
