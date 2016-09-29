@@ -50,9 +50,9 @@ public class GameWorld {
 			EmptyTile e = (EmptyTile) tile;
 			EmptyTile oldPos = (EmptyTile) player.getLocation();
 			if (!e.isTileOccupied()){
+				oldPos.removePlayer();
 				player.setLocation(tile);
 				e.addPlayer(player);
-				oldPos.removePlayer();
 				return true;
 			}
 		}
