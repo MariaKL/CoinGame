@@ -1,22 +1,20 @@
 package kaukau.model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-
-import kaukau.storage.ReadXMLFile;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
+import kaukau.storage.ReadXMLFile;
+
 import java.awt.Point;
 
-public class Room {
+public class Room implements Serializable{
 
 	private static final int ROOM_WIDTH = 7;
 	private static final int ROOM_HEIGHT = 7;

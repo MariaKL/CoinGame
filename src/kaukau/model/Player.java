@@ -1,13 +1,18 @@
 package kaukau.model;
 
-public class Player {
+import java.io.Serializable;
+
+
+public class Player implements Serializable{
 
 	private String name;
 	private Tile location;
 	private Bag bag;
 	private Direction facing;
+	private int userId;
 
-	public Player (String name, Tile startLocation, Direction facing){
+	public Player (int uid, String name, Tile startLocation, Direction facing){
+		this.userId = uid;
 		if(name != null && startLocation != null){
 			this.name = name;
 			this.location = startLocation;

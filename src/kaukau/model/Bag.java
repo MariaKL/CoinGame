@@ -1,8 +1,10 @@
 package kaukau.model;
 
+import java.io.Serializable;
+
 /**
  * Each Player has bag they carry with them. It is a container that can hold up to 5 collectable items*/
-public class Bag extends Container{
+public class Bag extends Container implements Serializable{
 	private Player player;
 	
 	public Bag (String name, Tile loc, Player player){
