@@ -5,8 +5,10 @@ import java.util.HashMap;
 import kaukau.model.Room.TileType;
 
 import java.awt.Point;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 
@@ -23,8 +25,8 @@ public class GameWorld {
 	 */
 	private static int uid = 0;
 	
+	
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
-	private final int MAX_PLAYERS = 4;
 
 	public GameWorld(String filename) throws IOException{
 		map = new Room[1][1];
@@ -35,6 +37,11 @@ public class GameWorld {
 		map = new Room[1][1];
 		map[0][0] = new Room("classroom", "room.xml");
 		gameOver = false;
+	}
+	
+	public GameWorld(HashMap<Integer, Player> players) throws IOException{
+		this.players = players;
+		map = new Room[1][1];
 	}
 
 	/**
@@ -138,27 +145,52 @@ public class GameWorld {
 	}
 	
 	/**
-	 * The following method converts the current state of the board into a byte
-	 * array, such that it can be shipped across a connection to an awaiting
-	 * client.
+	 * The following method converts the current state of the game into a byte
+	 * array, such that it can be shipped across a connection to an awaiting client.
 	 *
 	 * @return
+	 * @throws IOException 
 	 */
 	public synchronized byte[] toByteArray() throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		ObjectOutputStream dataOutput = new ObjectOutputStream(bout);
 		dataOutput.writeBoolean(gameOver);  // game state
-		dataOutput.writeObject(this.players);
-		dataOutput.writeObject(map[0][0]);	
+		dataOutput.writeObject(this.players);	
+		dataOutput.writeObject(map[0][0]);
 		dataOutput.flush();
 		// Finally, return!!
 		return bout.toByteArray();
 	}
-
-	public synchronized boolean performAction(String name, String action, Point p) {
-		return false;
+	
+	/**
+	 * The following method accepts a byte array representing the state of a
+	 * game; this state will be broadcast by a master connection, and is
+	 * then used to overwrite the current state (since it should be more up to date).
+	 *
+	 * @param bytes
+	 * @throws IOException 
+	 */
+	@SuppressWarnings("unchecked")
+	public synchronized void fromByteArray(byte[] bytes) throws IOException{
+		ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+		try {
+			ObjectInputStream dataInput = new ObjectInputStream(bin);
+			this.gameOver = dataInput.readBoolean();
+			this.players = (HashMap<Integer, Player>) dataInput.readObject();
+			map[0][0] = (Room) dataInput.readObject();
+		} catch (ClassNotFoundException e) {
+			System.err.println("Class not found in fromByteArray. " + e);
+			e.printStackTrace();
+		}
 	}
 
+	/**
+	 * /**
+	 * Returns the player of the game that matched with the userId.
+	 * @param uid UserId uses by the client
+	 * @return the player with the matching userId
+	 * @IllegalArgumentException if the userId does not contain in the game list
+	 */
 	public synchronized Player player(int uid){
 		if (players.containsKey(uid)){
 			return players.get(uid);
