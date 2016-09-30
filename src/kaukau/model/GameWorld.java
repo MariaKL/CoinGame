@@ -13,32 +13,32 @@ import java.io.ObjectOutputStream;
 
 
 public class GameWorld {
-	
+
 	private Room[][] map;
-	
+
 	private boolean gameOver;
-	
+
 	/**
 	 * The UID is a unique identifier for all characters in the game. This is
 	 * required in order to synchronise the movements of different players
 	 * across boards.
 	 */
 	private static int uid = 0;
-	
-	
+
+
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	public GameWorld(String filename) throws IOException{
 		map = new Room[1][1];
 		map[0][0] = new Room("classroom", filename);
 	}
-	
+
 	public GameWorld() throws IOException{
 		map = new Room[1][1];
 		map[0][0] = new Room("classroom", "room.xml");
 		gameOver = false;
 	}
-	
+
 	public GameWorld(HashMap<Integer, Player> players) throws IOException{
 		this.players = players;
 		map = new Room[1][1];
@@ -55,9 +55,9 @@ public class GameWorld {
 		this.players.put(name, new Player(++uid, name, room.getTileAt(new Point(5, 0)), Direction.EAST));
 		return true;
 	}*/
-	
+
 	/**
-	 * Register a new player into the game. 
+	 * Register a new player into the game.
 	 *
 	 * @return
 	 */
@@ -80,12 +80,12 @@ public class GameWorld {
 		Tile oldPos = player.getLocation();
 		Point newPos;
 		if (direction == Direction.NORTH)
-			newPos = new Point(oldPos.X(), oldPos.Y() - 1); 
+			newPos = new Point(oldPos.X(), oldPos.Y() - 1);
 		else if (direction == Direction.SOUTH)
-			newPos = new Point(oldPos.X(), oldPos.Y() + 1); 
+			newPos = new Point(oldPos.X(), oldPos.Y() + 1);
 		else if (direction == Direction.EAST)
-			newPos = new Point(oldPos.X()+1, oldPos.Y()); 
-		else newPos = new Point(oldPos.X()-1, oldPos.Y()); 
+			newPos = new Point(oldPos.X()+1, oldPos.Y());
+		else newPos = new Point(oldPos.X()-1, oldPos.Y());
 
 		if (room.width() <= newPos.x || room.height() <= newPos.y) return false;
 
@@ -109,7 +109,7 @@ public class GameWorld {
 		if (room.width() <= p.x || room.height() <= p.y) return false;
 		Player player = players.get(name);
 		Tile tile = room.getTileAt(p);
-		// if the tile is EmptyTile type, 
+		// if the tile is EmptyTile type,
 		// then player can pick up item only if there is an item
 		if (tile instanceof EmptyTile){
 			EmptyTile e = (EmptyTile) tile;
@@ -123,13 +123,13 @@ public class GameWorld {
 		}
 		return false;
 	}
-	
+
 	public synchronized boolean dropAnItem(int uid, Point p){
 		Room room = map[0][0];
 		if (room.width() <= p.x || room.height() <= p.y) return false;
 		Player player = players.get(uid);
 		Tile tile = room.getTileAt(p);
-		// if the tile is EmptyTile type, 
+		// if the tile is EmptyTile type,
 		// then player can pick up item only if there is an item
 		if (tile instanceof EmptyTile){
 			EmptyTile e = (EmptyTile) tile;
@@ -143,32 +143,32 @@ public class GameWorld {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * The following method converts the current state of the game into a byte
 	 * array, such that it can be shipped across a connection to an awaiting client.
 	 *
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public synchronized byte[] toByteArray() throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		ObjectOutputStream dataOutput = new ObjectOutputStream(bout);
 		dataOutput.writeBoolean(gameOver);  // game state
-		dataOutput.writeObject(this.players);	
+		dataOutput.writeObject(this.players);
 		dataOutput.writeObject(map[0][0]);
 		dataOutput.flush();
 		// Finally, return!!
 		return bout.toByteArray();
 	}
-	
+
 	/**
 	 * The following method accepts a byte array representing the state of a
 	 * game; this state will be broadcast by a master connection, and is
 	 * then used to overwrite the current state (since it should be more up to date).
 	 *
 	 * @param bytes
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized void fromByteArray(byte[] bytes) throws IOException{
@@ -185,7 +185,6 @@ public class GameWorld {
 	}
 
 	/**
-	 * /**
 	 * Returns the player of the game that matched with the userId.
 	 * @param uid UserId uses by the client
 	 * @return the player with the matching userId
@@ -198,6 +197,10 @@ public class GameWorld {
 		throw new IllegalArgumentException("Invalid Player UID");
 	}
 
+	public synchronized Boolean gameOver(){
+		return gameOver;
+	}
+
 	/**
 	 * Return the current board of the game.
 	 * @return
@@ -206,27 +209,34 @@ public class GameWorld {
 		return map;
 	}
 
+	/**
+	 * Return the current state of the game.
+	 * @return
+	 */
+	public boolean isOver(){
+		return gameOver;
+	}
+
+	/**
+	 * Return the current board of the game.
+	 * @return
+	 */
+	public Tile[][] getGameTiles(){
+		return map[0][0].getRoomBoard();
+	}
+
 	// testing
 	public static void main (String[] args) throws IOException{
-		/*GameWorld game = new GameWorld("room.xml");
-		game.addPlayer("Vivienne");
+		GameWorld game = new GameWorld("room.xml");
+		game.addPlayer();
 		Room[][] rooms = game.getGameMap();
 		Room room = rooms[0][0];
 
-		System.out.println(room.getTileAt(new Point(1,1)).getTileType());
-		System.out.println(game.getPlayer("Vivienne"));
-		Player player = game.getPlayer("Vivienne");
-		System.out.println(player.facingDirection());
+		//System.out.println(room.getTileAt(new Point(1,1)).getTileType());
 		//System.out.println(game.movePlayer(player.getName(), new Point(2, 1)));
 		//System.out.println(room.getTileAt(new Point(2,1)).getTileType());
-		System.out.println("move " + game.movePlayer(player.getName(), new Point(6, 0)));
-		System.out.println("pickup " + game.pickupAnItem(player.getName(), new Point(6, 0)));
-		System.out.println(player);
-		System.out.println(player.facingDirection());
-
-		for (Item item : player.getBag().getStorage()){
-			System.out.println(item.getName());
-		}
+		//System.out.println("move " + game.movePlayer(1, Direction.NORTH));
+		//System.out.println("pickup " + game.pickupAnItem(1, new Point(6, 0)));
 
 		Tile[][] tiles = room.getRoomBoard();
 		EmptyTile item = (EmptyTile) tiles[6][0];
@@ -238,8 +248,8 @@ public class GameWorld {
 				System.out.print(room.getTileAt(new Point(x,y)).getTileType() + ", ");
 			}
 			System.out.println();
-		}*/
-		
+		}
+
 	}
 
 }
