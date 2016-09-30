@@ -42,9 +42,11 @@ public class Server extends Thread{
 	private Queue<String> commands = new LinkedList<String>();
 	// game
 	private static GameWorld game;
-
+	// input output streams
 	private static ObjectInputStream input;
 	private static ObjectOutputStream output;
+	// current player to listen to
+	private static int player = 0;
 
 	public Server(GameWorld game){
 		this.game = game;
@@ -63,7 +65,11 @@ public class Server extends Thread{
 //			game.setState(Board.PLAYING);
 
 			//TODO: go through each client and read input
+
 			while(!game.isOver()) {
+				Socket sock = sockets.get(player);
+				input = new ObjectInputStream(sock.getInputStream());
+
 				int uid = input.readInt();
 				int dir = input.readInt();
 				switch(dir) {
