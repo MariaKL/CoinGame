@@ -10,9 +10,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 
-public class GameWorld {
+public class GameWorld implements Serializable{
 
 	private Room[][] map;
 
@@ -207,6 +208,14 @@ public class GameWorld {
 	 */
 	public Room[][] getGameMap(){
 		return map;
+	}
+
+	/**
+	 * Return the current players of the game.
+	 * @return
+	 */
+	public HashMap<Integer, Player> getAllPlayers(){
+		return players;
 	}
 
 	/**

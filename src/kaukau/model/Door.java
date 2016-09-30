@@ -1,6 +1,8 @@
 package kaukau.model;
 
-public class Door implements Item{
+import java.io.Serializable;
+
+public class Door implements Item, Serializable{
 	private Tile location;
 	private String name;
 	private int key;

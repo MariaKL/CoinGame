@@ -1,6 +1,8 @@
 package kaukau.model;
 
-public class Key extends PickupableItem{
+import java.io.Serializable;
+
+public class Key extends PickupableItem implements Serializable{
 	
 	private Player owner;
 	private int code;
