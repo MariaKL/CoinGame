@@ -15,30 +15,30 @@ import javax.swing.JOptionPane;
 
 /**
  * This class is in charge of creating the application window
- * 	for the Kaukau adventure game. The application window interfaces 
+ * 	for the Kaukau adventure game. The application window interfaces
  * 	with the rendering window to create the game gui.
- *  
+ *
  * @author Patrick
  *
  */
 @SuppressWarnings("serial")
 public class ApplicationWindow extends JFrame{
-	
+
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
-	
+
 	// Field to store the rendering window for the game
-	RenderWindow rw = new RenderWindow();
+	public RenderWindow rw = new RenderWindow();
 
 	public ApplicationWindow(){
 		super("Kaukau");
-		
+
 		// creating a menu
 		initMenu();
-		
+
 		// adding the rendering window to the application
 		add(rw);
-			
+
 		// setting title
 		setTitle("Kaukau");
 		// set size
@@ -56,7 +56,7 @@ public class ApplicationWindow extends JFrame{
             public void windowClosing(WindowEvent evt){
                 confirmExit();
             }
-        });	
+        });
 	}
 
 	/**
@@ -65,11 +65,11 @@ public class ApplicationWindow extends JFrame{
 	private void initMenu() {
 		//Creating the menu bar
 		JMenuBar menuBar = new JMenuBar();
-		
+
 		// Creating icons
 		ImageIcon iconExit = new ImageIcon(IMAGE_PATH + "exit.png");
 		ImageIcon iconHelp = new ImageIcon(IMAGE_PATH + "help.png");
-		
+
 		// creating menu and help menus
 		JMenu menu = new JMenu("Menu");
 		menu.setMnemonic(KeyEvent.VK_M);
@@ -105,9 +105,9 @@ public class ApplicationWindow extends JFrame{
 		menuBar.add(menu);
 		menuBar.add(help);
 		// set the menu bar
-		setJMenuBar(menuBar);	
+		setJMenuBar(menuBar);
 	}
-	
+
 	/**
 	 * Displays dialog asking if user wants to exit the game
 	 */

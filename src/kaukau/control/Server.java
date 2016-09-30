@@ -61,11 +61,9 @@ public class Server extends Thread{
 //			game.setState(Board.READY);
 			Thread.sleep(3000);
 //			game.setState(Board.PLAYING);
-			// now, wait for the game to finish
+
+			//TODO: go through each client and read input
 			while(!game.isOver()) {
-				// listen to clients
-				// add command to queue
-				// read the next command and process
 				int uid = input.readInt();
 				int dir = input.readInt();
 				switch(dir) {
@@ -88,6 +86,7 @@ public class Server extends Thread{
 						break;
 				}
 				// send back to clients
+				Thread.sleep(3000);
 			}
 			// If we get here, then we're in game over mode
 			Thread.sleep(3000);

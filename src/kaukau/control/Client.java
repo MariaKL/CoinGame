@@ -19,7 +19,7 @@ import kaukau.view.ApplicationWindow;
 /**
  * A client to connects
  */
-public class Client extends Thread implements KeyListener{
+public class Client extends Thread {
 	private String address = "127.0.0.1";
 	private Socket sock;
 	private GameWorld game;
@@ -98,36 +98,16 @@ public class Client extends Thread implements KeyListener{
 	}
 
 	/**
-	 * Send valid key events to server.
+	 * Sends the action command to the server.
+	 * @param code
 	 */
-	public void keyPressed(KeyEvent e) {
+	public void sendAction(int code){
 		try {
-			int code = e.getKeyCode();
-			if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_KP_RIGHT) {
-				System.out.println("Player " + uid + ": moved up");
-				output.writeInt(uid);
-				output.writeInt(code);
-			} else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_KP_LEFT) {
-				output.writeInt(uid);
-				output.writeInt(code);
-			} else if(code == KeyEvent.VK_UP) {
-				output.writeInt(uid);
-				output.writeInt(code);
-			} else if(code == KeyEvent.VK_DOWN) {
-				output.writeInt(uid);
-				output.writeInt(code);
-			}
-			output.flush();
-		} catch(IOException ioe) {
-			// something went wrong trying to communicate the key press to the
-			// server.  So, we just ignore it.
+			output.writeInt(uid);
+			output.writeInt(code);
+		} catch (IOException e) {
+			// problem with sending to the server
+//			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {}
-
-	@Override
-	public void keyReleased(KeyEvent e) {}
-
 }

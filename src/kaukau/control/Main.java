@@ -30,6 +30,7 @@ public class Main {
 				aw.setVisible(true);
 				Client pClient = new Client(aw);
 		    	pClient.start();
+		    	aw.rw.addClient(pClient);
 			}
 		});
 

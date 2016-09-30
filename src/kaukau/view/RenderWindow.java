@@ -17,20 +17,23 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import kaukau.control.Client;
+
 /**This class handles the rendering of the game levels
  * 	in the Kaukau game. This class interacts with the
- * 	application window to form the gui of the game.	
- * 
+ * 	application window to form the gui of the game.
+ *
  * @author Patrick
  *
  */
 @SuppressWarnings("serial")
 public class RenderWindow extends JPanel {
-	
+
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
-	
-	/* Field to store 2D array representation of the game level data.	
+	private Client client;
+
+	/* Field to store 2D array representation of the game level data.
 	 * 	KEY:
 	 *  0 - blue tile
 	 * 	1..8 - cracked tile
@@ -42,10 +45,10 @@ public class RenderWindow extends JPanel {
 		                                {2,0,0,2,0,0,0},
 		                                {0,0,0,2,0,0,0},
 		                                {0,0,0,0,0,0,2},
-		                                {2,0,0,0,0,2,0}}; 
-	
+		                                {2,0,0,0,0,2,0}};
+
 	/* Field to store 2D array representation of the level sprite data.
-	* KEY: 
+	* KEY:
 	* 1 - player
 	*/
 	private static int[][] spriteData = {{0,0,0,0,0,0,0},
@@ -55,9 +58,9 @@ public class RenderWindow extends JPanel {
                             	         {0,0,0,0,0,0,0},
 								         {0,0,0,0,0,0,0},
 							             {0,0,0,0,0,0,0}};
-	
+
 	/* Fields to store array representation of the level wall data.
-	* KEY: 
+	* KEY:
 	* 1 - wall
 	* 2 - door
 	*/
@@ -65,30 +68,30 @@ public class RenderWindow extends JPanel {
 	private static int[] eastWall  = {1,1,1,2,1,1,1};
 	private static int[] southWall = {1,1,1,1,1,1,1};
 	private static int[] westWall  = {1,1,1,2,1,1,1};
-	
+
 	// Field to store the board margins in pixels
 	private static final int MARGIN = 324;
 	private static final int SPRITE_MARGIN = 16;
 	private static final int WALL_Y = -66;
-	
+
 	// Fields to store the tile width & height in pixels
 	private static final int tileWidth = 50;
 	private static final int tileHeight = 50;
-	
+
 	// Field to store all the tiles in the current level
 	private List<Tile> allTiles = new ArrayList<Tile>();
 	// Field to store all the sprites in the current level
 	private List<Sprite> allSprites = new ArrayList<Sprite>();
-	
+
 	// Field to store the current direction of the board
 	private char gameDir = 'S';
-	
+
 	// Field to store the current direction of the player
 	private char playerDir = 'S';
-	
+
 	// Field to store the current player
 	Sprite player;
-	
+
 	public RenderWindow(){
 		//Setting a border
 		// FIXME: Stop border resizing with window
@@ -114,24 +117,24 @@ public class RenderWindow extends JPanel {
 	private void initSprites() {
 		for (int i = 0; i<spriteData.length; i++){
 			for (int j = 0; j<spriteData[0].length; j++){
-				
+
 				// getting the x & y position of the tile
 				int x = j * tileWidth;
 				int y = i * tileHeight;
-				
+
 				// getting the type type
 				int spriteType = spriteData[i][j];
 				if(spriteType == 0) continue;
-				
+
 				// creating and adding the tile to the current level board
 				placeSprite(spriteType, twoDToIso(new Point(x, y)));
 			}
-		}	
+		}
 	}
 
 	/**This method creates and adds a sprite to a list
 	 *  of all sprites which make up the current game level.
-	 * 
+	 *
 	 * @param spriteType
 	 * @param pt
 	 */
@@ -150,23 +153,23 @@ public class RenderWindow extends JPanel {
 	private void initLevel() {
 		for (int i = 0; i<levelData.length; i++){
 			for (int j = 0; j<levelData[0].length; j++){
-				
+
 				// getting the x & y position of the tile
 				int x = j * tileWidth;
 				int y = i * tileHeight;
-				
+
 				// getting the type type
 				int tileType = levelData[i][j];
-				
+
 				// creating and adding the tile to the current level board
 				placeTile(tileType, twoDToIso(new Point(x, y)));
 			}
-		}	
+		}
 	}
-	
+
 	/**This method creates and adds a tile to a list
 	 *  of all tiles which make up the current game level
-	 * 
+	 *
 	 * @param tileType
 	 * @param tile position point
 	 */
@@ -176,12 +179,11 @@ public class RenderWindow extends JPanel {
 		// Adding the tile to the current level
 		allTiles.add(t);
 	}
-	
+
 	/**
 	 * assign key to actions using key bindings
 	 */
 	private void attachBindings() {
-		
 		//rotate world binding
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_R, 0), "rotate");
@@ -192,7 +194,7 @@ public class RenderWindow extends JPanel {
 				repaint();
 			}
 		});
-		
+
 		//player move up
 		this.getInputMap().put(KeyStroke.getKeyStroke(
 				KeyEvent.VK_UP, 0), "moveUp");
@@ -201,10 +203,10 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveUp", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
-				
+
 				// update player direction
 				playerDir = 'E';
-				
+
 				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x, p.y - 1);
@@ -222,10 +224,11 @@ public class RenderWindow extends JPanel {
 					}
 				}
 				spriteData[r1-1][c1] = 1;
+				client.sendAction(KeyEvent.VK_UP);
 				repaint();
 			}
 		});
-		
+
 		//player move down
 		this.getInputMap().put(KeyStroke.getKeyStroke(
 				KeyEvent.VK_DOWN, 0), "moveDown");
@@ -237,7 +240,7 @@ public class RenderWindow extends JPanel {
 
 				// update player direction
 				playerDir = 'W';
-				
+
 				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x, p.y + 1);
@@ -255,10 +258,11 @@ public class RenderWindow extends JPanel {
 					}
 				}
 				spriteData[r1+1][c1] = 1;
+				client.sendAction(KeyEvent.VK_DOWN);
 				repaint();
 			}
 		});
-		
+
 		//player move left
 		this.getInputMap().put(KeyStroke.getKeyStroke(
 				KeyEvent.VK_RIGHT, 0), "moveRight");
@@ -267,10 +271,10 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveRight", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
-				
+
 				// update player direction
 				playerDir = 'S';
-				
+
 				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x+1, p.y );
@@ -288,10 +292,11 @@ public class RenderWindow extends JPanel {
 					}
 				}
 				spriteData[r1][c1+1] = 1;
+				client.sendAction(KeyEvent.VK_RIGHT);
 				repaint();
 			}
 		});
-		
+
 		//player move right
 		this.getInputMap().put(KeyStroke.getKeyStroke(
 				KeyEvent.VK_LEFT, 0), "moveLeft");
@@ -300,10 +305,10 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveLeft", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
-				
+
 				// update player direction
 				playerDir = 'N';
-				
+
 				// update sprite array position
 				Point p = player.getTilePos();
 				Point updatedPos = new Point(p.x-1, p.y);
@@ -321,11 +326,12 @@ public class RenderWindow extends JPanel {
 					}
 				}
 				spriteData[r1][c1-1] = 1;
-				repaint();			
+				client.sendAction(KeyEvent.VK_LEFT);
+				repaint();
 			}
 		});
 	}
-	
+
 	/**
 	 * rotate game world 90 degrees
 	 */
@@ -358,14 +364,14 @@ public class RenderWindow extends JPanel {
 	    allTiles.clear();
 	    for (int i = 0; i<ret.length; i++){
 			for (int j = 0; j<ret[0].length; j++){
-				
+
 				// getting the x & y position of the tile
 				int x = j * tileWidth;
 				int y = i * tileHeight;
-				
+
 				// getting the tile type
 				int tileType = ret[i][j];
-				
+
 				// creating and adding the tile to the current level board
 				placeTile(tileType, twoDToIso(new Point(x, y)));
 			}
@@ -373,9 +379,9 @@ public class RenderWindow extends JPanel {
 	    //replace levelData with new 2d array for future rotations
 	    for(int a=0; a<levelData.length; a++)
 	    	  for(int b=0; b<levelData[0].length; b++)
-	    	    levelData[a][b]=ret[a][b];    
+	    	    levelData[a][b]=ret[a][b];
 	}
-	
+
 	/**
 	 * rotate game world 90 degrees
 	 */
@@ -408,14 +414,14 @@ public class RenderWindow extends JPanel {
 	    allSprites.clear();
 	    for (int i = 0; i<ret.length; i++){
 			for (int j = 0; j<ret[0].length; j++){
-				
+
 				// getting the x & y position of the tile
 				int x = j * tileWidth;
 				int y = i * tileHeight;
-				
+
 				// getting the tile type
 				int spriteType = ret[i][j];
-				
+
 				// creating and adding the tile to the current level board
 				placeSprite(spriteType, twoDToIso(new Point(x, y)));
 			}
@@ -423,17 +429,17 @@ public class RenderWindow extends JPanel {
 	    //replace spriteData with new 2d array for future rotations
 	    for(int a=0; a<spriteData.length; a++)
 	    	  for(int b=0; b<spriteData[0].length; b++)
-	    	    spriteData[a][b]=ret[a][b];    
+	    	    spriteData[a][b]=ret[a][b];
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 	     super.paintComponent(g);
-	     
+
 	     try {
-	    	 
+
 	    	//FIXME: drawing walls from the wall arrays
-	    	 
+
 	    	// creating wall images
 	    	BufferedImage northWallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
 	    	BufferedImage eastWallImg = ImageIO.read(new File(IMAGE_PATH + "east-wall.png"));
@@ -443,17 +449,17 @@ public class RenderWindow extends JPanel {
 	    	// creating door images
 	    	BufferedImage northDoorImg = ImageIO.read(new File(IMAGE_PATH + "north-door.png"));
 	    	BufferedImage eastDoorImg = ImageIO.read(new File(IMAGE_PATH + "east-door.png"));
-	    	
+
 	    	// wall positioning values
 	    	int nx = 284; // stores the starting x pos for the north walls
 	    	int ex = 356; // stores the starting x pos for the east walls
 	    	int ny = WALL_Y, ey = WALL_Y; // stores the starting y pos for the north & east walls
-	    	
+
 	    	// FIXME: position doors without these points
 	    	// door positioning values
 	    	Point doorN = new Point(0,0); // stores the position of the locked door on the north wall
 	    	Point doorE = new Point(0,0); // stores the position of the locked door on the east wall
-	    	
+
 	    	// draw walls based on current game view
 	    	switch(gameDir){
 	    		case 'S':
@@ -539,7 +545,7 @@ public class RenderWindow extends JPanel {
 	    			g.drawImage(northDoorImg, doorN.x+(SPRITE_MARGIN), doorN.y+(SPRITE_MARGIN+8), this);
 	    			break;
 	    	}
-			
+
 			// TODO: tile randomisation.
 	    	// Drawing all level tiles onto the rendering panel
 	    	BufferedImage image;
@@ -555,12 +561,12 @@ public class RenderWindow extends JPanel {
 		    		g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/4), this);
 		    	}
 		    }
-		    
+
 		    // Drawing the game sprites onto the level
 		    // TODO: More sprites and player animation
 		    for(Sprite s: allSprites){
 		    	image = null;
-		    	if(s.getSpriteType() == 1){ 
+		    	if(s.getSpriteType() == 1){
 		    		switch(playerDir){
 		    			case 'N':
 		    				image = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png"));
@@ -577,15 +583,15 @@ public class RenderWindow extends JPanel {
 		    		}
 		    		if(image != null){
 		    			g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3-3), this);
-		    		}		
+		    		}
 		    	}
 		    }
-    			
+
 		} catch (IOException e) {
 			e.printStackTrace();
-		}   
+		}
 	 }
-	
+
 	/*
 	 * HELPER METHODS
 	 */
@@ -624,5 +630,13 @@ public class RenderWindow extends JPanel {
         result.x=pt.x*tileHeight;
         result.y=pt.y*tileHeight;
         return(result);
+    }
+
+    /**
+     * Stores a reference to the client to pass player actions through to server.
+     * @param client
+     */
+    public void addClient(Client client){
+    	this.client = client;
     }
 }
