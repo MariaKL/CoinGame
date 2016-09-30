@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.Date;
 
 import kaukau.model.GameWorld;
+import kaukau.view.ApplicationWindow;
 
 /**
  * Based off http://stackoverflow.com/questions/29545597/multiplayer-game-in-java-connect-client-player-to-game-that-was-created-by-ot
@@ -22,6 +23,7 @@ public class Client extends Thread implements KeyListener{
 	private String address = "127.0.0.1";
 	private Socket sock;
 	private GameWorld game;
+	private ApplicationWindow aw;
 //	private Server server;
 
 	private ObjectInputStream input;
@@ -33,7 +35,7 @@ public class Client extends Thread implements KeyListener{
 	/**
 	 * Creates a client for the player.
 	 */
-	public Client(){
+	public Client(ApplicationWindow aw){
 		// makes a new socket and sets input/output streams
 		try{
 //			while(name.length() < 1){
@@ -64,17 +66,21 @@ public class Client extends Thread implements KeyListener{
 			String line;
 			//TODO: make sure thread + client stay open until player closes the client
 			// read client command
-			while ((line = input.readLine()) != null)  {
-				System.out.println(line);
-				// write to server
-				output.writeUTF("Test message one: " + line + "\n");
-				output.flush();
+//			while ((line = input.readLine()) != null)  {
+//				System.out.println(line);
+//				// write to server
+//				output.writeUTF("Test message one: " + line + "\n");
+//				output.flush();
+//			}
+			boolean closed = false;
+			while(!closed){
+				// wait for game updates from server
+				GameWorld updatedGame = (GameWorld)input.readObject();
 			}
 			sock.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

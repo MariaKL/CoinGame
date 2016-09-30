@@ -1,11 +1,12 @@
 package kaukau.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * A container is an item able hold collectable type items.
  * Containers are lockers around the game and the bag's of each player*/
-public class Container implements Item{
+public class Container implements Item, Serializable{
 	private Tile location;
 	private String name;
 	private int storageLimit;

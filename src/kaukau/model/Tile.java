@@ -1,8 +1,10 @@
 package kaukau.model;
 
+import java.io.Serializable;
+
 import kaukau.model.Room.TileType;
 
-public class Tile {
+public class Tile implements Serializable{
 	private Item item;
 	private float row, col;
 	private char code;

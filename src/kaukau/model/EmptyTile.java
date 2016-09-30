@@ -1,9 +1,10 @@
 package kaukau.model;
 
+import java.io.Serializable;
+
 import kaukau.model.Room.TileType;
 
-public class EmptyTile extends Tile{
-
+public class EmptyTile extends Tile implements Serializable{
 	private PickupableItem item;
 	private Player player;
 

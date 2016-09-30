@@ -20,21 +20,21 @@ public class Main {
 	 */
 	public static void main (String[] args) throws IOException{
 
-//    	EventQueue.invokeLater(new Runnable(){
-//
-//			@Override
-//			public void run() {
-//				//
-//				ApplicationWindow aw = new ApplicationWindow();
-//				aw.setVisible(true);
-//
-//			}
-//		});
+    	EventQueue.invokeLater(new Runnable(){
+
+			@Override
+			public void run() {
+				//
+				ApplicationWindow aw = new ApplicationWindow();
+				aw.setVisible(true);
+
+			}
+		});
 
     	/**
     	 * Create a client for this player.
     	 */
-    	Client pClient = new Client();
+    	Client pClient = new Client(aw);
     	pClient.start();
 	}
 }
