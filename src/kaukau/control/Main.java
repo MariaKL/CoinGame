@@ -1,6 +1,7 @@
 package kaukau.control;
 
 import java.awt.EventQueue;
+import java.io.EOFException;
 import java.io.IOException;
 
 import kaukau.model.GameWorld;

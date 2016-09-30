@@ -31,6 +31,8 @@ public class Client extends Thread implements KeyListener{
 
 	private int uid;
 
+	private boolean initialRun = true;
+
 
 	/**
 	 * Creates a client for the player.
@@ -38,14 +40,12 @@ public class Client extends Thread implements KeyListener{
 	public Client(ApplicationWindow aw){
 		// makes a new socket and sets input/output streams
 		try{
-//			while(name.length() < 1){
-//				name = "Player" + Math.random();
-//			}
 	        sock = new Socket(address, Server.portNumber);
 	        input = new ObjectInputStream(sock.getInputStream());
-	        output = new ObjectOutputStream(sock.getOutputStream());
-		}
-		catch(IOException e){
+			output = new ObjectOutputStream(sock.getOutputStream());
+	    } catch(EOFException e){
+			System.out.println("Server not running.");
+		} catch(IOException e){
 			e.printStackTrace();
 		}
 	}
@@ -53,18 +53,20 @@ public class Client extends Thread implements KeyListener{
 	@Override
 	public void run(){
 		try {
-			boolean accepted = input.readBoolean();
-			// if there were too many players then close the socket
-			if(!accepted){
-				sock.close();
-				System.out.println("Not accepted into server");
-				return;
+			if(initialRun){
+				// TODO: get client to read its uid from server BEFORE running client
+				boolean accepted = input.readBoolean();
+				// if there were too many players then close the socket
+				if(!accepted){
+					sock.close();
+					System.out.println("Not accepted into server");
+					return;
+				}
+				uid = input.readInt();
+				System.out.println("New client uid: " + uid);
+				game = (GameWorld)input.readObject();
+				initialRun = false;
 			}
-			uid = input.readInt();
-			game = (GameWorld)input.readObject();
-
-			String line;
-
 			boolean closed = false;
 			while(!closed){
 				// wait for game updates from server
@@ -72,6 +74,9 @@ public class Client extends Thread implements KeyListener{
 				System.out.println("Received game update");
 			}
 			sock.close();
+		} catch(EOFException e){
+			e.printStackTrace();
+			System.out.println(uid + " : uid");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -79,17 +84,18 @@ public class Client extends Thread implements KeyListener{
 		}
 	}
 
-//	/**
-//	 * Sends a player command to the server
-//	 */
-//	public void send(){
-//		try {
-//			output.write("testString".getBytes("US-ASCII"));
-//			output.flush();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
+	/**
+	 * Closes the sock when the server is closed.
+	 */
+	public void closeClientSock(){
+		try{
+			sock.close();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			System.out.println("Cannot close socket.");
+		}
+	}
 
 	/**
 	 * Send valid key events to server.
@@ -119,15 +125,9 @@ public class Client extends Thread implements KeyListener{
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
+	public void keyTyped(KeyEvent e) {}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
+	public void keyReleased(KeyEvent e) {}
 
 }

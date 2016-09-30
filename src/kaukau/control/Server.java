@@ -50,9 +50,6 @@ public class Server extends Thread{
 		this.game = game;
         try {
 			listener = new ServerSocket(portNumber);
-//			input = new ObjectInputStream(listener.getInputStream());
-//			output = new ObjectOutputStream(listener.getOutputStream());
-
 			System.out.println("Created server");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -114,14 +111,12 @@ public class Server extends Thread{
 		return false;
 	}
 
-	/**
-	 * Accepts clients wanting to connect to the server.
-	 * @throws Exception
-	 */
+	@Override
     public void run(){
+		//TODO: allow for multiple players
         try{
         	System.out.println("Listening");
-            while(true){
+//            while(true){
 				Socket socket = listener.accept();
 				// if there are more than two players then don't accept the new player
             	if(sockets.size() > 2){
@@ -152,13 +147,14 @@ public class Server extends Thread{
 	//				threads.add(clientThread);
 	//				clientThread.start();
             	}
-            }
-        }
-        catch(IOException e){
+            	runGame();
+//            }
+        } catch(IOException e){
         	e.printStackTrace();
         	System.out.println("Failed to accept client on port " + portNumber + "\n");
-        }
-        finally {
+        } catch(Exception e){
+        	e.printStackTrace();
+        } finally {
         	try{
         		listener.close();
         	}
