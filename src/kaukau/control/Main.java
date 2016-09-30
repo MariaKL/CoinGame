@@ -27,14 +27,10 @@ public class Main {
 				//
 				ApplicationWindow aw = new ApplicationWindow();
 				aw.setVisible(true);
-
+				Client pClient = new Client(aw);
+		    	pClient.start();
 			}
 		});
 
-    	/**
-    	 * Create a client for this player.
-    	 */
-    	Client pClient = new Client(aw);
-    	pClient.start();
 	}
 }

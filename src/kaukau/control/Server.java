@@ -24,7 +24,7 @@ import kaukau.view.ApplicationWindow;
 
 /**
  * Based off http://stackoverflow.com/questions/29545597/multiplayer-game-in-java-connect-client-player-to-game-that-was-created-by-ot
- * @author Maria Legaspi
+ * @author Maria Legaspi and Vivienne Yapp
  *
  */
 
@@ -72,22 +72,22 @@ public class Server extends Thread{
 				int uid = input.readInt();
 				int dir = input.readInt();
 				switch(dir) {
-					case KeyEvent.VK_UP:
-					case KeyEvent.VK_KP_UP:
-						game.movePlayer(uid, Direction.NORTH);
-						System.out.println(uid + ": Moved north");
-						break;
-					case KeyEvent.VK_DOWN:
-					case KeyEvent.VK_KP_DOWN:
-						game.movePlayer(uid, Direction.SOUTH);
-						break;
 					case KeyEvent.VK_RIGHT:
 					case KeyEvent.VK_KP_RIGHT:
 						game.movePlayer(uid, Direction.EAST);
+						System.out.println(uid + ": Moved right");
 						break;
 					case KeyEvent.VK_LEFT:
 					case KeyEvent.VK_KP_LEFT:
 						game.movePlayer(uid, Direction.WEST);
+						break;
+					case KeyEvent.VK_UP:
+					case KeyEvent.VK_KP_UP:
+						game.movePlayer(uid, Direction.NORTH);
+						break;
+					case KeyEvent.VK_DOWN:
+					case KeyEvent.VK_KP_DOWN:
+						game.movePlayer(uid, Direction.SOUTH);
 						break;
 				}
 				// send back to clients

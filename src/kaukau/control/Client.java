@@ -11,7 +11,7 @@ import kaukau.view.ApplicationWindow;
 
 /**
  * Based off http://stackoverflow.com/questions/29545597/multiplayer-game-in-java-connect-client-player-to-game-that-was-created-by-ot
- * @author Maria Legaspi
+ * @author Maria Legaspi and Vivienne Yapp
  *
  */
 
@@ -64,18 +64,12 @@ public class Client extends Thread implements KeyListener{
 			game = (GameWorld)input.readObject();
 
 			String line;
-			//TODO: make sure thread + client stay open until player closes the client
-			// read client command
-//			while ((line = input.readLine()) != null)  {
-//				System.out.println(line);
-//				// write to server
-//				output.writeUTF("Test message one: " + line + "\n");
-//				output.flush();
-//			}
+
 			boolean closed = false;
 			while(!closed){
 				// wait for game updates from server
 				GameWorld updatedGame = (GameWorld)input.readObject();
+				System.out.println("Received game update");
 			}
 			sock.close();
 		} catch (IOException e) {
@@ -104,6 +98,7 @@ public class Client extends Thread implements KeyListener{
 		try {
 			int code = e.getKeyCode();
 			if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_KP_RIGHT) {
+				System.out.println("Player " + uid + ": moved up");
 				output.writeInt(uid);
 				output.writeInt(code);
 			} else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_KP_LEFT) {

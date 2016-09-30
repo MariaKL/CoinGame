@@ -8,6 +8,8 @@ import java.net.Socket;
  *
  */
 
+//TODO: use thread
+
 public class ClientThread extends Thread{
 	private Server server;
 	private Socket clientSock;
