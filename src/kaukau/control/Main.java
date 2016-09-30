@@ -1,7 +1,9 @@
 package kaukau.control;
 
 import java.awt.EventQueue;
+import java.io.IOException;
 
+import kaukau.model.GameWorld;
 import kaukau.view.ApplicationWindow;
 
 /**
@@ -10,19 +12,29 @@ import kaukau.view.ApplicationWindow;
  *
  */
 public class Main {
-	
-	public static void main (String[] args){
-		EventQueue.invokeLater(new Runnable(){
 
-			@Override
-			public void run() {
-				// 
-				ApplicationWindow aw = new ApplicationWindow();
-				aw.setVisible(true);
-				
-			}
-			
-		});
+	/**
+	 * Connects a player to the game through the server.
+	 * @param args
+	 * @throws IOException
+	 */
+	public static void main (String[] args) throws IOException{
+
+//    	EventQueue.invokeLater(new Runnable(){
+//
+//			@Override
+//			public void run() {
+//				//
+//				ApplicationWindow aw = new ApplicationWindow();
+//				aw.setVisible(true);
+//
+//			}
+//		});
+
+    	/**
+    	 * Create a client for this player.
+    	 */
+    	Client pClient = new Client();
+    	pClient.start();
 	}
-	
 }
