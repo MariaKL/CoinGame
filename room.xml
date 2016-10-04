@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
   <room name="Gym">
-    <L0>WWDWWWW</L0>
+    <StartX>0</StartX>
+    <StartY>0</StartY>
+    <L0>WWDDWWW</L0>
     <L1>WCCCCCW</L1>
     <L2>WCCCCCW</L2>
     <L3>WCCCCCD</L3>
     <L4>WCCCCCW</L4>
     <L5>WCCCCCW</L5>
     <L6>WWWWWWW</L6>
+  </room>
+  <room name="Classroom">
+    <StartX>7</StartX>
+    <StartY>0</StartY>
+    <L0>WWWWWWW</L0>
+	<L1>WCCCCCW</L1>
+	<L2>WCCCCCW</L2>
+	<L3>DCCCCCW</L3>
+	<L4>WCCCCCW</L4>
+	<L5>WCCCCCW</L5>
+	<L6>WWWWWDW</L6>
+  </room>
+  <room name="Hallway 1">
+	<StartX>0</StartX>
+    <StartY>7</StartY>
+    <L0>CCCCCCC</L0>
+	<L1>CCCCCCC</L1>
+	<L2>CCCCCCC</L2>
+	<L3>CCCCCCC</L3>
+	<L4>CCCCCCC</L4>
+	<L5>CCCCCCC</L5>
+	<L6>CCCCCCC</L6>
+  </room>
+  <room name="Hallway 2">
+	<StartX>7</StartX>
+    <StartY>7</StartY>
+	<L0>CCCCCCC</L0>
+	<L1>CCCCCCC</L1>
+	<L2>CCCCCCC</L2>
+	<L3>CCCCCCC</L3>
+	<L4>CCCCCCC</L4>
+	<L5>CCCCCCC</L5>
+	<L6>CCCCCCC</L6>
   </room>
 </map>
