@@ -134,12 +134,12 @@ public class Room implements Serializable{
 	}
 
 	private void addEmptyTile(int x, int y) {
-		EmptyTile tile = new EmptyTile(TileType.EMPTY, x, y);
+		Tile tile = new Tile(TileType.EMPTY, x, y);
 		board[x][y] = tile;
 	}
 
 	private void addItem(int x, int y) {
-		EmptyTile tile = new EmptyTile(TileType.EMPTY, x, y);
+		Tile tile = new Tile(TileType.EMPTY, x, y);
 		Key key = new Key(++keyCode, "Key 1");
 		tile.addItem(key);
 		board[x][y] = tile;

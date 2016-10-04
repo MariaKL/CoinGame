@@ -128,6 +128,15 @@ public class Tile implements Serializable {
 	public TileType getTileType() { return type; }
 
 	/**
+	 * Return the item that occupy this tile.
+	 * @return an item if it is pickupable item and there is one, otherwise returns null.
+	 */
+	public Item getItem(){ 
+		if (item instanceof PickupableItem) return item;
+		return null;
+	}
+	
+	/**
 	 * Return the column number of this tile.
 	 * @return the column number
 	 */
