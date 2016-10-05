@@ -1,15 +1,12 @@
 package kaukau.control;
 
-import java.awt.EventQueue;
+import kaukau.model.*;
+
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -18,9 +15,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-import kaukau.model.Direction;
-import kaukau.model.GameWorld;
-import kaukau.view.ApplicationWindow;
 
 /**
  * Based off http://stackoverflow.com/questions/29545597/multiplayer-game-in-java-connect-client-player-to-game-that-was-created-by-ot
@@ -126,7 +120,7 @@ public class Server{
 
 						while(!game.isOver()) {
 							Socket sock = sockets.get(player);
-
+							if(sock == null) System.out.println("No sock");
 							// read input from player
 							ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 							int uid = input.readInt(); // get player id
@@ -184,7 +178,7 @@ public class Server{
 		    	//TODO: allow for multiple players
 		        try{
 		        	System.out.println("Listening");
-//		            while(true){
+		            while(true){
 						Socket socket = listener.accept();
 						ObjectOutputStream output;
 						// if there are more than two players then don't accept the new player
@@ -216,7 +210,7 @@ public class Server{
 			//				threads.add(clientThread);
 			//				clientThread.start();
 		            	}
-//		            }
+		            }
 		        } catch(IOException e){
 		        	e.printStackTrace();
 		        	System.out.println("Failed to accept client on port " + portNumber + "\n");

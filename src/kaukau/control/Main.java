@@ -1,11 +1,11 @@
 package kaukau.control;
 
+import kaukau.model.*;
+import kaukau.view.ApplicationWindow;
+
 import java.awt.EventQueue;
-import java.io.EOFException;
 import java.io.IOException;
 
-import kaukau.model.GameWorld;
-import kaukau.view.ApplicationWindow;
 
 /**
  * Main method for the Kaukau adventure game

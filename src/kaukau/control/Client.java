@@ -1,13 +1,12 @@
 package kaukau.control;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import kaukau.model.*;
+import kaukau.view.*;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Date;
 
-import kaukau.model.GameWorld;
-import kaukau.view.ApplicationWindow;
 
 /**
  * Based off http://stackoverflow.com/questions/29545597/multiplayer-game-in-java-connect-client-player-to-game-that-was-created-by-ot
