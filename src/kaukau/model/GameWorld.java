@@ -83,9 +83,10 @@ public class GameWorld implements Serializable{
 		if (validPoint(pos)){
 			Tile tile = board.getTileAt(pos);
 			if (tile.getTileType() == TileType.EMPTY && tile.containsPickupItem()){
-				player.addToBag((PickupableItem)tile.getItem());
-				tile.removeItem();
-				return true;
+				if (player.addToBag((PickupableItem)tile.getItem())){
+					tile.removeItem();
+					return true;
+				}
 			}
 		}
 		return false;

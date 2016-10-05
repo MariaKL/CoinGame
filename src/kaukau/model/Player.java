@@ -69,6 +69,10 @@ public class Player implements Serializable{
 	 * adds item to players bag
 	 * */
 	public boolean addToBag(Item item){
+		if (item instanceof Coin && !coinbox.isStorageFull())
+			return coinbox.addCoin(item);
+		else if (item instanceof CoinBox && coinbox != null) // player only allow one coinbox
+			return false;
 		return inventory.addItem(item);
 	}
 
@@ -76,6 +80,9 @@ public class Player implements Serializable{
 	 * removes item from players bag
 	 * */
 	public boolean removeFromBag(int index){
+		Item item = inventory.getItem(index);
+		if (item != null && item instanceof CoinBox)
+			coinbox = null;
 		return inventory.removeItem(index);
 	}
 
@@ -95,6 +102,15 @@ public class Player implements Serializable{
 	}
 
 	/**
+	 * Returns the total money in the player's coinBox if the player has one.
+	 * @return total amount of coin or zero if there is not coinBox
+	 * */
+	public int totalMoney(){
+		if (coinbox != null) return coinbox.totalCoins();
+		return 0;
+	}
+
+	/**
 	 * Return the size of the player's storage.
 	 * @return the user id of this player.
 	 */
@@ -109,4 +125,5 @@ public class Player implements Serializable{
 	public String toString (){
 		return "Player "+this.name+" at position "+this.location.toString();
 	}
+
 }

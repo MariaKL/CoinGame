@@ -74,11 +74,36 @@ public class Container implements Item, Serializable{
 	}
 
 	/**
+	 * Returns the item at this index.
+	 * @return an item if index is within storage size, otherwise null
+	 * */
+	public Item getItem(int index){
+		if (index >= storageLimit && index >= storage.size()) return null;
+		return this.storage.get(index);
+	}
+
+	/**
+	 * Returns the size of this container that occupy by this container.
+	 * @return ArrayList <Collectable>
+	 * */
+	public int getStorageUsed(){
+		return this.storage.size();
+	}
+
+	/**
 	 * Returns the limit size of this container
 	 * @return ArrayList <Collectable>
 	 * */
 	public int getStorageLimit(){
 		return this.storageLimit;
+	}
+
+	/**
+	 * Check if this container is full or not.
+	 * @return
+	 * */
+	public boolean isStorageFull(){
+		return storage.size() >= storageLimit;
 	}
 
 }

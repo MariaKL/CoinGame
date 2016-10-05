@@ -38,4 +38,12 @@ public class CoinBox extends PickupableItem implements Serializable{
 	public int totalCoins(){
 		return totalCoinAmount;
 	}
+
+	/**
+	 * Check if this coinbox is full or not.
+	 * @return ArrayList <Collectable>
+	 * */
+	public boolean isStorageFull(){
+		return storage.isStorageFull();
+	}
 }
