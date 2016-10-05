@@ -46,8 +46,8 @@ public class GameWorld implements Serializable{
 	 * @return
 	 */
 	public synchronized int addPlayer(){
-		Room room = map[0][0];
-		Player player = new Player(++uid, "Player", board.getTileAt(new Point(5, 0)), Direction.EAST);
+//		Room room = map[0][0];
+		Player player = new Player(++uid, "Player", board.getTileAt(new Point(2, 2)), Direction.EAST);
 		this.players.put(uid, player);
 		return uid;
 	}

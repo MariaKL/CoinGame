@@ -79,6 +79,7 @@ public class Server{
         	  out.write(game.toByteArray());
         	  out.flush();
           }
+    	  System.out.println("Sent updated game to players");
     	}
     	catch(IOException e){
     		System.out.println("Failed to create buffered writer.\n");
@@ -125,7 +126,7 @@ public class Server{
 							ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 							int uid = input.readInt(); // get player id
 							int dir = input.readInt(); // get movement
-
+							System.out.println("Read command from player " + uid + ", direction = " + dir);
 							// update game with player movement
 							switch(dir) {
 								case KeyEvent.VK_RIGHT:
@@ -146,6 +147,7 @@ public class Server{
 									game.movePlayer(uid, Direction.SOUTH);
 									break;
 							}
+							System.out.println("Updated game");
 							// send back to clients
 							updateAll();
 							//OR
@@ -233,11 +235,8 @@ public class Server{
      * @throws IOException
      */
     public static void main(String[] args) throws IOException{
-    	if(args.length != 1){
-    		throw new IOException("Missing game file input.");
-    	}
-		// call gameworld with file
-    	GameWorld newGame = new GameWorld(args[0]);
+		// create a new game
+    	GameWorld newGame = new GameWorld();
     	// make and run a server
     	new Server(newGame);
 	}

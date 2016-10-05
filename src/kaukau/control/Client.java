@@ -73,6 +73,7 @@ public class Client extends Thread {
 				game = (GameWorld)input.readObject();
 				initialRun = false;
 			}
+			System.out.println("Waiting for game updates");
 			boolean closed = false;
 			while(!closed){
 				// wait for game updates from server
