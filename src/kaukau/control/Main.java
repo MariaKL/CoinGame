@@ -25,12 +25,19 @@ public class Main {
 
 			@Override
 			public void run() {
-				//
-				ApplicationWindow aw = new ApplicationWindow();
+				ApplicationWindow aw = null;
+				try {
+					aw = new ApplicationWindow(new GameWorld());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				aw.setVisible(true);
 				Client pClient = new Client(aw);
 		    	pClient.start();
 		    	aw.rw.addClient(pClient);
+		    	// TODO: pass info from server where game is saved to client,
+		    	// client should get copy of gameworld from server and pass into app window
 			}
 		});
 
