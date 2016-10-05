@@ -7,20 +7,4 @@ import java.io.Serializable;
  * ie collectible objects, puzzles, clues, doors and containers such as the players bag and lockers.*/
 public interface Item extends Serializable{
 
-	/**
-	 * Sets the items location to be the argument
-	 * */
-	public void setLocation(Tile loc);
-
-	/**
-	 * Gets the items location
-	 * @return Tile*/
-	public Tile getLocation();
-
-	/**
-	 * Gets the item name
-	 * @return The name of this item
-	 * */
-	public String getName();
-
 }

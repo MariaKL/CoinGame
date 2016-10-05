@@ -3,36 +3,18 @@ package kaukau.model;
 import java.io.Serializable;
 
 public class Door implements Item, Serializable{
+	
 	private Tile location;
-	private String name;
-	private int key;
+	private final int key;
 	private boolean locked;
-
-	public Door(String name, int key, boolean locked){
-		if(name != null && key > 0){
-			this.name = name;
-			this.key = key;
-			this.locked = locked;
-		}
+	
+	public Door(int key, Tile location){
+		this.location = location;
+		this.key = key;
+		if (key > 0) this.locked = true;
+		else this.locked = false;
 	}
-
-	@Override
-	public void setLocation(Tile loc) {
-		if(loc != null){
-			this.location = loc;
-		}
-	}
-
-	@Override
-	public String getName() {
-		return this.name;
-	}
-
-	@Override
-	public Tile getLocation() {
-		return this.location;
-	}
-
+	
 	/**
 	 * returns whether or not door is locked
 	 * @return boolean locked
