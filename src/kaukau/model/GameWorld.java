@@ -1,8 +1,9 @@
 package kaukau.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import kaukau.model.Room.TileType;
+import kaukau.model.GameMap.TileType;
 
 import java.awt.Point;
 import java.io.ByteArrayInputStream;
@@ -29,14 +30,8 @@ public class GameWorld implements Serializable{
 
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
-	public GameWorld(String filename) throws IOException{
-		map = new Room[1][1];
-		map[0][0] = new Room("classroom", filename);
-	}
-
-	public GameWorld() throws IOException{
-		map = new Room[1][1];
-		map[0][0] = new Room("classroom", "room.xml");
+	public GameWorld(){
+		board =  new GameMap("room.xml");
 		gameOver = false;
 	}
 
@@ -52,7 +47,7 @@ public class GameWorld implements Serializable{
 	 */
 	public synchronized int addPlayer(){
 		Room room = map[0][0];
-		Player player = new Player(++uid, "Player", room.getTileAt(new Point(5, 0)), Direction.EAST);
+		Player player = new Player(++uid, "Player", board.getTileAt(new Point(5, 0)), Direction.EAST);
 		this.players.put(uid, player);
 		return uid;
 	}
@@ -70,11 +65,11 @@ public class GameWorld implements Serializable{
 		Point newPos = getPointFromDirection(player, direction);
 
 		if (board.width() <= newPos.x || board.height() <= newPos.y ||
-			newPos.x < 0 || newPos.y < 0) 
+			newPos.x < 0 || newPos.y < 0)
 			return false;
 
 		// if the tile is emptyTile and not occupy, then move player to this new position
-		Tile tile = room.getTileAt(newPos);
+		Tile tile = board.getTileAt(newPos);
 		if (tile.getTileType() == TileType.EMPTY && !tile.isTileOccupied()){
 			oldPos.removePlayer();
 			player.setLocation(tile);
@@ -89,7 +84,7 @@ public class GameWorld implements Serializable{
 		Point pos = getPointFromDirection(player, player.facingDirection());
 		if (board.width() <= pos.x || board.height() <= pos.y ||
 			pos.x < 0 || pos.y < 0) return false;
-		
+
 		// if the tile is EmptyTile type and item is pickupable,
 		// then player can pick up the item only if there is one
 		Tile tile = board.getTileAt(pos);
@@ -100,11 +95,11 @@ public class GameWorld implements Serializable{
 		}
 		return false;
 	}
-	
+
 	public synchronized boolean dropAnItem(int uid){
 		return false;
 	}
-	
+
 	/**
 	 * Get the point from the facing direction of the player.
 	 * @param player the current player
@@ -182,13 +177,13 @@ public class GameWorld implements Serializable{
 	public synchronized Boolean gameOver(){
 		return gameOver;
 	}
-	
+
 	/**
 	 * Return the current board of the game.
 	 * @return
 	 */
-	public Tile[][] getGameMap(){
-		return board.getBoard();
+	public GameMap getGameMap(){
+		return board;
 	}
 
 	/**
@@ -212,11 +207,29 @@ public class GameWorld implements Serializable{
 	 * @return
 	 */
 	public Tile[][] getGameTiles(){
-		return map[0][0].getRoomBoard();
+		return board.getBoard();
 	}
 
 	// testing
 	public static void main (String[] args) throws IOException{
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		Tile[][] tiles = board.getBoard();
+
+		for (int x = 0; x < 14; x++){
+			for (int y = 0; y < 14; y++){
+				System.out.print(tiles[x][y].getTileType().toString().charAt(0));
+			}
+			System.out.println();
+		}
+
+		ArrayList<Room> rooms = board.getAllRooms();
+		for (Room r: rooms){
+			System.out.println(r.getName());
+		}
+
+		//System.out.println(x);
+
 		/*GameWorld game = new GameWorld("room.xml");
 		game.addPlayer();
 		Room[][] rooms = game.getGameMap();

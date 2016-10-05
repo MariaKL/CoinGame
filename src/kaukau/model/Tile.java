@@ -2,7 +2,8 @@ package kaukau.model;
 
 import java.io.Serializable;
 
-import kaukau.model.Room.TileType;
+import kaukau.model.GameMap.TileType;
+
 
 public class Tile implements Serializable {
 
@@ -15,6 +16,11 @@ public class Tile implements Serializable {
 		this.type = type;
 		this.x = x;
 		this.y = y;
+		item = null;
+		player = null;
+	}
+
+	public Tile(){
 		item = null;
 		player = null;
 	}
@@ -131,11 +137,11 @@ public class Tile implements Serializable {
 	 * Return the item that occupy this tile.
 	 * @return an item if it is pickupable item and there is one, otherwise returns null.
 	 */
-	public Item getItem(){ 
+	public Item getItem(){
 		if (item instanceof PickupableItem) return item;
 		return null;
 	}
-	
+
 	/**
 	 * Return the column number of this tile.
 	 * @return the column number

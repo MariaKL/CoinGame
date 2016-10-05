@@ -1,9 +1,5 @@
 package kaukau.model;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -13,6 +9,7 @@ import org.w3c.dom.Element;
 import kaukau.storage.ReadXMLFile;
 
 import java.awt.Point;
+import java.io.Serializable;
 
 public class Room implements Serializable{
 
@@ -21,64 +18,15 @@ public class Room implements Serializable{
 	private Tile[][] board = new Tile[ROOM_WIDTH][ROOM_HEIGHT];
 	private String name;
 	private int keyCode = 0;
+	private int startX, startY;
 
-	public enum TileType{
-		WALL, EMPTY, DOOR;
-	}
-
-	public Room(String name, String doc) throws IOException{
+	public Room(String name, int x, int y){
 		this.name = name;
-		createRoomFromFile(doc);
+		startX = x;
+		startY = y;
 	}
 
-	public Room(String doc) throws IOException{
-		createRoomFromFile(doc);
-	}
 
-	public void createRoomFromFile(String filename){
-		try {
-			Document doc = new ReadXMLFile().createDocument(filename);
-			NodeList nList = doc.getElementsByTagName("room");
-
-    		for (int temp = 0; temp < nList.getLength(); temp++) {
-    			Node nNode = nList.item(temp);
-    			//System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
-    			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-    				Element eElement = (Element) nNode;
-    				this.name = eElement.getAttribute("name");
-
-    				for (int x = 0; x < ROOM_HEIGHT; x++){
-    					// get the value line by line from XML file e.g. a line is <L0></L0>
-	    				String line = eElement.getElementsByTagName("L"+String.valueOf(x)).item(0).getTextContent();
-
-	    				for(int y = 0;y!= ROOM_WIDTH;++y) {
-	    					char c = line.charAt(y);
-	    					switch (c) {
-		    					case 'W' :
-		    						addWall(x, y);
-		    						break;
-		    					case 'D':
-		    						addDoor(x, y);
-		    						break;
-		    					case 'C':
-		    						addEmptyTile(x, y);
-		    						break;
-		    					case 'N':
-		    						addItem(x,y);
-		    						break;
-	    					}
-	    				}
-
-	    			}
-    			}
-
-    		}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/*private void createRoomFromFile(String filename) throws IOException {
 		FileReader fr = new FileReader(filename);
@@ -125,48 +73,6 @@ public class Room implements Serializable{
 
 	}
 */
-	private void addDoor(int x, int y) {
-		board[x][y] = new Tile(TileType.DOOR, x, y);
-	}
 
-	private void addWall(int x, int y) {
-		board[x][y] = new Tile(TileType.WALL, x, y);
-	}
-
-	private void addEmptyTile(int x, int y) {
-		Tile tile = new Tile(TileType.EMPTY, x, y);
-		board[x][y] = tile;
-	}
-
-	private void addItem(int x, int y) {
-		Tile tile = new Tile(TileType.EMPTY, x, y);
-		Key key = new Key(++keyCode, "Key 1");
-		//tile.addItem(key);
-		board[x][y] = tile;
-		Point p = new Point(x, y);
-	}
-
-
-	public Tile getTileAt(Point p){
-		if (p.x >= ROOM_WIDTH || p.y >= ROOM_HEIGHT) return null;
-		return board[p.x][p.y];
-	}
-
-	// if the tile is not EmptyTile, then it is occupy.
-	public boolean isTileOccupied(Point p){
-		Tile tile = board[p.x][p.y];
-		if (tile.getTileType() == TileType.EMPTY){
-			EmptyTile e = (EmptyTile) tile;
-			return e.isTileOccupied();
-		}
-		return true;
-	}
-
-	public Tile[][] getRoomBoard(){
-		return board;
-	}
-
-	public int width(){ return ROOM_WIDTH; }
-	public int height(){ return ROOM_HEIGHT; }
 	public String getName(){ return name; }
 }
