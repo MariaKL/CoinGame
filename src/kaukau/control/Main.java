@@ -26,12 +26,7 @@ public class Main {
 			@Override
 			public void run() {
 				ApplicationWindow aw = null;
-				try {
-					aw = new ApplicationWindow(new GameWorld());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				aw = new ApplicationWindow(new GameWorld());
 				aw.setVisible(true);
 				Client pClient = new Client(aw);
 		    	pClient.start();
