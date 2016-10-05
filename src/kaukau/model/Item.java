@@ -7,4 +7,6 @@ import java.io.Serializable;
  * ie collectible objects, puzzles, clues, doors and containers such as the players bag and lockers.*/
 public interface Item extends Serializable{
 
+	public String getName();
+
 }

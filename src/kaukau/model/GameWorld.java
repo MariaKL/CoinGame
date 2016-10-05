@@ -274,7 +274,9 @@ public class GameWorld implements Serializable{
 
 		for (int x = 0; x < 14; x++){
 			for (int y = 0; y < 14; y++){
-				System.out.print(tiles[y][x].getTileType().toString().charAt(0));
+				Tile tile = tiles[y][x];
+				if(tile.containsPickupItem()) System.out.print(tile.getItem().getName().charAt(0));
+				else System.out.print(tiles[y][x].getTileType().toString().charAt(0));
 			}
 			System.out.println();
 		}

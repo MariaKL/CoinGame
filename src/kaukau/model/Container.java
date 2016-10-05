@@ -106,4 +106,9 @@ public class Container implements Item, Serializable{
 		return storage.size() >= storageLimit;
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
 }

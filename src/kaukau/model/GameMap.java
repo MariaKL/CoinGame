@@ -45,6 +45,7 @@ public class GameMap implements Serializable{
     				Element eElement = (Element) nNode;
     				int doorCount = 0;  // use to count the doors
     				int keyCount = 0;   // use to count the keys
+    				int coinCount = 0;   // use to count the coin
     				// get the name of the room, the start point of x and y
     				String name = eElement.getAttribute("name");
     				int startX =  Integer.valueOf(eElement.getElementsByTagName("startX").item(0).getTextContent());
@@ -66,6 +67,9 @@ public class GameMap implements Serializable{
 		    						break;
 		    					case 'K':
 		    						keyCount = addKey(eElement, keyCount, col+startX, row+startY);
+		    						break;
+		    					case 'X':
+		    						keyCount = addCoin(eElement, coinCount, col+startX, row+startY);
 		    						break;
 		    					case 'C':
 		    						board[col+startX][row+startY] = new Tile(TileType.EMPTY, col+startX, row+startY);
@@ -93,7 +97,7 @@ public class GameMap implements Serializable{
 	 */
 	public int addDoor(Element element, int count, int x, int y){
 		Tile tile = new Tile(TileType.DOOR, x, y);
-		int key = Integer.valueOf(element.getElementsByTagName("D"+String.valueOf(count)).item(0).getTextContent());
+		int key = Integer.valueOf(element.getElementsByTagName("Door"+String.valueOf(count)).item(0).getTextContent());
 		Door door = new Door(key, tile);
 		doors.add(door);
 		tile.setItem(door);
@@ -111,9 +115,27 @@ public class GameMap implements Serializable{
 	 */
 	public int addKey(Element element, int count, int x, int y){
 		Tile tile = new Tile(TileType.EMPTY, x, y);
-		int keycode = Integer.valueOf(element.getElementsByTagName("K"+String.valueOf(count)).item(0).getTextContent());
+		int keycode = Integer.valueOf(element.getElementsByTagName("Key"+String.valueOf(count)).item(0).getTextContent());
 		Key key = new Key(keycode);
 		tile.setItem(key);
+		System.out.println(tile.containsPickupItem());
+		board[x][y] = tile;
+		return ++count;
+	}
+
+	/**
+	 *
+	 * @param element room element from XML file
+	 * @param count the number index of the key from XML file
+	 * @param x the x point of this key
+	 * @param y the y point of  this key
+	 * @return the next index number for next key item
+	 */
+	public int addCoin(Element element, int count, int x, int y){
+		Tile tile = new Tile(TileType.EMPTY, x, y);
+		int amount = Integer.valueOf(element.getElementsByTagName("Coin"+String.valueOf(count)).item(0).getTextContent());
+		Coin coin = new Coin(amount);
+		tile.setItem(coin);
 		System.out.println(tile.containsPickupItem());
 		board[x][y] = tile;
 		return ++count;

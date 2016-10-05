@@ -3,18 +3,18 @@ package kaukau.model;
 import java.io.Serializable;
 
 public class Door implements Item, Serializable{
-	
+
 	private Tile location;
 	private final int key;
 	private boolean locked;
-	
+
 	public Door(int key, Tile location){
 		this.location = location;
 		this.key = key;
 		if (key > 0) this.locked = true;
 		else this.locked = false;
 	}
-	
+
 	/**
 	 * returns whether or not door is locked
 	 * @return boolean locked
@@ -36,4 +36,11 @@ public class Door implements Item, Serializable{
 	public String toString(){
 		return "Door at "+this.location.toString();
 	}
+
+	@Override
+	public String getName() {
+		return "Door";
+	}
+
+
 }
