@@ -4,6 +4,7 @@ import kaukau.model.*;
 import kaukau.view.*;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Date;
 
@@ -44,6 +45,8 @@ public class Client extends Thread {
 			output = new ObjectOutputStream(sock.getOutputStream());
 	    } catch(EOFException e){
 			System.out.println("Server not running.");
+		} catch(ConnectException e){
+			System.out.println("Server not running");
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -54,7 +57,11 @@ public class Client extends Thread {
 		try {
 			if(initialRun){
 				// TODO: get client to read its uid from server BEFORE running client
-				boolean accepted = input.readBoolean();
+
+				// checks if client is connected to the server
+				boolean accepted = false;
+				if(input!=null)
+					accepted = input.readBoolean();
 				// if there were too many players then close the socket
 				if(!accepted){
 					sock.close();
@@ -74,11 +81,13 @@ public class Client extends Thread {
 			}
 			sock.close();
 		} catch(EOFException e){
-			e.printStackTrace();
+			System.out.println("UID not read");
 			System.out.println(uid + " : uid");
-		} catch (IOException e) {
+		} catch(ConnectException e){
+			System.out.println("Server not running");
+		} catch(IOException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch(ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}

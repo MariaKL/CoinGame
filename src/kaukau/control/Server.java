@@ -185,24 +185,21 @@ public class Server{
 		            	if(sockets.size() > 2){
 		            		output = new ObjectOutputStream(socket.getOutputStream());
 		    				output.writeBoolean(false);
-		    				output.flush();
 		    				output.writeUTF("Cannot accept another player");
-		    	        	output.flush();
 		            	}
 		            	// otherwise accept a new player
 		            	else{
 							// accept a new client
 							int uid = game.addPlayer();
 							sockets.put(uid, socket);
-							System.out.println("New socket: " + socket.getPort());
+							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
 
-							// send the client's uid to the client
 							output = new ObjectOutputStream(socket.getOutputStream());
-							output.write(uid);
-				        	output.flush();
+		    				output.writeBoolean(true);
+							// send the client's uid to the client
+							output.writeInt(uid);
 				        	// send the game to the client
 				        	output.writeObject(game);
-				        	output.flush();
 
 				        	System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 			//				// make a thread associated with the socket
@@ -210,6 +207,7 @@ public class Server{
 			//				threads.add(clientThread);
 			//				clientThread.start();
 		            	}
+			        	output.flush();
 		            }
 		        } catch(IOException e){
 		        	e.printStackTrace();
