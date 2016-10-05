@@ -1,11 +1,11 @@
 package kaukau.control;
 
+import kaukau.model.*;
+import kaukau.view.ApplicationWindow;
+
 import java.awt.EventQueue;
-import java.io.EOFException;
 import java.io.IOException;
 
-import kaukau.model.GameWorld;
-import kaukau.view.ApplicationWindow;
 
 /**
  * Main method for the Kaukau adventure game
@@ -25,12 +25,14 @@ public class Main {
 
 			@Override
 			public void run() {
-				//
-				ApplicationWindow aw = new ApplicationWindow();
+				ApplicationWindow aw = null;
+				aw = new ApplicationWindow(new GameWorld());
 				aw.setVisible(true);
 				Client pClient = new Client(aw);
 		    	pClient.start();
 		    	aw.rw.addClient(pClient);
+		    	// TODO: pass info from server where game is saved to client,
+		    	// client should get copy of gameworld from server and pass into app window
 			}
 		});
 

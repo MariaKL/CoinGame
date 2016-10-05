@@ -54,7 +54,7 @@ public class GameWorld implements Serializable{
 		Player player = players.get(uid);
 		Tile oldPos = player.getLocation();
 		Point newPos = getPointFromDirection(player, direction);
-		
+
 		// if the tile is emptyTile and not occupy, then move player to this new position
 		if (validPoint(newPos)){
 			Tile tile = board.getTileAt(newPos);
@@ -68,8 +68,8 @@ public class GameWorld implements Serializable{
 		return false;
 	}
 
-	 /** Performs a pickup item for a given Player. 
-	  * 
+	 /** Performs a pickup item for a given Player.
+	  *
 	  * @param uid user id belongs to this player
 	  * @param index the number index of the inventory
 	  * @return true if the player successfully pick up an item, otherwise false.
@@ -92,7 +92,7 @@ public class GameWorld implements Serializable{
 	}
 
 	/**
-	 * Performs a drop item for a given Player and index number of the item in the inventory. 
+	 * Performs a drop item for a given Player and index number of the item in the inventory.
 	 * @param uid user id belongs to this player
 	 * @param index the number index of the inventory
 	 * @return true if the player successfully drop an item on a tile, otherwise false.
@@ -108,9 +108,9 @@ public class GameWorld implements Serializable{
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Performs door open by a given Player. 
+	 * Performs door open by a given Player.
 	 * @param uid user id belongs to this player
 	 * @return true if the player successfully open door and enter the room, otherwise false.
 	 */
@@ -129,12 +129,12 @@ public class GameWorld implements Serializable{
 				else if (player.facingDirection() == Direction.EAST)
 					newPos = new Point(oldPos.X()+2, oldPos.Y());
 				else newPos = new Point(oldPos.X()-2, oldPos.Y());
-			
+
 				if (validPoint(newPos)){ // check if this new point is valid or not
 					Tile newTile = board.getTileAt(newPos);
 					if (!newTile.isTileOccupied()){
 						oldPos.removePlayer();        // remove player from a tile
-						player.setLocation(newTile); 
+						player.setLocation(newTile);
 						newTile.addPlayer(player);    // add player to this new location
 						return true;
 					}
@@ -154,7 +154,7 @@ public class GameWorld implements Serializable{
 				pos.x < 0 || pos.y < 0) return false;
 		return false;
 	}
-	
+
 	/**
 	 * Get the new point from the facing direction of the player.
 	 * @param player the current player

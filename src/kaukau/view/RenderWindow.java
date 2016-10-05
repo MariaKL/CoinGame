@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import kaukau.control.Client;
+import kaukau.model.GameWorld;
+import kaukau.model.Tile;
 
 /**This class handles the rendering of the game levels
  * 	in the Kaukau game. This class interacts with the
@@ -39,35 +41,31 @@ public class RenderWindow extends JPanel {
 	 * 	1..8 - cracked tile
 	 * 	9 - no tile (null)
 	 */
-	private static int[][] levelData = {{2,2,0,0,0,0,2},
-		                                {2,0,0,0,0,0,2},
-		                                {0,0,0,2,0,0,0},
-		                                {2,0,0,2,0,0,0},
-		                                {0,0,0,2,0,0,0},
-		                                {0,0,0,0,0,0,2},
-		                                {2,0,0,0,0,2,0}};
+	private static int[][] levelData = {{2,2,0,0,0},
+		                                {2,0,0,0,0},
+		                                {0,0,0,2,0},
+		                                {0,0,0,2,0},
+		                                {2,0,0,2,0}};
 
 	/* Field to store 2D array representation of the level sprite data.
 	* KEY:
 	* 1 - player
 	*/
-	private static int[][] spriteData = {{0,0,0,0,0,0,0},
-										 {0,0,0,0,0,0,0},
-								         {0,0,0,0,0,0,0},
-						                 {0,0,0,1,0,0,0},
-                            	         {0,0,0,0,0,0,0},
-								         {0,0,0,0,0,0,0},
-							             {0,0,0,0,0,0,0}};
+	private static int[][] spriteData = {{0,0,0,0,0},
+										 {0,0,0,0,0},
+								         {0,0,0,0,0},
+						                 {0,0,0,1,0},
+                            	         {0,0,0,0,0}};
 
 	/* Fields to store array representation of the level wall data.
 	* KEY:
 	* 1 - wall
 	* 2 - door
 	*/
-	private static int[] northWall = {1,1,1,1,1,2,1};
-	private static int[] eastWall  = {1,1,1,2,1,1,1};
-	private static int[] southWall = {1,1,1,1,1,1,1};
-	private static int[] westWall  = {1,1,1,2,1,1,1};
+	private static int[] northWall = {1,1,1,1,1};
+	private static int[] eastWall  = {1,1,1,2,1};
+	private static int[] southWall = {1,1,1,1,1};
+	private static int[] westWall  = {1,1,1,2,1};
 
 	// Field to store the board margins in pixels
 	private static final int MARGIN = 324;
@@ -79,7 +77,7 @@ public class RenderWindow extends JPanel {
 	private static final int tileHeight = 50;
 
 	// Field to store all the tiles in the current level
-	private List<Tile> allTiles = new ArrayList<Tile>();
+	private List<kaukau.view.Tile> allTiles = new ArrayList<kaukau.view.Tile>();
 	// Field to store all the sprites in the current level
 	private List<Sprite> allSprites = new ArrayList<Sprite>();
 
@@ -91,8 +89,12 @@ public class RenderWindow extends JPanel {
 
 	// Field to store the current player
 	Sprite player;
+	
+	// Field to store GameWorld object
+	GameWorld game;
 
-	public RenderWindow(){
+	public RenderWindow(GameWorld game){
+		this.game = game;
 		//Setting a border
 		// FIXME: Stop border resizing with window
 		setBorder(BorderFactory.createCompoundBorder(
@@ -175,7 +177,7 @@ public class RenderWindow extends JPanel {
 	 */
 	private void placeTile(int tileType, Point pt) {
 		// Creating a new tiles
-		Tile t = new Tile(tileType, pt.x, pt.y);
+		kaukau.view.Tile t = new kaukau.view.Tile(tileType, pt.x, pt.y);
 		// Adding the tile to the current level
 		allTiles.add(t);
 	}
@@ -549,7 +551,7 @@ public class RenderWindow extends JPanel {
 			// TODO: tile randomisation.
 	    	// Drawing all level tiles onto the rendering panel
 	    	BufferedImage image;
-		    for(Tile t: allTiles){
+		    for(kaukau.view.Tile t: allTiles){
 		    	if(t.getTileType()==9){
 		    		image = null;
 		    	} else if(t.getTileType() == 0){
@@ -639,4 +641,60 @@ public class RenderWindow extends JPanel {
     public void addClient(Client client){
     	this.client = client;
     }
+    
+    /**
+	 * Get 2d int array for render window to render tiles
+	 * @return
+	 */
+	public int[][] getTiles4Render() {
+		Tile[][] tiles = game.getGameTiles();
+		for (int i=0;i<tiles.length;i++){
+			for (int j=0;j<tiles[0].length;j++){
+				if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.EMPTY){
+					//empty tile is 0
+					levelData[i-1][j-1] = 0; //shift over to account for walls in tile map
+				} else if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.WALL){
+					// Wall is 1
+					if (i==0 && j>0){
+						//north
+						northWall[j-1]=1;
+					} else if (j==6 && i>0){
+						//east
+						eastWall[i-1]=1;
+					} else if (i==6 && j>0){
+						//south
+						southWall[j-1]=1;
+					} else if (j==0 && i>0){
+						//west
+						westWall[i-1]=1;
+					} 
+				} else if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.DOOR){
+					// Door is 2
+					if (i==0 && j>0){
+						//north
+						northWall[j-1]=2;
+					} else if (j==6 && i>0){
+						//east
+						eastWall[i-1]=2;
+					} else if (i==6 && j>0){
+						//south
+						southWall[j-1]=2;
+					} else if (j==0 && i>0){
+						//west
+						westWall[i-1]=2;
+					} 
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get 2d int array for render window to render players
+	 * @return
+	 */
+	public int[][] getPlayers4Render() {
+		
+		return null;
+	}
 }

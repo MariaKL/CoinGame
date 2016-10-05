@@ -12,7 +12,6 @@ import org.w3c.dom.NodeList;
 import kaukau.storage.ReadXMLFile;
 
 public class GameMap implements Serializable{
-	
 	private static final int ROOM_WIDTH = 7;
 	private static final int ROOM_HEIGHT = 7;
 	private static final int BOARD_WIDTH = 14;
@@ -24,7 +23,7 @@ public class GameMap implements Serializable{
 	public enum TileType{
 		WALL, EMPTY, DOOR;
 	}
-		
+
 
 	public GameMap(){
 		this.board= new Tile[BOARD_WIDTH][BOARD_HEIGHT];
@@ -52,7 +51,7 @@ public class GameMap implements Serializable{
     				int startY =  Integer.valueOf(eElement.getElementsByTagName("startY").item(0).getTextContent());
     				Room room = new Room(name, startX, startY);
     				rooms.add(room);
-    				
+
     				for (int row = 0; row < ROOM_HEIGHT; row++){
     					// get the value line by line from XML file e.g. a line is <L0></L0>
 	    				String line = eElement.getElementsByTagName("L"+String.valueOf(row)).item(0).getTextContent();
@@ -83,7 +82,7 @@ public class GameMap implements Serializable{
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Add the door to the board.
 	 * @param element room element from XML file
@@ -101,9 +100,9 @@ public class GameMap implements Serializable{
 		board[x][y] = tile;
 		return ++count;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param element room element from XML file
 	 * @param count the number index of the key from XML file
 	 * @param x the x point of this key
@@ -132,7 +131,7 @@ public class GameMap implements Serializable{
     			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
     				Element eElement = (Element) nNode;
     				String name = eElement.getAttribute("name");
-    				
+
     				for (int x = 0; x < 14; x++){
     					// get the value line by line from XML file e.g. a line is <L0></L0>
 	    				String line = eElement.getElementsByTagName("L"+String.valueOf(x)).item(0).getTextContent();
@@ -188,7 +187,7 @@ public class GameMap implements Serializable{
 	 * @return the width of board
 	 */
 	public int width(){ return BOARD_WIDTH; }
-	
+
 	/**
 	 * Return the height of this board.
 	 * @return the height of board
