@@ -6,8 +6,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
-import kaukau.storage.ReadXMLFile;
-
 import java.awt.Point;
 import java.io.Serializable;
 

@@ -41,21 +41,25 @@ public class RenderWindow extends JPanel {
 	 * 	1..8 - cracked tile
 	 * 	9 - no tile (null)
 	 */
-	private static int[][] levelData = {{2,2,0,0,0},
-		                                {2,0,0,0,0},
-		                                {0,0,0,2,0},
-		                                {0,0,0,2,0},
-		                                {2,0,0,2,0}};
+	private static int[][] levelData = {{2,2,0,0,0,0,0},
+		                                {2,0,0,0,0,0,0},
+		                                {2,0,0,0,0,0,0},
+		                                {0,0,0,2,0,0,0},
+		                                {0,0,0,2,0,0,0},
+		                                {0,0,0,2,0,0,0},
+		                                {2,0,0,2,0,0,0}};
 
 	/* Field to store 2D array representation of the level sprite data.
 	* KEY:
 	* 1 - player
 	*/
-	private static int[][] spriteData = {{0,0,0,0,0},
-										 {0,0,0,0,0},
-								         {0,0,0,0,0},
-						                 {0,0,0,1,0},
-                            	         {0,0,0,0,0}};
+	private static int[][] spriteData = {{0,0,0,0,0,0,0},
+							             {0,0,0,0,0,0,0},
+							             {0,0,0,0,0,0,0},
+							             {0,0,0,1,0,0,0},
+							             {0,0,0,0,0,0,0},
+							             {0,0,0,0,0,0,0},
+							             {0,0,0,0,0,0,0}};
 
 	/* Fields to store array representation of the level wall data.
 	* KEY:

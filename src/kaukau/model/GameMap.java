@@ -9,8 +9,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import kaukau.storage.ReadXMLFile;
-
 public class GameMap implements Serializable{
 
 	private static final int BOARD_WIDTH = 14;
@@ -31,7 +29,7 @@ public class GameMap implements Serializable{
 
 	public void createRoomsFromFile(){
 		try {
-			Document doc = new ReadXMLFile().createDocument("room.xml");
+			Document doc = new storage.ReadXMLFile().createDocument("room.xml");
 			NodeList nList = doc.getElementsByTagName("room");  // get elements
 
     		for (int temp = 0; temp < nList.getLength(); temp++) {
