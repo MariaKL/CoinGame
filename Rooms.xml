@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+  <room name="Gym">
+  	<startX>0</startX>
+  	<startY>0</startY>
+    <L0>WWDDWWW</L0>
+    <L1>WCCCCKW</L1>
+    <L2>WCCCCCW</L2>
+    <L3>WCCCCCD</L3>
+    <L4>WCCCCCW</L4>
+    <L5>WCCCCCW</L5>
+    <L6>WWWWWWW</L6>
+    <D0>0</D0>
+    <D1>0</D1>
+    <D2>0</D2>
+    <K0>123</K0>
+  </room>
+  <room name="Office">
+    <startX>7</startX>
+    <startY>0</startY>
+    <L0>WWWWWWW</L0>
+    <L1>CCCCCCW</L1>
+    <L2>CCCCCCW</L2>
+    <L3>CCCCCCW</L3>
+    <L4>CCCCCCW</L4>
+    <L5>CCCCCCW</L5>
+    <L6>WWWWWDW</L6>
+    <D0>0</D0>
+  </room>
+  <room name="Hallway 1">
+    <startX>0</startX>
+    <startY>7</startY>
+    <L0>CCCCCCC</L0>
+    <L1>CCCCKCC</L1>
+    <L2>CCCCCCC</L2>
+    <L3>CCCCCCC</L3>
+    <L4>CCCCCCC</L4>
+    <L5>CKCCCCC</L5>
+    <L6>CCCCCCC</L6>
+    <K0>124</K0>
+`   <K1>125</K1>
+  </room>
+  <room name="Hallway 2">
+    <startX>7</startX>
+    <startY>7</startY>
+    <L0>CCCCCCC</L0>
+    <L1>CCCCCCC</L1>
+    <L2>CCCCCCC</L2>
+    <L3>CCCCCCC</L3>
+    <L4>CCCCCCC</L4>
+    <L5>CCCCCCC</L5>
+    <L6>CCCCCCC</L6>
+  </room>
+</map>

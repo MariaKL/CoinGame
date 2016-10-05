@@ -1,27 +1,20 @@
 package kaukau.model;
 
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Room implements Serializable{
 
-	private static final int ROOM_WIDTH = 7;
-	private static final int ROOM_HEIGHT = 7;
-	private Tile[][] board = new Tile[ROOM_WIDTH][ROOM_HEIGHT];
 	private String name;
-	private int keyCode = 0;
 	private int startX, startY;
+	private ArrayList<Door> doors;
 
 	public Room(String name, int x, int y){
 		this.name = name;
-		startX = x;
-		startY = y;
+		this.startX = x;
+		this.startY = y;
+		doors = new ArrayList<Door>();
 	}
 
 
@@ -70,7 +63,11 @@ public class Room implements Serializable{
 	     }
 
 	}
+	
+	
 */
-
+	public Point getStartPoint(){
+		return new Point(startX, startY);
+	}
 	public String getName(){ return name; }
 }

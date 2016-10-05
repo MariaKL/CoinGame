@@ -66,10 +66,10 @@ public class RenderWindow extends JPanel {
 	* 1 - wall
 	* 2 - door
 	*/
-	private static int[] northWall = {1,1,1,1,1};
-	private static int[] eastWall  = {1,1,1,2,1};
-	private static int[] southWall = {1,1,1,1,1};
-	private static int[] westWall  = {1,1,1,2,1};
+	private static int[] northWall = {1,1,1,1,1,2,1};
+	private static int[] eastWall  = {1,1,1,2,1,1,1};
+	private static int[] southWall = {1,1,1,1,1,1,1};
+	private static int[] westWall  = {1,1,1,1,1,1,1};
 
 	// Field to store the board margins in pixels
 	private static final int MARGIN = 324;
@@ -511,7 +511,7 @@ public class RenderWindow extends JPanel {
 	    	    		ey = ey + 22;
 	    			}
 	    			// drawing doors
-	    			g.drawImage(northDoorImg, doorN.x+(SPRITE_MARGIN), doorN.y+(SPRITE_MARGIN+8), this);
+	    			//g.drawImage(northDoorImg, doorN.x+(SPRITE_MARGIN), doorN.y+(SPRITE_MARGIN+8), this);
 	    			g.drawImage(eastLockedDoorImg, doorE.x-(SPRITE_MARGIN*9), doorE.y-(SPRITE_MARGIN*4), this);
 	    			break;
 	    		case 'N':
@@ -530,7 +530,7 @@ public class RenderWindow extends JPanel {
 	    	    		ey = ey + 22;
 	    			}
 	    			// drawing doors
-	    			g.drawImage(eastDoorImg, doorE.x+(SPRITE_MARGIN*2+4), doorE.y+(SPRITE_MARGIN+8), this);
+	    			//g.drawImage(eastDoorImg, doorE.x+(SPRITE_MARGIN*2+4), doorE.y+(SPRITE_MARGIN+8), this);
 	    			break;
 	    		case 'E':
 	    			// draw east and south walls

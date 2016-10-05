@@ -1,24 +1,24 @@
 package kaukau.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class Player implements Serializable{
 
 	private String name;
 	private Tile location;
-	private Bag bag;
+	private Container inventory;
 	private Direction facing;
-	private int userId;
+	private final int userId;
 
 	public Player (int uid, String name, Tile startLocation, Direction facing){
 		this.userId = uid;
-		if(name != null && startLocation != null){
-			this.name = name;
-			this.location = startLocation;
-		}
-		bag = new Bag(this.name+"'s Bag", this.location, this);
+		this.name = name;
+		this.location = startLocation;
 		this.facing = facing;
+		inventory = new Container("Backpack", startLocation);
+		inventory.setAmmount(5);
 	}
 
 	/**
@@ -27,7 +27,6 @@ public class Player implements Serializable{
 	public void setLocation(Tile loc) {
 		if(loc != null){
 			this.location = loc;
-			this.bag.setLocation(loc);
 		}
 		setFacingDirection(loc);
 	}
@@ -66,22 +65,38 @@ public class Player implements Serializable{
 	/**
 	 * adds item to players bag
 	 * */
-	public void addToBag(PickupableItem item){
-		this.bag.addCollectable(item);
+	public boolean addToBag(Item item){
+		return inventory.addItem(item);
 	}
 
 	/**
 	 * removes item from players bag
 	 * */
-	public void removeFromBag(PickupableItem item){
-		this.bag.removeCollectable(item);
+	public boolean removeFromBag(int index){
+		return inventory.removeItem(index);
 	}
 
 	/**
 	 * adds item to players bag
 	 * */
-	public Bag getBag(){
-		return bag;
+	public ArrayList <PickupableItem> getInventory(){
+		return inventory.getStorage();
+	}
+	
+	/**
+	 * Return the user id of this player.
+	 * @return the user id of this player.
+	 */
+	public int getUserId(){
+		return userId;
+	}
+	
+	/**
+	 * Return the size of the player's storage.
+	 * @return the user id of this player.
+	 */
+	public int getStorageSize(){
+		return inventory.getStorageLimit();
 	}
 
 	/**

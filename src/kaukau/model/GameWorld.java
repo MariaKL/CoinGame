@@ -16,9 +16,7 @@ import java.io.Serializable;
 
 public class GameWorld implements Serializable{
 
-	private Room[][] map;
 	private GameMap board;
-
 	private boolean gameOver;
 
 	/**
@@ -31,13 +29,8 @@ public class GameWorld implements Serializable{
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	public GameWorld(){
-		board =  new GameMap("room.xml");
+		board =  new GameMap();
 		gameOver = false;
-	}
-
-	public GameWorld(HashMap<Integer, Player> players) throws IOException{
-		this.players = players;
-		map = new Room[1][1];
 	}
 
 	/**
@@ -46,8 +39,7 @@ public class GameWorld implements Serializable{
 	 * @return
 	 */
 	public synchronized int addPlayer(){
-//		Room room = map[0][0];
-		Player player = new Player(++uid, "Player", board.getTileAt(new Point(2, 2)), Direction.EAST);
+		Player player = new Player(++uid, "Player", board.getTileAt(new Point(2, 1+uid)), Direction.EAST);
 		this.players.put(uid, player);
 		return uid;
 	}
@@ -59,49 +51,112 @@ public class GameWorld implements Serializable{
 	 * @return True if the player is move to the new position, otherwise False.
 	 */
 	public synchronized boolean movePlayer(int uid, Direction direction){
-		Room room = map[0][0];
 		Player player = players.get(uid);
 		Tile oldPos = player.getLocation();
 		Point newPos = getPointFromDirection(player, direction);
 
-		if (board.width() <= newPos.x || board.height() <= newPos.y ||
-			newPos.x < 0 || newPos.y < 0)
-			return false;
-
 		// if the tile is emptyTile and not occupy, then move player to this new position
-		Tile tile = board.getTileAt(newPos);
-		if (tile.getTileType() == TileType.EMPTY && !tile.isTileOccupied()){
-			oldPos.removePlayer();
-			player.setLocation(tile);
-			tile.addPlayer(player);
-			return true;
+		if (validPoint(newPos)){
+			Tile tile = board.getTileAt(newPos);
+			if (tile.getTileType() == TileType.EMPTY && !tile.isTileOccupied()){
+				oldPos.removePlayer();
+				player.setLocation(tile);
+				tile.addPlayer(player);
+				return true;
+			}
 		}
 		return false;
 	}
 
+	 /** Performs a pickup item for a given Player.
+	  *
+	  * @param uid user id belongs to this player
+	  * @param index the number index of the inventory
+	  * @return true if the player successfully pick up an item, otherwise false.
+	  */
 	public synchronized boolean pickupAnItem(int uid){
 		Player player = players.get(uid);
 		Point pos = getPointFromDirection(player, player.facingDirection());
-		if (board.width() <= pos.x || board.height() <= pos.y ||
-			pos.x < 0 || pos.y < 0) return false;
 
 		// if the tile is EmptyTile type and item is pickupable,
 		// then player can pick up the item only if there is one
-		Tile tile = board.getTileAt(pos);
-		if (tile.getTileType() == TileType.EMPTY && tile.containsPickupItem()){
-			player.addToBag((PickupableItem)tile.getItem());
-			tile.removeItem();
-			return true;
+		if (validPoint(pos)){
+			Tile tile = board.getTileAt(pos);
+			if (tile.getTileType() == TileType.EMPTY && tile.containsPickupItem()){
+				player.addToBag((PickupableItem)tile.getItem());
+				tile.removeItem();
+				return true;
+			}
 		}
-		return false;
-	}
-
-	public synchronized boolean dropAnItem(int uid){
 		return false;
 	}
 
 	/**
-	 * Get the point from the facing direction of the player.
+	 * Performs a drop item for a given Player and index number of the item in the inventory.
+	 * @param uid user id belongs to this player
+	 * @param index the number index of the inventory
+	 * @return true if the player successfully drop an item on a tile, otherwise false.
+	 */
+	public synchronized boolean dropAnItem(int uid, int index){
+		Player player = players.get(uid);
+		Point pos = getPointFromDirection(player, player.facingDirection());
+		if (validPoint(pos)){
+			Tile tile = board.getTileAt(pos);
+			if (!tile.isTileOccupied()){
+				return player.removeFromBag(index);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Performs door open by a given Player.
+	 * @param uid user id belongs to this player
+	 * @return true if the player successfully open door and enter the room, otherwise false.
+	 */
+	public synchronized boolean openDoor(int uid){
+		Player player = players.get(uid);
+		Tile oldPos = player.getLocation();
+		Point pos = getPointFromDirection(player, player.facingDirection());
+		if (validPoint(pos)){
+			Tile doorTile = board.getTileAt(pos);
+			if (doorTile.getTileType() == TileType.DOOR){  // if the facing direction is a door
+				Point newPos;  // get the new point after enter from door
+				if (player.facingDirection() == Direction.NORTH)
+					newPos = new Point(oldPos.X(), oldPos.Y()-2);
+				else if (player.facingDirection() == Direction.SOUTH)
+					newPos = new Point(oldPos.X(), oldPos.Y()+2);
+				else if (player.facingDirection() == Direction.EAST)
+					newPos = new Point(oldPos.X()+2, oldPos.Y());
+				else newPos = new Point(oldPos.X()-2, oldPos.Y());
+
+				if (validPoint(newPos)){ // check if this new point is valid or not
+					Tile newTile = board.getTileAt(newPos);
+					if (!newTile.isTileOccupied()){
+						oldPos.removePlayer();        // remove player from a tile
+						player.setLocation(newTile);
+						newTile.addPlayer(player);    // add player to this new location
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check if this given point is valid or not.
+	 * @param pos the given point
+	 * @return true if the x and y is within the board's size, otherwise false
+	 */
+	public boolean validPoint(Point pos){
+		if (board.width() <= pos.x || board.height() <= pos.y ||
+				pos.x < 0 || pos.y < 0) return false;
+		return false;
+	}
+
+	/**
+	 * Get the new point from the facing direction of the player.
 	 * @param player the current player
 	 * @param direct facing direction of the player
 	 * @return new point from the facing direction of the player
@@ -129,7 +184,7 @@ public class GameWorld implements Serializable{
 		ObjectOutputStream dataOutput = new ObjectOutputStream(bout);
 		dataOutput.writeBoolean(gameOver);  // game state
 		dataOutput.writeObject(this.players);
-		dataOutput.writeObject(map[0][0]);
+		dataOutput.writeObject(this.board);
 		dataOutput.flush();
 		// Finally, return!!
 		return bout.toByteArray();
@@ -150,7 +205,7 @@ public class GameWorld implements Serializable{
 			ObjectInputStream dataInput = new ObjectInputStream(bin);
 			this.gameOver = dataInput.readBoolean();
 			this.players = (HashMap<Integer, Player>) dataInput.readObject();
-			map[0][0] = (Room) dataInput.readObject();
+			this.board = (GameMap) dataInput.readObject();
 		} catch (ClassNotFoundException e) {
 			System.err.println("Class not found in fromByteArray. " + e);
 			e.printStackTrace();
@@ -218,7 +273,7 @@ public class GameWorld implements Serializable{
 
 		for (int x = 0; x < 14; x++){
 			for (int y = 0; y < 14; y++){
-				System.out.print(tiles[x][y].getTileType().toString().charAt(0));
+				System.out.print(tiles[y][x].getTileType().toString().charAt(0));
 			}
 			System.out.println();
 		}
