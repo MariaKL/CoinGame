@@ -6,7 +6,7 @@ package kaukau.model;
 public class Locker extends Container{
 
 	public Locker (String name, Tile loc){
-		super(name, loc);
+		super("Locker", loc);
 		setAmmount(8);
 	}
 
@@ -14,6 +14,6 @@ public class Locker extends Container{
 	 * Returns a string describing the locker.
 	 * */
 	public String toString(){
-		return "This is Locker: "+this.getName();
+		return "This is Locker.";
 	}
 }

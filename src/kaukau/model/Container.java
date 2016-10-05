@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * A container is an item able hold collectable type items.
  * Containers are lockers around the game and the bag's of each player*/
 public class Container implements Item, Serializable{
-	private Tile location;
+	
 	private String name;
 	private int storageLimit;
 	private ArrayList <PickupableItem> storage =  new ArrayList <PickupableItem>( );
@@ -15,33 +15,11 @@ public class Container implements Item, Serializable{
 	public Container (String name, Tile loc){
 		if (name != null && loc != null){
 			this.name = name;
-			this.location = loc;
 		}
-	}
-
-	@Override
-	public void setLocation(Tile loc) {
-		if(loc != null){
-			this.location = loc;
-			//set the location for all items in container to be same as container.
-			for(PickupableItem c : this.storage){
-				c.setLocation(loc);
-			}
-		}
-	}
-
-	@Override
-	public String getName() {
-		return this.name;
-	}
-
-	@Override
-	public Tile getLocation() {
-		return this.location;
 	}
 
 	/**
-	 * Protected method to set the max storage ammount which is determined when the container is made.
+	 * Protected method to set the max storage amount which is determined when the container is made.
 	 * */
 	protected void setAmmount (int ammount){
 		if(ammount > 0){
@@ -50,27 +28,41 @@ public class Container implements Item, Serializable{
 	}
 
 	/**
-	 * Adds a collectable item to a container
+	 * Adds a pickupable item to a container
 	 * @throws NullPointer Exception
 	 * */
-	public void addCollectable(PickupableItem item){
-		if(item != null){
-			if(this.storage.size() < this.storageLimit){
-				storage.add(item);
+	public boolean addItem(Item item){
+		if (item != null && item instanceof PickupableItem){
+			if (this.storage.size() < this.storageLimit){
+				storage.add((PickupableItem) item);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**
-	 * Removes a collectable item from a container
+	 * Removes a pickupable item from a container
 	 * @throws NullPointer Exception
 	 * */
-	public void removeCollectable(PickupableItem item){
-		if(item != null){
-			if(this.storage.contains(item)){
-				storage.remove(item);
-			}
+	public boolean removeItem(Item item){
+		if (item != null && storage.contains(item)){
+			storage.remove((PickupableItem) item);
+			return true;
 		}
+		return false;
+	}
+	
+	/**
+	 * Removes a pickupable item from this container using index number of ArrayList
+	 * @throws NullPointer Exception
+	 * */
+	public boolean removeItem(int index){
+		if (index < this.storage.size() && index >= 0){
+			storage.remove(index);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -79,6 +71,14 @@ public class Container implements Item, Serializable{
 	 * */
 	public ArrayList <PickupableItem> getStorage(){
 		return this.storage;
+	}
+	
+	/**
+	 * Returns the list of items in the container
+	 * @return ArrayList <Collectable>
+	 * */
+	public int getStorageLimit(){
+		return this.storageLimit;
 	}
 
 }
