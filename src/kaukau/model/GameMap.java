@@ -1,6 +1,7 @@
 package kaukau.model;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.w3c.dom.Document;
@@ -10,7 +11,7 @@ import org.w3c.dom.NodeList;
 
 import kaukau.storage.ReadXMLFile;
 
-public class GameMap {
+public class GameMap implements Serializable{
 
 	private static final int BOARD_WIDTH = 14;
 	private static final int BOARD_HEIGHT = 14;
