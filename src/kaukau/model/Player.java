@@ -9,6 +9,7 @@ public class Player implements Serializable{
 	private String name;
 	private Tile location;
 	private Container inventory;
+	private CoinBox coinbox;
 	private Direction facing;
 	private final int userId;
 
@@ -18,7 +19,9 @@ public class Player implements Serializable{
 		this.location = startLocation;
 		this.facing = facing;
 		inventory = new Container("Backpack", startLocation);
-		inventory.setAmmount(5);
+		inventory.setAmmount(8);
+		this.coinbox = new CoinBox(this);
+		this.inventory.addItem(this.coinbox);
 	}
 
 	/**
@@ -82,7 +85,7 @@ public class Player implements Serializable{
 	public ArrayList <PickupableItem> getInventory(){
 		return inventory.getStorage();
 	}
-	
+
 	/**
 	 * Return the user id of this player.
 	 * @return the user id of this player.
@@ -90,7 +93,7 @@ public class Player implements Serializable{
 	public int getUserId(){
 		return userId;
 	}
-	
+
 	/**
 	 * Return the size of the player's storage.
 	 * @return the user id of this player.
