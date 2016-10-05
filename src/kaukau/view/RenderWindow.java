@@ -650,10 +650,10 @@ public class RenderWindow extends JPanel {
 		Tile[][] tiles = game.getGameTiles();
 		for (int i=0;i<tiles.length;i++){
 			for (int j=0;j<tiles[0].length;j++){
-				if (tiles[i][j].getCode().equals("C")){
+				if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.EMPTY){
 					//empty tile is 0
 					levelData[i-1][j-1] = 0; //shift over to account for walls in tile map
-				} else if (tiles[i][j].getCode().equals("W")){
+				} else if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.WALL){
 					// Wall is 1
 					if (i==0 && j>0){
 						//north
@@ -668,7 +668,7 @@ public class RenderWindow extends JPanel {
 						//west
 						westWall[i-1]=1;
 					} 
-				} else if (tiles[i][j].getCode().equals("D")){
+				} else if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.DOOR){
 					// Door is 2
 					if (i==0 && j>0){
 						//north
