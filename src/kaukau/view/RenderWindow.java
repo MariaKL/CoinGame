@@ -37,27 +37,31 @@ public class RenderWindow extends JPanel {
 
 	/* Field to store 2D array representation of the game level data.
 	 * 	KEY:
-	 *  0 - blue tile
-	 * 	1..8 - cracked tile
+	 *  0 - cracked tile
+	 * 	1 - brown tile
+	 *  2 - maroon tile
+	 *  3 - red tile
+	 *  4..8 - blue
 	 * 	9 - no tile (null)
 	 */
-	private static int[][] levelData = {{2,2,0,0,0,0,0},
-		                                {2,0,0,0,0,0,0},
-		                                {2,0,0,0,0,0,0},
-		                                {0,0,0,2,0,0,0},
-		                                {0,0,0,2,0,0,0},
-		                                {0,0,0,2,0,0,0},
-		                                {2,0,0,2,0,0,0}};
+	private static int[][] levelData = {{0,5,5,0,5,5,5},
+		                                {5,0,0,2,0,0,5},
+		                                {5,0,4,3,4,0,5},
+		                                {5,3,2,1,2,3,5},
+		                                {0,0,4,3,4,0,5},
+		                                {0,0,0,2,0,0,5},
+		                                {5,5,5,5,5,5,0}};
 
 	/* Field to store 2D array representation of the level sprite data.
 	* KEY:
 	* 1 - player
+	* 2 - basic cube
 	*/
 	private static int[][] spriteData = {{0,0,0,0,0,0,0},
 							             {0,0,0,0,0,0,0},
 							             {0,0,0,0,0,0,0},
 							             {0,0,0,1,0,0,0},
-							             {0,0,0,0,0,0,0},
+							             {0,0,0,2,0,0,0},
 							             {0,0,0,0,0,0,0},
 							             {0,0,0,0,0,0,0}};
 
@@ -72,7 +76,6 @@ public class RenderWindow extends JPanel {
 	private static int[] westWall  = {1,1,1,1,1,1,1};
 
 	// Field to store the board margins in pixels
-	private static final int MARGIN = 324;
 	private static final int SPRITE_MARGIN = 16;
 	private static final int WALL_Y = -66;
 
@@ -87,7 +90,6 @@ public class RenderWindow extends JPanel {
 
 	// Field to store the current direction of the board
 	private char gameDir = 'S';
-
 	// Field to store the current direction of the player
 	private char playerDir = 'S';
 
@@ -99,6 +101,7 @@ public class RenderWindow extends JPanel {
 
 	public RenderWindow(GameWorld game){
 		this.game = game;
+		
 		//Setting a border
 		setBorder(BorderFactory.createCompoundBorder(
 						      BorderFactory.createEmptyBorder(0, 2, 2, 2),
@@ -208,7 +211,7 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveUp", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
-
+				
 				// update player direction
 				playerDir = 'E';
 
@@ -242,7 +245,7 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveDown", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
-
+				
 				// update player direction
 				playerDir = 'W';
 
@@ -456,29 +459,38 @@ public class RenderWindow extends JPanel {
 	 * 	rendering window.
 	 */
 	private void paintLevelSprites(Graphics g) {
+		// a point to store the position of the player
+		Point playerPos = new Point(0,0);
 		try{
 		    for(Sprite s: allSprites){
-		    	BufferedImage image = null;
+		    	// if the position is a player it must be drawn last
 		    	if(s.getSpriteType() == 1){
-		    		switch(playerDir){
-		    			case 'N':
-		    				image = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png"));
-		    				break;
-		    			case 'E':
-		    				image = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
-		    				break;
-		    			case 'S':
-		    				image = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
-		    				break;
-		    			case 'W':
-		    				image = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png"));
-		    				break;
-		    		}
-		    		if(image != null){
-		    			g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3-3), this);
-		    		}
+		    		playerPos.x = s.X() + (720/2) - (SPRITE_MARGIN*2);
+		    		playerPos.y = s.Y() - (SPRITE_MARGIN/3-3);
+		    	} else if(s.getSpriteType() == 2){
+		    		BufferedImage image = ImageIO.read(new File(IMAGE_PATH + "coin.png"));
+		    		g.drawImage(image, s.X()+(720/2)-10, s.Y()+75, this);
 		    	}
 		    }
+		    // drawing the player last
+		    BufferedImage image = null;
+    		switch(playerDir){
+				case 'N':
+					image = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png"));
+					break;
+				case 'E':
+					image = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
+					break;
+				case 'S':
+					image = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
+					break;
+				case 'W':
+					image = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png"));
+					break;
+    		}
+    		if(image != null){
+    			g.drawImage(image, playerPos.x, playerPos.y, this);
+    		}
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -489,20 +501,27 @@ public class RenderWindow extends JPanel {
 	 * 	rendering window.
 	 */
 	private void paintLevelTiles(Graphics g) {
+		final int TILE_MARGIN = 324;
 		try{
-    	BufferedImage image;
-	    for(kaukau.view.Tile t: allTiles){
-	    	if(t.getTileType()==9){
-	    		image = null;
-	    	} else if(t.getTileType() == 0){
-	    		image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
-	    	} else {
-	    		image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
-	    	}
-	    	if(image != null){
-	    		g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/4), this);
-	    	}
-	    }
+	    	BufferedImage image;
+		    for(kaukau.view.Tile t: allTiles){
+		    	if(t.getTileType()==9){
+		    		image = null;
+		    	} else if(t.getTileType() == 0){
+		    		image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
+		    	} else if(t.getTileType() == 1){
+			    		image = ImageIO.read(new File(IMAGE_PATH + "brown-tile.png"));
+		    	} else if(t.getTileType() == 2){
+		    		image = ImageIO.read(new File(IMAGE_PATH + "maroon-tile.png"));
+		    	} else if(t.getTileType() == 3){
+		    		image = ImageIO.read(new File(IMAGE_PATH + "red-tile.png"));
+		    	} else {
+		    		image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
+		    	}
+		    	if(image != null){
+		    		g.drawImage(image, t.X() + TILE_MARGIN, t.Y() + (TILE_MARGIN/4), this);
+		    	}
+		    }
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -725,7 +744,6 @@ public class RenderWindow extends JPanel {
 	 * @return
 	 */
 	public int[][] getPlayers4Render() {
-		
 		return null;
 	}
 }
