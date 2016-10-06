@@ -101,7 +101,6 @@ public class RenderWindow extends JPanel {
 
 	public RenderWindow(GameWorld game){
 		this.game = game;
-		
 		//Setting a border
 		setBorder(BorderFactory.createCompoundBorder(
 						      BorderFactory.createEmptyBorder(0, 2, 2, 2),
@@ -189,161 +188,9 @@ public class RenderWindow extends JPanel {
 	}
 
 	/**
-	 * assign key to actions using key bindings
-	 */
-	private void attachBindings() {
-		//rotate world binding
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-                KeyEvent.VK_R, 0), "rotate");
-		this.getActionMap().put("rotate", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				rotateWorld();
-				rotateSprites();
-				repaint();
-			}
-		});
-
-		//player move up
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_UP, 0), "moveUp");
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_W, 0), "moveUp");
-		this.getActionMap().put("moveUp", new AbstractAction() {
-			public void actionPerformed(ActionEvent e){
-				// TODO: check if action is legal
-				
-				// update player direction
-				playerDir = 'E';
-
-				// update sprite array position
-				Point p = player.getTilePos();
-				Point updatedPos = new Point(p.x, p.y - 1);
-				player.setPosFromTilePos(updatedPos);
-				// update 2d array position
-				int r1 = 0;
-				int c1 = 0;
-				for (int r=0;r<spriteData.length;r++){
-					for (int c=0;c<spriteData[0].length;c++){
-						if (spriteData[r][c] == 1){
-							r1 = r;
-							c1 = c;
-							spriteData[r][c] = 0;
-						}
-					}
-				}
-				spriteData[r1-1][c1] = 1;
-				client.sendAction(KeyEvent.VK_UP);
-				repaint();
-			}
-		});
-
-		//player move down
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_DOWN, 0), "moveDown");
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_S, 0), "moveDown");
-		this.getActionMap().put("moveDown", new AbstractAction() {
-			public void actionPerformed(ActionEvent e){
-				// TODO: check if action is legal
-				
-				// update player direction
-				playerDir = 'W';
-
-				// update sprite array position
-				Point p = player.getTilePos();
-				Point updatedPos = new Point(p.x, p.y + 1);
-				player.setPosFromTilePos(updatedPos);
-				// update 2d array position
-				int r1 = 0;
-				int c1 = 0;
-				for (int r=0;r<spriteData.length;r++){
-					for (int c=0;c<spriteData[0].length;c++){
-						if (spriteData[r][c] == 1){
-							r1 = r;
-							c1 = c;
-							spriteData[r][c] = 0;
-						}
-					}
-				}
-				spriteData[r1+1][c1] = 1;
-				client.sendAction(KeyEvent.VK_DOWN);
-				repaint();
-			}
-		});
-
-		//player move left
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_RIGHT, 0), "moveRight");
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_D, 0), "moveRight");
-		this.getActionMap().put("moveRight", new AbstractAction() {
-			public void actionPerformed(ActionEvent e){
-				// TODO: check if action is legal
-
-				// update player direction
-				playerDir = 'S';
-
-				// update sprite array position
-				Point p = player.getTilePos();
-				Point updatedPos = new Point(p.x+1, p.y );
-				player.setPosFromTilePos(updatedPos);
-				// update 2d array position
-				int r1 = 0;
-				int c1 = 0;
-				for (int r=0;r<spriteData.length;r++){
-					for (int c=0;c<spriteData[0].length;c++){
-						if (spriteData[r][c] == 1){
-							r1 = r;
-							c1 = c;
-							spriteData[r][c] = 0;
-						}
-					}
-				}
-				spriteData[r1][c1+1] = 1;
-				client.sendAction(KeyEvent.VK_RIGHT);
-				repaint();
-			}
-		});
-
-		//player move right
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_LEFT, 0), "moveLeft");
-		this.getInputMap().put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_A, 0), "moveLeft");
-		this.getActionMap().put("moveLeft", new AbstractAction() {
-			public void actionPerformed(ActionEvent e){
-				// TODO: check if action is legal
-
-				// update player direction
-				playerDir = 'N';
-
-				// update sprite array position
-				Point p = player.getTilePos();
-				Point updatedPos = new Point(p.x-1, p.y);
-				player.setPosFromTilePos(updatedPos);
-				// update 2d array position
-				int r1 = 0;
-				int c1 = 0;
-				for (int r=0;r<spriteData.length;r++){
-					for (int c=0;c<spriteData[0].length;c++){
-						if (spriteData[r][c] == 1){
-							r1 = r;
-							c1 = c;
-							spriteData[r][c] = 0;
-						}
-					}
-				}
-				spriteData[r1][c1-1] = 1;
-				client.sendAction(KeyEvent.VK_LEFT);
-				repaint();
-			}
-		});
-	}
-
-	/**
 	 * rotate game world 90 degrees
 	 */
-	public void rotateWorld() {
+	private void rotateWorld() {
 		//first, rotate game direction
 		switch(gameDir){
 		case 'N':
@@ -393,7 +240,7 @@ public class RenderWindow extends JPanel {
 	/**
 	 * rotate game world 90 degrees
 	 */
-	public void rotateSprites() {
+	private void rotateSprites() {
 		//first, rotate player direction
 		switch(playerDir){
 		case 'N':
@@ -642,6 +489,158 @@ public class RenderWindow extends JPanel {
 			} catch (IOException e) { 
 				e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * assign key to actions using key bindings
+	 */
+	private void attachBindings() {
+		//rotate world binding
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_R, 0), "rotate");
+		this.getActionMap().put("rotate", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				rotateWorld();
+				rotateSprites();
+				repaint();
+			}
+		});
+
+		//player move up
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_UP, 0), "moveUp");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_W, 0), "moveUp");
+		this.getActionMap().put("moveUp", new AbstractAction() {
+			public void actionPerformed(ActionEvent e){
+				// TODO: check if action is legal
+				
+				// update player direction
+				playerDir = 'E';
+
+				// update sprite array position
+				Point p = player.getTilePos();
+				Point updatedPos = new Point(p.x, p.y - 1);
+				player.setPosFromTilePos(updatedPos);
+				// update 2d array position
+				int r1 = 0;
+				int c1 = 0;
+				for (int r=0;r<spriteData.length;r++){
+					for (int c=0;c<spriteData[0].length;c++){
+						if (spriteData[r][c] == 1){
+							r1 = r;
+							c1 = c;
+							spriteData[r][c] = 0;
+						}
+					}
+				}
+				spriteData[r1-1][c1] = 1;
+				client.sendAction(KeyEvent.VK_UP);
+				repaint();
+			}
+		});
+
+		//player move down
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_DOWN, 0), "moveDown");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_S, 0), "moveDown");
+		this.getActionMap().put("moveDown", new AbstractAction() {
+			public void actionPerformed(ActionEvent e){
+				// TODO: check if action is legal
+				
+				// update player direction
+				playerDir = 'W';
+
+				// update sprite array position
+				Point p = player.getTilePos();
+				Point updatedPos = new Point(p.x, p.y + 1);
+				player.setPosFromTilePos(updatedPos);
+				// update 2d array position
+				int r1 = 0;
+				int c1 = 0;
+				for (int r=0;r<spriteData.length;r++){
+					for (int c=0;c<spriteData[0].length;c++){
+						if (spriteData[r][c] == 1){
+							r1 = r;
+							c1 = c;
+							spriteData[r][c] = 0;
+						}
+					}
+				}
+				spriteData[r1+1][c1] = 1;
+				client.sendAction(KeyEvent.VK_DOWN);
+				repaint();
+			}
+		});
+
+		//player move left
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_RIGHT, 0), "moveRight");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_D, 0), "moveRight");
+		this.getActionMap().put("moveRight", new AbstractAction() {
+			public void actionPerformed(ActionEvent e){
+				// TODO: check if action is legal
+
+				// update player direction
+				playerDir = 'S';
+
+				// update sprite array position
+				Point p = player.getTilePos();
+				Point updatedPos = new Point(p.x+1, p.y );
+				player.setPosFromTilePos(updatedPos);
+				// update 2d array position
+				int r1 = 0;
+				int c1 = 0;
+				for (int r=0;r<spriteData.length;r++){
+					for (int c=0;c<spriteData[0].length;c++){
+						if (spriteData[r][c] == 1){
+							r1 = r;
+							c1 = c;
+							spriteData[r][c] = 0;
+						}
+					}
+				}
+				spriteData[r1][c1+1] = 1;
+				client.sendAction(KeyEvent.VK_RIGHT);
+				repaint();
+			}
+		});
+
+		//player move right
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_LEFT, 0), "moveLeft");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+				KeyEvent.VK_A, 0), "moveLeft");
+		this.getActionMap().put("moveLeft", new AbstractAction() {
+			public void actionPerformed(ActionEvent e){
+				// TODO: check if action is legal
+
+				// update player direction
+				playerDir = 'N';
+
+				// update sprite array position
+				Point p = player.getTilePos();
+				Point updatedPos = new Point(p.x-1, p.y);
+				player.setPosFromTilePos(updatedPos);
+				// update 2d array position
+				int r1 = 0;
+				int c1 = 0;
+				for (int r=0;r<spriteData.length;r++){
+					for (int c=0;c<spriteData[0].length;c++){
+						if (spriteData[r][c] == 1){
+							r1 = r;
+							c1 = c;
+							spriteData[r][c] = 0;
+						}
+					}
+				}
+				spriteData[r1][c1-1] = 1;
+				client.sendAction(KeyEvent.VK_LEFT);
+				repaint();
+			}
+		});
 	}
 
 	/*
