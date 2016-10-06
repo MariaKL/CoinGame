@@ -55,56 +55,6 @@ public class Server{
 	}
 
 	/**
-	 * Checks there's at least one socket that's connected.
-	 * @return
-	 */
-	private static boolean atleastOneConnection() {
-		for (Socket s : sockets.values()) {
-			if (s.isConnected()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-     * Sends updated game to all clients.
-     * @param message
-     */
-    public static void updateAll(){
-    	try{
-          for(Socket sock: sockets.values()){
-        	  // sends game to byte array to each client
-        	  ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
-        	  out.writeObject(game.toByteArray());
-        	  out.flush();
-          }
-    	  System.out.println("Sent updated game to players");
-    	}
-    	catch(IOException e){
-    		System.out.println("Failed to create buffered writer.\n");
-    	}
-    }
-
-    /**
-     * Sends String command to all clients.
-     * @param message
-     */
-    public static void sendToAll(String message){
-    	try{
-          for(Socket sock: sockets.values()){
-        	  // sends game to byte array to each client
-        	  ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
-        	  output.writeUTF(message);
-        	  output.flush();
-          }
-    	}
-    	catch(IOException e){
-    		System.out.println("Failed to create buffered writer.\n");
-    	}
-    }
-
-	/**
 	 * Constructs a thread to handle player commands.
 	 * @return
 	 */
@@ -223,6 +173,69 @@ public class Server{
 		};
 		return listeningThread;
 	}
+
+	/**
+	 * Checks there's at least one socket that's connected.
+	 * @return
+	 */
+	private static boolean atleastOneConnection() {
+		for (Socket s : sockets.values()) {
+			if (s.isConnected()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+     * Sends updated game to all clients.
+     * @param message
+     */
+    public static void updateAll(){
+    	try{
+          for(Socket sock: sockets.values()){
+        	  // sends game to byte array to each client
+        	  ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
+        	  out.writeObject(game.toByteArray());
+        	  out.flush();
+          }
+    	  System.out.println("Sent updated game to players");
+    	}
+    	catch(IOException e){
+    		System.out.println("Failed to create buffered writer.\n");
+    	}
+    }
+
+    /**
+     * Sends String command to all clients.
+     * @param message
+     */
+    public static void sendToAll(String message){
+    	try{
+          for(Socket sock: sockets.values()){
+        	  // sends game to byte array to each client
+        	  ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
+        	  output.writeUTF(message);
+        	  output.flush();
+          }
+    	}
+    	catch(IOException e){
+    		System.out.println("Failed to create buffered writer.\n");
+    	}
+    }
+
+    /**
+     * Closes all sockets.
+     */
+    public void closeAll(){
+    	for(Socket sock: sockets.values()){
+    		try {
+				sock.close();
+			} catch (IOException e) {
+				System.out.println("Unable to close socket");
+			}
+    	}
+    }
 
     /**
      * Starts a game and associates it with a server.
