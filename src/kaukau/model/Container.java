@@ -4,8 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * A container is an item able hold collectable type items.
- * Containers are lockers around the game and the bag's of each player*/
+ * /**
+ * A container is an item able hold pickupable type items.
+ * Containers are storage for a coinbox, player's inventory...etc.
+ * @author
+ *
+ */
 public class Container implements Item, Serializable{
 
 	private String name;
