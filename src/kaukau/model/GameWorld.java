@@ -23,6 +23,7 @@ public class GameWorld implements Serializable{
 
 	@XmlElement
 	private GameMap board;
+
 	@XmlElement
 	private boolean gameOver;
 
