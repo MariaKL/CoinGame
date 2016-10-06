@@ -2,25 +2,19 @@ package kaukau.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+//@XmlRootElement
 public class Key extends PickupableItem implements Serializable{
-	
-	private Player owner;
-	private int code;
 
-	public Key(int code, String name) {
-		super(name);
-		this.code = code;
-		owner = null;
-	}
-	
-	public void setOwner(Player player){
-		owner = player;
+	private final int code;
+
+	public Key(int key) {
+		super("Key");
+		this.code = key;
 	}
 
-	@Override
-	public String[] getActions() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getCode(){
+		return code;
 	}
 
 }

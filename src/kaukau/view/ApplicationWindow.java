@@ -13,6 +13,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import kaukau.model.GameWorld;
+
 /**
  * This class is in charge of creating the application window
  * 	for the Kaukau adventure game. The application window interfaces
@@ -28,13 +30,21 @@ public class ApplicationWindow extends JFrame{
 	private static final String IMAGE_PATH = "images/";
 
 	// Field to store the rendering window for the game
-	public RenderWindow rw = new RenderWindow();
+	public RenderWindow rw;
 
-	public ApplicationWindow(){
+	// Field to store application window's copy of the game
+	public GameWorld game;
+
+	public ApplicationWindow(GameWorld game){
 		super("Kaukau");
+
+		this.game = game;
 
 		// creating a menu
 		initMenu();
+
+		// construct render window with GameWorld
+		rw = new RenderWindow(this.game);
 
 		// adding the rendering window to the application
 		add(rw);
@@ -75,6 +85,10 @@ public class ApplicationWindow extends JFrame{
 		menu.setMnemonic(KeyEvent.VK_M);
 		JMenu help = new JMenu("Help");
 		help.setMnemonic(KeyEvent.VK_H);
+		JMenu save = new JMenu("Save");
+		help.setMnemonic(KeyEvent.VK_S);
+		JMenu load = new JMenu("Load");
+		help.setMnemonic(KeyEvent.VK_L);
 
 		// creating the view help menu item
 		JMenuItem hMenuItem = new JMenuItem("View Help", iconHelp);
@@ -104,6 +118,8 @@ public class ApplicationWindow extends JFrame{
 		// adding menus to menubar
 		menuBar.add(menu);
 		menuBar.add(help);
+		menuBar.add(save);
+		menuBar.add(load);
 		// set the menu bar
 		setJMenuBar(menuBar);
 	}

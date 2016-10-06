@@ -2,9 +2,11 @@ package kaukau.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import kaukau.model.GameMap.TileType;
-
-
+@XmlRootElement
 public class Tile implements Serializable {
 
 	private Item item;
@@ -137,6 +139,7 @@ public class Tile implements Serializable {
 	 * Return the item that occupy this tile.
 	 * @return an item if it is pickupable item and there is one, otherwise returns null.
 	 */
+	@XmlAnyElement
 	public Item getItem(){
 		if (item instanceof PickupableItem) return item;
 		return null;
