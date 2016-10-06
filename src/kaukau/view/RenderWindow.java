@@ -45,9 +45,9 @@ public class RenderWindow extends JPanel {
 	 * 	9 - no tile (null)
 	 */
 	private static int[][] levelData = {{0,5,5,0,5,5,5},
-		                                {5,0,0,2,0,0,5},
-		                                {5,0,4,3,4,0,5},
-		                                {5,3,2,1,2,3,5},
+		                                {5,0,0,3,0,0,5},
+		                                {5,0,4,2,4,0,5},
+		                                {5,3,2,1,3,2,5},
 		                                {0,0,4,3,4,0,5},
 		                                {0,0,0,2,0,0,5},
 		                                {5,5,5,5,5,5,0}};
@@ -61,8 +61,8 @@ public class RenderWindow extends JPanel {
 							             {0,0,0,0,0,0,0},
 							             {0,0,0,0,0,0,0},
 							             {0,0,0,1,0,0,0},
-							             {0,0,0,2,0,0,0},
 							             {0,0,0,0,0,0,0},
+							             {0,0,0,2,0,0,0},
 							             {0,0,0,0,0,0,0}};
 
 	/* Fields to store array representation of the level wall data.
@@ -468,7 +468,7 @@ public class RenderWindow extends JPanel {
 		    		playerPos.y = s.Y() - (SPRITE_MARGIN/3-3);
 		    	} else if(s.getSpriteType() == 2){
 		    		BufferedImage image = ImageIO.read(new File(IMAGE_PATH + "coin.png"));
-		    		g.drawImage(image, s.X()+(720/2)-10, s.Y()+75, this);
+		    		g.drawImage(image, s.X()+(720/2)-35, s.Y()+80, this);
 		    	}
 		    }
 		    // drawing the player last
