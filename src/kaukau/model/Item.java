@@ -8,19 +8,9 @@ import java.io.Serializable;
 public interface Item extends Serializable{
 
 	/**
-	 * Sets the items location to be the argument
-	 * */
-	public void setLocation(Tile loc);
-
-	/**
-	 * Gets the items location
-	 * @return Tile*/
-	public Tile getLocation();
-
-	/**
-	 * Gets the item name
-	 * @return The name of this item
-	 * */
+	 * Return the name of this item.
+	 * @return the name of this item
+	 */
 	public String getName();
 
 }
