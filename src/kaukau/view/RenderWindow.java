@@ -100,7 +100,6 @@ public class RenderWindow extends JPanel {
 	public RenderWindow(GameWorld game){
 		this.game = game;
 		//Setting a border
-		// FIXME: Stop border resizing with window
 		setBorder(BorderFactory.createCompoundBorder(
 						      BorderFactory.createEmptyBorder(0, 2, 2, 2),
 						      BorderFactory.createLineBorder(Color.BLACK, 2)
