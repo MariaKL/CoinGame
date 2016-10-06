@@ -440,14 +440,84 @@ public class RenderWindow extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
-	     super.paintComponent(g);
+		super.paintComponent(g);
+	    
+	    //FIXME: drawing walls from the wall arrays
+	    paintLevelWalls(g);
 
-	     try {
+	    // Drawing all level tiles onto the rendering panel
+	    paintLevelTiles(g);
 
-	    	//FIXME: drawing walls from the wall arrays
+		// Drawing the game sprites onto the level
+		// TODO: More sprites and player animation
+	    paintLevelSprites(g);
+	 }
+	
+	/**Drawing the current level game sprites onto the
+	 * 	rendering window.
+	 */
+	private void paintLevelSprites(Graphics g) {
+		try{
+		    for(Sprite s: allSprites){
+		    	BufferedImage image = null;
+		    	if(s.getSpriteType() == 1){
+		    		switch(playerDir){
+		    			case 'N':
+		    				image = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png"));
+		    				break;
+		    			case 'E':
+		    				image = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
+		    				break;
+		    			case 'S':
+		    				image = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
+		    				break;
+		    			case 'W':
+		    				image = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png"));
+		    				break;
+		    		}
+		    		if(image != null){
+		    			g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3-3), this);
+		    		}
+		    	}
+		    }
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**Drawing the current level tiles onto the
+	 * 	rendering window.
+	 */
+	private void paintLevelTiles(Graphics g) {
+		try{
+    	BufferedImage image;
+	    for(kaukau.view.Tile t: allTiles){
+	    	if(t.getTileType()==9){
+	    		image = null;
+	    	} else if(t.getTileType() == 0){
+	    		image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
+	    	} else {
+	    		image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
+	    	}
+	    	if(image != null){
+	    		g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/4), this);
+	    	}
+	    }
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		
+	}
 
-	    	// creating wall images
-	    	BufferedImage northWallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
+	/**Drawing the current levels walls onto the
+	 * 	rendering window.
+	 */
+	private void paintLevelWalls(Graphics g) {
+    	// creating wall images
+    	BufferedImage northWallImg;
+		try {
+			northWallImg = ImageIO.read(new File(IMAGE_PATH + "north-wall.png"));
 	    	BufferedImage eastWallImg = ImageIO.read(new File(IMAGE_PATH + "east-wall.png"));
 	    	// creating locked door images
 	    	BufferedImage northLockedDoorImg = ImageIO.read(new File(IMAGE_PATH + "north-locked-door.png"));
@@ -455,17 +525,17 @@ public class RenderWindow extends JPanel {
 	    	// creating door images
 	    	BufferedImage northDoorImg = ImageIO.read(new File(IMAGE_PATH + "north-door.png"));
 	    	BufferedImage eastDoorImg = ImageIO.read(new File(IMAGE_PATH + "east-door.png"));
-
+	
 	    	// wall positioning values
 	    	int nx = 284; // stores the starting x pos for the north walls
 	    	int ex = 356; // stores the starting x pos for the east walls
 	    	int ny = WALL_Y, ey = WALL_Y; // stores the starting y pos for the north & east walls
-
+	
 	    	// FIXME: position doors without these points
 	    	// door positioning values
 	    	Point doorN = new Point(0,0); // stores the position of the locked door on the north wall
 	    	Point doorE = new Point(0,0); // stores the position of the locked door on the east wall
-
+	
 	    	// draw walls based on current game view
 	    	switch(gameDir){
 	    		case 'S':
@@ -550,53 +620,11 @@ public class RenderWindow extends JPanel {
 	    			// drawing doors
 	    			g.drawImage(northDoorImg, doorN.x+(SPRITE_MARGIN), doorN.y+(SPRITE_MARGIN+8), this);
 	    			break;
-	    	}
-
-			// TODO: tile randomisation.
-	    	// Drawing all level tiles onto the rendering panel
-	    	BufferedImage image;
-		    for(kaukau.view.Tile t: allTiles){
-		    	if(t.getTileType()==9){
-		    		image = null;
-		    	} else if(t.getTileType() == 0){
-		    		image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
-		    	} else {
-		    		image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
-		    	}
-		    	if(image != null){
-		    		g.drawImage(image, t.X() + MARGIN, t.Y() + (MARGIN/4), this);
-		    	}
-		    }
-
-		    // Drawing the game sprites onto the level
-		    // TODO: More sprites and player animation
-		    for(Sprite s: allSprites){
-		    	image = null;
-		    	if(s.getSpriteType() == 1){
-		    		switch(playerDir){
-		    			case 'N':
-		    				image = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png"));
-		    				break;
-		    			case 'E':
-		    				image = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
-		    				break;
-		    			case 'S':
-		    				image = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
-		    				break;
-		    			case 'W':
-		    				image = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png"));
-		    				break;
-		    		}
-		    		if(image != null){
-		    			g.drawImage(image, s.X() + (720/2) - (SPRITE_MARGIN*2), s.Y() - (SPRITE_MARGIN/3-3), this);
-		    		}
-		    	}
-		    }
-
-		} catch (IOException e) {
-			e.printStackTrace();
+	    		}
+			} catch (IOException e) { 
+				e.printStackTrace();
 		}
-	 }
+	}
 
 	/*
 	 * HELPER METHODS
