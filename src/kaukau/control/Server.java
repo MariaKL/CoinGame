@@ -76,7 +76,7 @@ public class Server{
           for(Socket sock: sockets.values()){
         	  // sends game to byte array to each client
         	  ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
-        	  out.write(game.toByteArray());
+        	  out.writeObject(game.toByteArray());
         	  out.flush();
           }
     	  System.out.println("Sent updated game to players");
@@ -182,12 +182,12 @@ public class Server{
 		        	System.out.println("Listening");
 		            while(true){
 						Socket socket = listener.accept();
-						ObjectOutputStream output;
 						// if there are more than two players then don't accept the new player
 		            	if(sockets.size() > 2){
-		            		output = new ObjectOutputStream(socket.getOutputStream());
+		            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 		    				output.writeBoolean(false);
 		    				output.writeUTF("Cannot accept another player");
+				        	output.flush();
 		            	}
 		            	// otherwise accept a new player
 		            	else{
@@ -196,15 +196,15 @@ public class Server{
 							sockets.put(uid, socket);
 							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
 
-							output = new ObjectOutputStream(socket.getOutputStream());
+		            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 		    				output.writeBoolean(true);
 							// send the client's uid to the client
 							output.writeInt(uid);
+				        	output.flush();
 				        	System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 				        	// send new game to all players
 				        	updateAll();
 		            	}
-			        	output.flush();
 		            }
 		        } catch(IOException e){
 		        	e.printStackTrace();

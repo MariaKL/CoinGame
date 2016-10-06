@@ -37,6 +37,8 @@ public class Client extends Thread {
 		// makes a new socket and sets input/output streams
 		try{
 	        sock = new Socket(address, Server.portNumber);
+	        this.aw = aw;
+	        this.game = aw.game;
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -61,7 +63,8 @@ public class Client extends Thread {
 				}
 				uid = input.readInt();
 				System.out.println("New client uid: " + uid);
-				game.fromByteArray((byte[])input.readObject());
+		        ObjectInputStream readGame = new ObjectInputStream(sock.getInputStream());
+				game.fromByteArray((byte[])readGame.readObject());
 //				game = (GameWorld)input.readObject();
 				initialRun = false;
 			}
