@@ -40,8 +40,13 @@ public class ApplicationWindow extends JFrame{
 
 		this.game = game;
 
+		this.game = game;
+
 		// creating a menu
 		initMenu();
+
+		// construct render window with GameWorld
+		rw = new RenderWindow(this.game);
 
 		// construct render window with GameWorld
 		rw = new RenderWindow(this.game);

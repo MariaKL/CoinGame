@@ -24,8 +24,9 @@ public class Player implements Serializable{
 		inventory.setAmmount(8);
 		this.coinbox = new CoinBox(this);
 		this.inventory.addItem(this.coinbox);
+
 	}
-	
+
 	@SuppressWarnings("unused")
 	private Player() {
 	this(-1, null, null, null);

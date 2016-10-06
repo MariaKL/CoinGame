@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Vivienne Yapp, 300339524
  *
  */
+
 @XmlRootElement
 public class Door implements Item, Serializable{
 
