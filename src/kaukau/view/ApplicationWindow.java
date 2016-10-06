@@ -1,5 +1,6 @@
 package kaukau.view;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -33,12 +34,10 @@ public class ApplicationWindow extends JFrame{
 	public RenderWindow rw;
 
 	// Field to store application window's copy of the game
-	public GameWorld game;
+	private GameWorld game;
 
 	public ApplicationWindow(GameWorld game){
 		super("Kaukau");
-
-		this.game = game;
 
 		this.game = game;
 
@@ -46,10 +45,7 @@ public class ApplicationWindow extends JFrame{
 		initMenu();
 
 		// construct render window with GameWorld
-		rw = new RenderWindow(this.game);
-
-		// construct render window with GameWorld
-		rw = new RenderWindow(this.game);
+		rw = new RenderWindow(game, this);
 
 		// adding the rendering window to the application
 		add(rw);
@@ -72,6 +68,13 @@ public class ApplicationWindow extends JFrame{
                 confirmExit();
             }
         });
+	}
+	
+	/**
+	 * @return the applications copy of the game world
+	 */
+	public GameWorld getGame(){
+		return this.game;
 	}
 
 	/**

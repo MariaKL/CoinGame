@@ -1,6 +1,5 @@
 package kaukau.view;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -13,7 +12,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -84,7 +82,7 @@ public class RenderWindow extends JPanel {
 	private static final int tileHeight = 50;
 
 	// Field to store all the tiles in the current level
-	private List<kaukau.view.Tile> allTiles = new ArrayList<kaukau.view.Tile>();
+	private List<RenderTile> allTiles = new ArrayList<RenderTile>();
 	// Field to store all the sprites in the current level
 	private List<Sprite> allSprites = new ArrayList<Sprite>();
 
@@ -96,17 +94,16 @@ public class RenderWindow extends JPanel {
 	// Field to store the current player
 	Sprite player;
 
-	// Field to store GameWorld object
-	GameWorld game;
+	// Field to store the parent jframe
+	private final ApplicationWindow parent;
+	// Field to store the rendering canvas
+	private RenderCanvas canvas;
 
-	public RenderWindow(GameWorld game){
-		this.game = game;
-		//Setting a border
-		setBorder(BorderFactory.createCompoundBorder(
-						      BorderFactory.createEmptyBorder(0, 2, 2, 2),
-						      BorderFactory.createLineBorder(Color.BLACK, 2)
-						   ));
-
+	public RenderWindow(GameWorld game, ApplicationWindow app){
+		
+		this.canvas = new RenderCanvas(game);
+		this.parent = app;
+		
 		// initilising the level from 2D level data array
 		initLevel();
 		// initilising level sprites from 2D sprite data array
@@ -115,6 +112,10 @@ public class RenderWindow extends JPanel {
 		attachBindings();
 		// repaint board
 		repaint();
+	}
+	
+	public RenderCanvas getCanvas(){
+		return this.canvas;
 	}
 
 	/**
@@ -182,7 +183,7 @@ public class RenderWindow extends JPanel {
 	 */
 	private void placeTile(int tileType, Point pt) {
 		// Creating a new tiles
-		kaukau.view.Tile t = new kaukau.view.Tile(tileType, pt.x, pt.y);
+		RenderTile t = new RenderTile(tileType, pt.x, pt.y);
 		// Adding the tile to the current level
 		allTiles.add(t);
 	}
@@ -503,7 +504,7 @@ public class RenderWindow extends JPanel {
 		final int TILE_MARGIN = 324;
 		try{
 	    	BufferedImage image;
-		    for(kaukau.view.Tile t: allTiles){
+		    for(RenderTile t: allTiles){
 		    	if(t.getTileType()==9){
 		    		image = null;
 		    	} else if(t.getTileType() == 0){
@@ -696,7 +697,7 @@ public class RenderWindow extends JPanel {
 	 * @return
 	 */
 	public int[][] getTiles4Render() {
-		Tile[][] tiles = game.getGameTiles();
+		Tile[][] tiles = parent.getGame().getGameTiles();
 		for (int i=0;i<tiles.length;i++){
 			for (int j=0;j<tiles[0].length;j++){
 				if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.EMPTY){
