@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -13,7 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
+@XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable{
 	private static final int ROOM_WIDTH = 7;
 	private static final int ROOM_HEIGHT = 7;

@@ -47,7 +47,6 @@ public class Client extends Thread {
 		try {
 			if(initialRun){
 				// TODO: get client to read its uid from server BEFORE running client
-
 		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 				// checks if client is connected to the server
 				boolean accepted = false;
@@ -61,8 +60,7 @@ public class Client extends Thread {
 				}
 				uid = input.readInt();
 				System.out.println("New client uid: " + uid);
-				game.fromByteArray((byte[])input.readObject());
-//				game = (GameWorld)input.readObject();
+//				game.fromByteArray((byte[])input.readObject());
 				initialRun = false;
 			}
 			System.out.println("Waiting for game updates");
@@ -70,7 +68,7 @@ public class Client extends Thread {
 			while(!closed){
 		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 				// wait for game updates from server
-				game.fromByteArray((byte[])input.readObject());
+//				game.fromByteArray((byte[])input.readObject());
 				System.out.println("Received game update");
 			}
 			sock.close();
@@ -80,8 +78,6 @@ public class Client extends Thread {
 		} catch(ConnectException e){
 			System.out.println("Server not running");
 		} catch(IOException e) {
-			e.printStackTrace();
-		} catch(ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}

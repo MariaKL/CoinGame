@@ -31,18 +31,23 @@ public class ApplicationWindow extends JFrame{
 
 	// Field to store the rendering window for the game
 	public RenderWindow rw;
-	
+
 	// Field to store application window's copy of the game
 	public GameWorld game;
 
 	public ApplicationWindow(GameWorld game){
 		super("Kaukau");
-		
+
+		this.game = game;
+
 		this.game = game;
 
 		// creating a menu
 		initMenu();
-		
+
+		// construct render window with GameWorld
+		rw = new RenderWindow(this.game);
+
 		// construct render window with GameWorld
 		rw = new RenderWindow(this.game);
 
@@ -85,6 +90,10 @@ public class ApplicationWindow extends JFrame{
 		menu.setMnemonic(KeyEvent.VK_M);
 		JMenu help = new JMenu("Help");
 		help.setMnemonic(KeyEvent.VK_H);
+		JMenu save = new JMenu("Save");
+		help.setMnemonic(KeyEvent.VK_S);
+		JMenu load = new JMenu("Load");
+		help.setMnemonic(KeyEvent.VK_L);
 
 		// creating the view help menu item
 		JMenuItem hMenuItem = new JMenuItem("View Help", iconHelp);
@@ -114,6 +123,8 @@ public class ApplicationWindow extends JFrame{
 		// adding menus to menubar
 		menuBar.add(menu);
 		menuBar.add(help);
+		menuBar.add(save);
+		menuBar.add(load);
 		// set the menu bar
 		setJMenuBar(menuBar);
 	}

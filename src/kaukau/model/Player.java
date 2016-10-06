@@ -3,7 +3,9 @@ package kaukau.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class Player implements Serializable{
 
 	private String name;
@@ -22,6 +24,12 @@ public class Player implements Serializable{
 		inventory.setAmmount(8);
 		this.coinbox = new CoinBox(this);
 		this.inventory.addItem(this.coinbox);
+
+	}
+
+	@SuppressWarnings("unused")
+	private Player() {
+	this(-1, null, null, null);
 	}
 
 	/**

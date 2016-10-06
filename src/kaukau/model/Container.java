@@ -3,6 +3,8 @@ package kaukau.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * /**
  * A container is an item able hold pickupable type items.
@@ -10,6 +12,8 @@ import java.util.ArrayList;
  * @author
  *
  */
+
+@XmlRootElement
 public class Container implements Item, Serializable{
 
 	private String name;
