@@ -1,6 +1,5 @@
 package kaukau.view;
 
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -31,33 +30,35 @@ public class RenderCanvas extends JPanel {
 	
 	public RenderCanvas(GameWorld game){
 		
-		getTiles(game);
+		getBlocks(game);
 		repaint();
 
 	}
 
-	private void getTiles(GameWorld game) {
+	private void getBlocks(GameWorld game) {
 
 		Tile[][] tiles = game.getGameTiles();
-		for(int r=0; r!=8; r++){
-			for(int c=0; c!=8; c++){
+		for(int r=0; r!=7; r++){
+			for(int c=0; c!=7; c++){
 				// getting the gameworld model tile
 				Tile tile = tiles[r][c];
 				if(tile.getTileType() == GameMap.TileType.EMPTY){
-					
 					// getting the x & y position of the tile
 					int x = r * tileWidth ;
 					int y = c * tileHeight;
-
-					// getting the type type
-					//int tileType = levelData[i][j];
-
-					// creating and adding the tile to the current level board
+					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
-					// creating & adding the new tile to the all tiles list
-					//TODO: different tile types
-					allTiles.add(new RenderTile(0, pos.x, pos.y));
-				} 
+					// adjusting the position of the render
+					allTiles.add(new RenderTile(0, pos.x-25, pos.y+130));
+				} else if(tile.getTileType() == GameMap.TileType.WALL){
+					// getting the x & y position of the tile
+					int x = r * tileWidth ;
+					int y = c * tileHeight;
+					// converting 2d point to isometic
+					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					// adjusting the position of the render
+					allWalls.add(new Wall(0, pos.x-25, pos.y-105));
+				}
 			}
 		}
 	}
@@ -66,26 +67,54 @@ public class RenderCanvas extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
+		paintLevelWalls(g);
 		paintLevelTiles(g);
+		
 	}
 	
-	private void paintLevelTiles(Graphics g) {
+	private void paintLevelWalls(Graphics g) {
 		final int TILE_MARGIN = 400;
 		try{
 	    	BufferedImage image = null;
-		    for(RenderTile t: allTiles){
-		    	if(t.getTileType()==9){
-		    		image = null;
-		    	} else if(t.getTileType() == 0){
-		    		image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
-		    	} 
+	    	Boolean pattern = true;
+		    for(Wall w: allWalls){
+		    	if(pattern){
+		    		image = ImageIO.read(new File(IMAGE_PATH + "light-wall.png"));
+		    		pattern = false;
+		    	} else {
+		    		image = ImageIO.read(new File(IMAGE_PATH + "grey-wall.png"));
+		    		pattern = true;
+		    	}	
 		    	if(image != null){
-		    		g.drawImage(image, t.X() + TILE_MARGIN, t.Y() + (TILE_MARGIN/8), this);
+		    		g.drawImage(image, w.X() + TILE_MARGIN, w.Y() + (TILE_MARGIN/8), this);
 		    	}
 		    }
 		} catch(IOException e){
 			e.printStackTrace();
 		}
+		
+	}
 
+	private void paintLevelTiles(Graphics g) {
+		final int TILE_MARGIN = 400;
+		try{
+	    	BufferedImage image = null;
+	    	int count = 0;
+		    for(RenderTile t: allTiles){
+		    	if(count%5==0){
+		    		image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
+		    	} else if(count%8==0){
+		    		image = ImageIO.read(new File(IMAGE_PATH + "red-tile.png"));
+		    	} else {
+		    		image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
+		    	} 
+		    	if(image != null){
+		    		g.drawImage(image, t.X() + TILE_MARGIN, t.Y() + (TILE_MARGIN/8), this);
+		    	}
+		    	count++;
+		    }
+		} catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 }
