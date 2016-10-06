@@ -129,7 +129,6 @@ public class GameWorld implements Serializable{
 		ObjectOutputStream dataOutput = new ObjectOutputStream(bout);
 		dataOutput.writeBoolean(gameOver);  // game state
 		dataOutput.writeObject(this.players);
-		dataOutput.writeObject(map[0][0]);
 		dataOutput.flush();
 		// Finally, return!!
 		return bout.toByteArray();

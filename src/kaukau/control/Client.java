@@ -22,15 +22,11 @@ import java.util.Date;
 public class Client extends Thread {
 	private String address = "127.0.0.1";
 	private Socket sock;
+
 	private GameWorld game;
 	private ApplicationWindow aw;
-//	private Server server;
-
-	private ObjectInputStream input;
-	private ObjectOutputStream output;
 
 	private int uid;
-
 	private boolean initialRun = true;
 
 
@@ -41,12 +37,6 @@ public class Client extends Thread {
 		// makes a new socket and sets input/output streams
 		try{
 	        sock = new Socket(address, Server.portNumber);
-	        input = new ObjectInputStream(sock.getInputStream());
-			output = new ObjectOutputStream(sock.getOutputStream());
-	    } catch(EOFException e){
-			System.out.println("Server not running.");
-		} catch(ConnectException e){
-			System.out.println("Server not running");
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -58,6 +48,7 @@ public class Client extends Thread {
 			if(initialRun){
 				// TODO: get client to read its uid from server BEFORE running client
 
+		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 				// checks if client is connected to the server
 				boolean accepted = false;
 				if(input!=null)
@@ -70,14 +61,16 @@ public class Client extends Thread {
 				}
 				uid = input.readInt();
 				System.out.println("New client uid: " + uid);
-				game = (GameWorld)input.readObject();
+				game.fromByteArray((byte[])input.readObject());
+//				game = (GameWorld)input.readObject();
 				initialRun = false;
 			}
 			System.out.println("Waiting for game updates");
 			boolean closed = false;
 			while(!closed){
+		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 				// wait for game updates from server
-				GameWorld updatedGame = (GameWorld)input.readObject();
+				game.fromByteArray((byte[])input.readObject());
 				System.out.println("Received game update");
 			}
 			sock.close();
@@ -112,11 +105,20 @@ public class Client extends Thread {
 	 */
 	public void sendAction(int code){
 		try {
+	        ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
 			output.writeInt(uid);
 			output.writeInt(code);
 		} catch (IOException e) {
 			// problem with sending to the server
 //			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Returns the player's uid.
+	 * @return
+	 */
+	public int getUID(){
+		return uid;
 	}
 }
