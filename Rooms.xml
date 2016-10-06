@@ -4,9 +4,9 @@
     <startX>0</startX>
     <startY>0</startY>
     <L0>WWDDWWW</L0>
-    <L1>WCCCCKC</L1>
+    <L1>WCCCWKC</L1>
     <L2>WCCCCCC</L2>
-    <L3>WCCCCCC</L3>
+    <L3>WWWCCCC</L3>
     <L4>WCCCCCC</L4>
     <L5>WCCCCCC</L5>
     <L6>WCCCCCC</L6>
@@ -22,9 +22,9 @@
     <L1>CCXCCCW</L1>
     <L2>CCCCCCW</L2>
     <L3>CCCCCCW</L3>
-    <L4>CCCCCCW</L4>
+    <L4>CCCCC@W</L4>
     <L5>CCCCCCW</L5>
-    <L6>WWWWWDW</L6>
+    <L6>CCCCCDW</L6>
     <Door0>0</Door0>
     <Coin0>50</Coin0>
   </room>

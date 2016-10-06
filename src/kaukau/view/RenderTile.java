@@ -1,22 +1,17 @@
 package kaukau.view;
 
-public class RenderTile {
+public class RenderTile extends Block {
 	// Field for type of tile
 	private int tileType;
-	// Fields for x & y position of tile
-	private final int x;
-	private final int y;
 	
 	public RenderTile(int tileType, int x, int y) {
+		super(x,y);
 		this.tileType = tileType;
-		this.x = x;
-		this.y = y;
 	}
 	
 	/*
 	 * Setter methods
 	 */
-	
 	public void setTileType(int tType){
 		this.tileType = tType;
 	}
@@ -25,6 +20,4 @@ public class RenderTile {
 	 * Getter methods
 	 */
 	public int getTileType() { return tileType;	}
-	public int X() { return x; }
-	public int Y() { return y; }
 }
