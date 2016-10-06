@@ -3,6 +3,13 @@ package kaukau.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * A CoinBox is a pickupable item which can be carry by player.
+ * This CoinBox object can be stored in Player's inventory and
+ * CoinBox can used to store Coin object only.
+ * @author Vivienne Yapp, 300339524
+ *
+ */
 public class CoinBox extends PickupableItem implements Serializable{
 
 	private Container storage;
@@ -17,10 +24,15 @@ public class CoinBox extends PickupableItem implements Serializable{
 		totalCoinAmount = 0;
 	}
 
+	/**
+	 * Add coin to the coinbox.
+	 * @param item the item to add
+	 * @return true if the item is a coin and the coinBox is not full, otherwise false
+	 */
 	public boolean addCoin(Item item){
 		if (item instanceof Coin){
 			Coin coin = (Coin) item;
-			if (storage.addItem(item)){
+			if (storage.addItem(item) && !storage.isStorageFull()){
 				totalCoinAmount = coin.getAmount();
 			}
 		}
@@ -35,14 +47,18 @@ public class CoinBox extends PickupableItem implements Serializable{
 		return this.storage.getStorage();
 	}
 
+	/**
+	 * Return the total coins in this coinBox.
+	 * @return
+	 */
 	public int totalCoins(){
 		return totalCoinAmount;
 	}
 
 	/**
-	 * Check if this coinbox is full or not.
-	 * @return ArrayList <Collectable>
-	 * */
+	 * Check if this coin box is full or not.
+	 * @return
+	 */
 	public boolean isStorageFull(){
 		return storage.isStorageFull();
 	}

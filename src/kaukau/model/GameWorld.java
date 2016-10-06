@@ -13,7 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-
 public class GameWorld implements Serializable{
 
 	private GameMap board;
@@ -26,6 +25,9 @@ public class GameWorld implements Serializable{
 	 */
 	private static int uid = 0;
 
+	/**
+	 * The current players of this game. Max number of player = 2.
+	 */
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	public GameWorld(){
@@ -35,8 +37,7 @@ public class GameWorld implements Serializable{
 
 	/**
 	 * Register a new player into the game.
-	 *
-	 * @return
+	 * @return the user id of the new player.
 	 */
 	public synchronized int addPlayer(){
 		Player player = new Player(++uid, "Player", board.getTileAt(new Point(2, 1+uid)), Direction.EAST);

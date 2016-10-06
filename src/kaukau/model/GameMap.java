@@ -1,15 +1,21 @@
 package kaukau.model;
 
 import java.awt.Point;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import storage.ReadXMLFile;
+import kaukau.storage.ReadXMLFile;
+
+
 
 public class GameMap implements Serializable{
 	private static final int ROOM_WIDTH = 7;
@@ -34,7 +40,11 @@ public class GameMap implements Serializable{
 
 	public void createRoomsFromFile(){
 		try {
-			Document doc = new ReadXMLFile().createDocument("Rooms.xml");
+			//Document doc = new ReadXMLFile().createDocument("Rooms.xml");
+			File xmlFile = new File("Rooms.xml");
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(xmlFile);
 			NodeList nList = doc.getElementsByTagName("room");  // get elements
 
     		for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -140,49 +150,6 @@ public class GameMap implements Serializable{
 		board[x][y] = tile;
 		return ++count;
 	}
-
-	/*public void createRoomsFromFile(){
-		try {
-			Document doc = new ReadXMLFile().createDocument("room.xml");
->>>>>>> e02ba04ed15316e12fd24fa125908ea11ea685a8
-			NodeList nList = doc.getElementsByTagName("room");  // get elements
-
-    		for (int temp = 0; temp < nList.getLength(); temp++) {
-    			Node nNode = nList.item(temp);
-    			//System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
-    			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-    				Element eElement = (Element) nNode;
-    				String name = eElement.getAttribute("name");
-
-    				for (int x = 0; x < 14; x++){
-    					// get the value line by line from XML file e.g. a line is <L0></L0>
-	    				String line = eElement.getElementsByTagName("L"+String.valueOf(x)).item(0).getTextContent();
-	    				for (int y = 0; y < 14; y++) {
-
-	    					char c = line.charAt(y);
-	    					switch (c) {
-		    					case 'W' :
-		    						board[x][y] = new Tile(TileType.WALL, x, y);
-		    						break;
-		    					case 'D':
-		    						board[x][y] = new Tile(TileType.DOOR, x, y);
-		    						break;
-		    					case 'C':
-		    						board[x][y] = new Tile(TileType.EMPTY, x, y);
-		    						break;
-	    					}
-	    				}
-
-	    			}
-    			}
-
-    		}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}*/
 
 	/**
 	 * Return the tile at the given point.
