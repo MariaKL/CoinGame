@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * A container is an item able hold collectable type items.
  * Containers are lockers around the game and the bag's of each player*/
 public class Container implements Item, Serializable{
-	
+
 	private String name;
 	private int storageLimit;
 	private ArrayList <PickupableItem> storage =  new ArrayList <PickupableItem>( );
@@ -52,7 +52,7 @@ public class Container implements Item, Serializable{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Removes a pickupable item from this container using index number of ArrayList
 	 * @throws NullPointer Exception
@@ -72,13 +72,43 @@ public class Container implements Item, Serializable{
 	public ArrayList <PickupableItem> getStorage(){
 		return this.storage;
 	}
-	
+
 	/**
-	 * Returns the list of items in the container
+	 * Returns the item at this index.
+	 * @return an item if index is within storage size, otherwise null
+	 * */
+	public Item getItem(int index){
+		if (index >= storageLimit && index >= storage.size()) return null;
+		return this.storage.get(index);
+	}
+
+	/**
+	 * Returns the size of this container that occupy by this container.
+	 * @return ArrayList <Collectable>
+	 * */
+	public int getStorageUsed(){
+		return this.storage.size();
+	}
+
+	/**
+	 * Returns the limit size of this container
 	 * @return ArrayList <Collectable>
 	 * */
 	public int getStorageLimit(){
 		return this.storageLimit;
+	}
+
+	/**
+	 * Check if this container is full or not.
+	 * @return
+	 * */
+	public boolean isStorageFull(){
+		return storage.size() >= storageLimit;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 }
