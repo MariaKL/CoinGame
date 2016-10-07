@@ -21,6 +21,11 @@ public class Coin extends PickupableItem implements Serializable{
 		this.amount = amount;
 	}
 
+	@SuppressWarnings("unused")
+	public Coin(){
+		this(-1);
+	}
+
 	/**
 	 * Get the amount of this coin.
 	 * @return the amount of this coin

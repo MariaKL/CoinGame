@@ -26,6 +26,11 @@ public class Container implements Item, Serializable{
 		}
 	}
 
+	@SuppressWarnings("unused")
+	public Container(){
+		this(null, null);
+	}
+
 	/**
 	 * Protected method to set the max storage amount which is determined when the container is made.
 	 * */

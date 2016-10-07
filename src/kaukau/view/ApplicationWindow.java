@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import kaukau.model.GameWorld;
+import kaukau.storage.JAXBJavaToXml;
 
 /**
  * This class is in charge of creating the application window
@@ -25,6 +26,10 @@ import kaukau.model.GameWorld;
  */
 @SuppressWarnings("serial")
 public class ApplicationWindow extends JFrame{
+
+	//generate XML
+	JAXBJavaToXml toXML = new JAXBJavaToXml();
+
 
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
@@ -91,9 +96,15 @@ public class ApplicationWindow extends JFrame{
 		JMenu help = new JMenu("Help");
 		help.setMnemonic(KeyEvent.VK_H);
 		JMenu save = new JMenu("Save");
-		help.setMnemonic(KeyEvent.VK_S);
+		save.setMnemonic(KeyEvent.VK_S);
+		save.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toXML.generateXML(game);
+			}
+		});
 		JMenu load = new JMenu("Load");
-		help.setMnemonic(KeyEvent.VK_L);
+		load.setMnemonic(KeyEvent.VK_L);
 
 		// creating the view help menu item
 		JMenuItem hMenuItem = new JMenuItem("View Help", iconHelp);
@@ -119,6 +130,8 @@ public class ApplicationWindow extends JFrame{
 		});
 		// adding menu and help menus
 		menu.add(eMenuItem);
+//		menu.add(save);
+//		menu.add(load);
 		help.add(hMenuItem);
 		// adding menus to menubar
 		menuBar.add(menu);

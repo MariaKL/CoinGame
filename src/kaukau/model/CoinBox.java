@@ -24,6 +24,11 @@ public class CoinBox extends PickupableItem implements Serializable{
 		totalCoinAmount = 0;
 	}
 
+	@SuppressWarnings("unused")
+	public CoinBox(){
+		this(null);
+	}
+
 	/**
 	 * Add coin to the coinbox.
 	 * @param item the item to add

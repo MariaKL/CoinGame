@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <GameWorld xmlns:ns2="Team_24.kaukau.model.GameWorld">
-    <board/>
-    <gameOver>false</gameOver>
-    <uid>0</uid>
-    <players/>
+    <allPlayers>
+        <entry>
+            <key>1</key>
+            <value>
+                <name>Player</name>
+                <inventory/>
+                <coinbox/>
+                <facing>EAST</facing>
+                <userId>1</userId>
+                <location/>
+            </value>
+        </entry>
+    </allPlayers>
 </GameWorld>
