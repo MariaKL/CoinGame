@@ -38,7 +38,7 @@ public class Client extends Thread {
 		try{
 			// sets references to the game and ui window
 			this.aw = aw;
-			this.game = aw.game;
+			this.game = aw.getGame();
 			System.out.println("Set window and game");
 			// sets networking fields
 	        sock = new Socket(address, Server.portNumber);

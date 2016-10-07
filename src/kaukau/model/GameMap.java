@@ -16,10 +16,12 @@ import org.w3c.dom.NodeList;
 
 @XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable{
-	private static final int ROOM_WIDTH = 7;
-	private static final int ROOM_HEIGHT = 7;
-	private static final int BOARD_WIDTH = 14;
-	private static final int BOARD_HEIGHT = 14;
+	
+	public static final int ROOM_WIDTH = 10;
+	public static final int ROOM_HEIGHT = 10;
+	public static final int BOARD_WIDTH = 20;
+	public static final int BOARD_HEIGHT = 20;
+	
 	private Tile[][] board;
 	private ArrayList<Room> rooms;
 	private ArrayList<Door> doors;
