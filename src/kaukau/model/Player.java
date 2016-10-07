@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
@@ -13,7 +15,7 @@ public class Player implements Serializable{
 	private String name;
 	//@XmlElement(name="location")
 	private Tile location;
-	@XmlElement
+	//@XmlElement
 	private Container inventory;
 	@XmlElement
 	private CoinBox coinbox;
@@ -105,6 +107,10 @@ public class Player implements Serializable{
 	/**
 	 * adds item to players bag
 	 * */
+	@XmlElementWrapper(name="inventory")
+    @XmlElements({
+    @XmlElement(name="item") }
+    )
 	public ArrayList <PickupableItem> getInventory(){
 		return inventory.getStorage();
 	}

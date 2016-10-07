@@ -11,7 +11,9 @@ import javax.xml.bind.JAXBException;
 
 import javax.xml.bind.Marshaller;
 
+import kaukau.model.Coin;
 import kaukau.model.GameWorld;
+import kaukau.model.Key;
 import kaukau.model.Player;
 
 public class JAXBJavaToXml {
@@ -66,6 +68,10 @@ public class JAXBJavaToXml {
 		HashMap<Integer, Player> players = game.getAllPlayers();
 		Player p1 = game.player(1);
 		Player p2 = game.player(2);
+		p1.addToBag(new Coin (50));
+		p1.addToBag(new Coin (100));
+		p1.addToBag(new Key (7));
+		p2.addToBag(new Key (71));
 
 
 		return game;

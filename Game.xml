@@ -5,10 +5,23 @@
             <key>1</key>
             <value>
                 <name>Player</name>
-                <inventory/>
-                <coinbox/>
+                <coinbox>
+                    <CoinBox>
+                        <coins/>
+                        <coins/>
+                    </CoinBox>
+                </coinbox>
                 <facing>EAST</facing>
                 <userId>1</userId>
+                <inventory>
+                    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
+                        <CoinBox>
+                            <coins/>
+                            <coins/>
+                        </CoinBox>
+                    </item>
+                    <item/>
+                </inventory>
                 <location/>
             </value>
         </entry>
@@ -16,10 +29,17 @@
             <key>2</key>
             <value>
                 <name>Player</name>
-                <inventory/>
-                <coinbox/>
+                <coinbox>
+                    <CoinBox/>
+                </coinbox>
                 <facing>EAST</facing>
                 <userId>2</userId>
+                <inventory>
+                    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
+                        <CoinBox/>
+                    </item>
+                    <item/>
+                </inventory>
                 <location/>
             </value>
         </entry>
