@@ -6,7 +6,6 @@ import kaukau.view.*;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.util.Date;
 
 
 /**
@@ -22,6 +21,7 @@ import java.util.Date;
 public class Client extends Thread {
 	private String address = "127.0.0.1";
 	private Socket sock;
+	private boolean connected;
 
 	private GameWorld game;
 	private ApplicationWindow aw;
@@ -36,7 +36,19 @@ public class Client extends Thread {
 	public Client(ApplicationWindow aw){
 		// makes a new socket and sets input/output streams
 		try{
+			// sets references to the game and ui window
+			this.aw = aw;
+			this.game = aw.getGame();
+			System.out.println("Set window and game");
+			// sets networking fields
 	        sock = new Socket(address, Server.portNumber);
+	        connected = true;
+	        System.out.println("Made socket");
+	    } catch(EOFException e){
+			System.out.println("Server not running.");
+		} catch(ConnectException e){
+			connected = false;
+			System.out.println("Server unavailable.");
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -45,6 +57,13 @@ public class Client extends Thread {
 	@Override
 	public void run(){
 		try {
+			// single player game
+			if(!connected){
+				System.out.println("Single player game begun");
+				closeClientSock();
+				return;
+			}
+			// multiplayer game
 			if(initialRun){
 				// TODO: get client to read its uid from server BEFORE running client
 		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
@@ -60,24 +79,29 @@ public class Client extends Thread {
 				}
 				uid = input.readInt();
 				System.out.println("New client uid: " + uid);
-//				game.fromByteArray((byte[])input.readObject());
+		        ObjectInputStream readGame = new ObjectInputStream(sock.getInputStream());
+				game.fromByteArray((byte[])readGame.readObject());
 				initialRun = false;
 			}
+			// play game
 			System.out.println("Waiting for game updates");
 			boolean closed = false;
 			while(!closed){
 		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
+				System.out.println("Players size before update: " + game.getAllPlayers().size());
 				// wait for game updates from server
 //				game.fromByteArray((byte[])input.readObject());
 				System.out.println("Received game update");
+				System.out.println("Players size after update: " + game.getAllPlayers().size());
 			}
 			sock.close();
 		} catch(EOFException e){
-			System.out.println("UID not read");
-			System.out.println(uid + " : uid");
+			System.out.println("Input not read");
 		} catch(ConnectException e){
 			System.out.println("Server not running");
 		} catch(IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -87,7 +111,9 @@ public class Client extends Thread {
 	 */
 	public void closeClientSock(){
 		try{
-			sock.close();
+			if(!sock.isClosed()){
+				sock.close();
+			}
 		}
 		catch(IOException e){
 			e.printStackTrace();
@@ -101,9 +127,11 @@ public class Client extends Thread {
 	 */
 	public void sendAction(int code){
 		try {
-	        ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
-			output.writeInt(uid);
-			output.writeInt(code);
+			if(connected){
+		        ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
+				output.writeInt(uid);
+				output.writeInt(code);
+			}
 		} catch (IOException e) {
 			// problem with sending to the server
 //			e.printStackTrace();

@@ -14,6 +14,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import kaukau.control.Client;
 import kaukau.model.GameWorld;
 
 /**
