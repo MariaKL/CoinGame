@@ -31,7 +31,7 @@ public class Server{
 	// client sockets
 	private static HashMap<Integer, Socket> sockets = new HashMap<Integer, Socket>();
 	// client threads associated with sockets
-	private Set<ClientThread> threads = new HashSet<ClientThread>();
+//	private Set<ClientThread> threads = new HashSet<ClientThread>();
 	// commands received from clients
 	private Queue<String> commands = new LinkedList<String>();
 	// game
@@ -75,7 +75,7 @@ public class Server{
     	try{
           for(Socket sock: sockets.values()){
         	  // sends game to byte array to each client
-        	  DataOutputStream out = new DataOutputStream(sock.getOutputStream());
+        	  ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
         	  out.write(game.toByteArray());
         	  out.flush();
           }
@@ -94,7 +94,7 @@ public class Server{
     	try{
           for(Socket sock: sockets.values()){
         	  // sends game to byte array to each client
-        	  DataOutputStream output = new DataOutputStream(sock.getOutputStream());
+        	  ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
         	  output.writeUTF(message);
         	  output.flush();
           }
@@ -200,14 +200,9 @@ public class Server{
 		    				output.writeBoolean(true);
 							// send the client's uid to the client
 							output.writeInt(uid);
-				        	// send the game to the client
-				        	output.writeObject(game);
-
 				        	System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
-			//				// make a thread associated with the socket
-			//				ClientThread clientThread = new ClientThread(this, socket);
-			//				threads.add(clientThread);
-			//				clientThread.start();
+				        	// send new game to all players
+				        	updateAll();
 		            	}
 			        	output.flush();
 		            }

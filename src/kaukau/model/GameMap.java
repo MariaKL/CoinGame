@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -13,7 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
+@XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable{
 	private static final int ROOM_WIDTH = 7;
 	private static final int ROOM_HEIGHT = 7;
@@ -46,7 +47,6 @@ public class GameMap implements Serializable{
 
     		for (int temp = 0; temp < nList.getLength(); temp++) {
     			Node nNode = nList.item(temp);
-    			//System.out.println("\nCurrent Element :" + nNode.getNodeName());
 
     			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
     				Element eElement = (Element) nNode;
@@ -125,7 +125,6 @@ public class GameMap implements Serializable{
 		int keycode = Integer.valueOf(element.getElementsByTagName("Key"+String.valueOf(count)).item(0).getTextContent());
 		Key key = new Key(keycode);
 		tile.setItem(key);
-		System.out.println(tile.containsPickupItem());
 		board[x][y] = tile;
 		return ++count;
 	}
@@ -143,7 +142,6 @@ public class GameMap implements Serializable{
 		int amount = Integer.valueOf(element.getElementsByTagName("Coin"+String.valueOf(count)).item(0).getTextContent());
 		Coin coin = new Coin(amount);
 		tile.setItem(coin);
-		System.out.println(tile.containsPickupItem());
 		board[x][y] = tile;
 		return ++count;
 	}

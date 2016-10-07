@@ -6,14 +6,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javax.imageio.ImageIO;
-
+import javax.xml.bind.annotation.XmlRootElement;
 /**
  * A Pickupable object is something a player can pick up, inspect, store in a container or drop.
  * Pickupable items include Keys, pieces of maps, notes and clues.
  * @author Vivienne Yapp, 300339524
  *
  */
+
+@XmlRootElement
+
 public abstract class PickupableItem implements Item, Serializable{
 
 	protected String name;

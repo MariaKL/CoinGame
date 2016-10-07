@@ -3,6 +3,10 @@ package kaukau.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import kaukau.model.GameMap.TileType;
 
 import java.awt.Point;
@@ -13,9 +17,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+@XmlRootElement(name="GameWorld")
+@XmlType(propOrder = { "board", "gameOver", "uid", "players"})
 public class GameWorld implements Serializable{
 
+	@XmlElement
 	private GameMap board;
+
+	@XmlElement
 	private boolean gameOver;
 
 	/**
@@ -23,11 +32,13 @@ public class GameWorld implements Serializable{
 	 * required in order to synchronise the movements of different players
 	 * across boards.
 	 */
-	private static int uid = 0;
+	@XmlElement
+	private int uid = 0;
 
 	/**
 	 * The current players of this game. Max number of player = 2.
 	 */
+	@XmlElement
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	public GameWorld(){
@@ -40,7 +51,9 @@ public class GameWorld implements Serializable{
 	 * @return the user id of the new player.
 	 */
 	public synchronized int addPlayer(){
-		Player player = new Player(++uid, "Player", board.getTileAt(new Point(2, 1+uid)), Direction.EAST);
+		Tile tile = board.getTileAt(new Point(2, 1+uid));
+		Player player = new Player(++uid, "Player", tile, Direction.EAST);
+		tile.addPlayer(player);
 		this.players.put(uid, player);
 		return uid;
 	}
@@ -62,6 +75,7 @@ public class GameWorld implements Serializable{
 			if (tile.getTileType() == TileType.EMPTY && !tile.isTileOccupied()){
 				oldPos.removePlayer();
 				player.setLocation(tile);
+				player.setFacingDirection(direction);
 				tile.addPlayer(player);
 				return true;
 			}
@@ -154,7 +168,7 @@ public class GameWorld implements Serializable{
 	public boolean validPoint(Point pos){
 		if (board.width() <= pos.x || board.height() <= pos.y ||
 				pos.x < 0 || pos.y < 0) return false;
-		return false;
+		return true;
 	}
 
 	/**
@@ -286,31 +300,6 @@ public class GameWorld implements Serializable{
 		for (Room r: rooms){
 			System.out.println(r.getName());
 		}
-
-		//System.out.println(x);
-
-		/*GameWorld game = new GameWorld("room.xml");
-		game.addPlayer();
-		Room[][] rooms = game.getGameMap();
-		Room room = rooms[0][0];
-
-		//System.out.println(room.getTileAt(new Point(1,1)).getTileType());
-		//System.out.println(game.movePlayer(player.getName(), new Point(2, 1)));
-		//System.out.println(room.getTileAt(new Point(2,1)).getTileType());
-		//System.out.println("move " + game.movePlayer(1, Direction.NORTH));
-		//System.out.println("pickup " + game.pickupAnItem(1, new Point(6, 0)));
-
-		Tile[][] tiles = room.getRoomBoard();
-		EmptyTile item = (EmptyTile) tiles[6][0];
-		System.out.println(item.containsItem());
-		System.out.println(item.isTileOccupied());
-
-		for (int x = 0; x < 7; x++){
-			for (int y = 0; y < 7; y++){
-				System.out.print(room.getTileAt(new Point(x,y)).getTileType() + ", ");
-			}
-			System.out.println();
-		}*/
 
 	}
 

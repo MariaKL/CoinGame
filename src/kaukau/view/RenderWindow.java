@@ -95,13 +95,12 @@ public class RenderWindow extends JPanel {
 
 	// Field to store the current player
 	Sprite player;
-	
+
 	// Field to store GameWorld object
 	GameWorld game;
 
 	public RenderWindow(GameWorld game){
 		this.game = game;
-		
 		//Setting a border
 		setBorder(BorderFactory.createCompoundBorder(
 						      BorderFactory.createEmptyBorder(0, 2, 2, 2),
@@ -211,7 +210,7 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveUp", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
-				
+
 				// update player direction
 				playerDir = 'E';
 
@@ -245,7 +244,7 @@ public class RenderWindow extends JPanel {
 		this.getActionMap().put("moveDown", new AbstractAction() {
 			public void actionPerformed(ActionEvent e){
 				// TODO: check if action is legal
-				
+
 				// update player direction
 				playerDir = 'W';
 
@@ -343,7 +342,7 @@ public class RenderWindow extends JPanel {
 	/**
 	 * rotate game world 90 degrees
 	 */
-	public void rotateWorld() {
+	private void rotateWorld() {
 		//first, rotate game direction
 		switch(gameDir){
 		case 'N':
@@ -393,7 +392,7 @@ public class RenderWindow extends JPanel {
 	/**
 	 * rotate game world 90 degrees
 	 */
-	public void rotateSprites() {
+	private void rotateSprites() {
 		//first, rotate player direction
 		switch(playerDir){
 		case 'N':
@@ -443,7 +442,7 @@ public class RenderWindow extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-	    
+
 	    //FIXME: drawing walls from the wall arrays
 	    paintLevelWalls(g);
 
@@ -454,7 +453,7 @@ public class RenderWindow extends JPanel {
 		// TODO: More sprites and player animation
 	    paintLevelSprites(g);
 	 }
-	
+
 	/**Drawing the current level game sprites onto the
 	 * 	rendering window.
 	 */
@@ -494,9 +493,9 @@ public class RenderWindow extends JPanel {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	/**Drawing the current level tiles onto the
 	 * 	rendering window.
 	 */
@@ -525,7 +524,7 @@ public class RenderWindow extends JPanel {
 		} catch(IOException e){
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**Drawing the current levels walls onto the
@@ -543,17 +542,17 @@ public class RenderWindow extends JPanel {
 	    	// creating door images
 	    	BufferedImage northDoorImg = ImageIO.read(new File(IMAGE_PATH + "north-door.png"));
 	    	BufferedImage eastDoorImg = ImageIO.read(new File(IMAGE_PATH + "east-door.png"));
-	
+
 	    	// wall positioning values
 	    	int nx = 284; // stores the starting x pos for the north walls
 	    	int ex = 356; // stores the starting x pos for the east walls
 	    	int ny = WALL_Y, ey = WALL_Y; // stores the starting y pos for the north & east walls
-	
+
 	    	// FIXME: position doors without these points
 	    	// door positioning values
 	    	Point doorN = new Point(0,0); // stores the position of the locked door on the north wall
 	    	Point doorE = new Point(0,0); // stores the position of the locked door on the east wall
-	
+
 	    	// draw walls based on current game view
 	    	switch(gameDir){
 	    		case 'S':
@@ -639,7 +638,7 @@ public class RenderWindow extends JPanel {
 	    			g.drawImage(northDoorImg, doorN.x+(SPRITE_MARGIN), doorN.y+(SPRITE_MARGIN+8), this);
 	    			break;
 	    		}
-			} catch (IOException e) { 
+			} catch (IOException e) {
 				e.printStackTrace();
 		}
 	}
@@ -721,7 +720,7 @@ public class RenderWindow extends JPanel {
 					} else if (j==0 && i>0){
 						//west
 						westWall[i-1]=1;
-					} 
+					}
 				} else if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.DOOR){
 					// Door is 2
 					if (i==0 && j>0){
@@ -736,13 +735,13 @@ public class RenderWindow extends JPanel {
 					} else if (j==0 && i>0){
 						//west
 						westWall[i-1]=2;
-					} 
+					}
 				}
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get 2d int array for render window to render players
 	 * @return
