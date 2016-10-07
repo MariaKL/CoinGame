@@ -3,14 +3,23 @@ package kaukau.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlAccessorType; 
+import javax.xml.bind.annotation.XmlElement; 
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class Player implements Serializable{
-
-	private String name;
-	private Tile location;
-	private Container inventory;
-	private CoinBox coinbox;
-	private Direction facing;
+	@XmlElement 	
+	private String name; 	
+	//@XmlElement(name="location") 	
+	private Tile location; 	
+	@XmlElement 	
+	private Container inventory; 	
+	@XmlElement 	
+	private CoinBox coinbox; 	
+	@XmlElement 	
+	private Direction facing; 	
+	@XmlElement 	
 	private final int userId;
 
 	public Player (int uid, String name, Tile startLocation, Direction facing){

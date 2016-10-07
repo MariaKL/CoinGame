@@ -2,9 +2,11 @@ package kaukau.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAnyElement; 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import kaukau.model.GameMap.TileType;
-
-
+@XmlRootElement
 public class Tile implements Serializable {
 
 	private Item item;
