@@ -12,5 +12,17 @@
                 <location/>
             </value>
         </entry>
+        <entry>
+            <key>2</key>
+            <value>
+                <name>Player</name>
+                <inventory/>
+                <coinbox/>
+                <facing>EAST</facing>
+                <userId>2</userId>
+                <location/>
+            </value>
+        </entry>
     </allPlayers>
+    <isGameOver>false</isGameOver>
 </GameWorld>

@@ -1,7 +1,9 @@
 package kaukau.storage;
+
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
 
@@ -10,88 +12,104 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import kaukau.model.GameWorld;
+import kaukau.model.Player;
 
 public class JAXBJavaToXml {
 
-	public void generateXML(GameWorld game){
+	public void generateXML(GameWorld game) {
 		// creating country object
 
-		   GameWorld gameWorld = game;
-		   //game.addPlayer();
+		GameWorld gameWorld = game;
+		// game.addPlayer();
 
-		  try {
+		try {
 
-		   // create JAXB context and initializing Marshaller
+			// create JAXB context and initializing Marshaller
 
-		   JAXBContext jaxbContext = JAXBContext.newInstance(GameWorld.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(GameWorld.class);
 
-		   Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-		   // for getting nice formatted output
+			// for getting nice formatted output
 
-		   jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-		   //specify the location and name of xml file to be created
+			// specify the location and name of xml file to be created
 
-		   File XMLfile = new File("/home/khanshai/workspace/T2/Team_24/Game.xml");
+			File XMLfile = new File("/home/khanshai/workspace/T2/Team_24/Game.xml");
 
-		   // Writing to XML file
+			// Writing to XML file
 
-		   jaxbMarshaller.marshal(gameWorld, XMLfile);
+			jaxbMarshaller.marshal(gameWorld, XMLfile);
 
-		   // Writing to console
+			// // Writing to console
+			//
+			// jaxbMarshaller.marshal(gameWorld, System.out);
 
-		   jaxbMarshaller.marshal(gameWorld, System.out);
+		} catch (JAXBException e) {
 
-		  } catch (JAXBException e) {
+			// some exception occured
 
-		   // some exception occured
+			e.printStackTrace();
 
-		   e.printStackTrace();
-
-		  }
+		}
 
 	}
 
- public static void main(String[] args) {
+	public static GameWorld createDummyGame() {
+		// create dummy game world
+		GameWorld game = new GameWorld();
+		// create 2 players
+		game.addPlayer();
+		game.addPlayer();
+		//add items already in inventory including coinBox
+		HashMap<Integer, Player> players = game.getAllPlayers();
+		Player p1 = game.player(1);
+		Player p2 = game.player(2);
 
-  // creating country object
 
-   GameWorld game = new GameWorld();
-   //game.addPlayer();
+		return game;
+	}
 
-  try {
+	public static void main(String[] args) {
 
-   // create JAXB context and initializing Marshaller
+		// creating country object
 
-   JAXBContext jaxbContext = JAXBContext.newInstance(GameWorld.class);
+		GameWorld game = createDummyGame();
+		// game.addPlayer();
 
-   Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		try {
 
-   // for getting nice formatted output
+			// create JAXB context and initializing Marshaller
 
-   jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			JAXBContext jaxbContext = JAXBContext.newInstance(GameWorld.class);
 
-   //specify the location and name of xml file to be created
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-   File XMLfile = new File("/home/khanshai/workspace/T2/Team_24/Game.xml");
+			// for getting nice formatted output
 
-   // Writing to XML file
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-   jaxbMarshaller.marshal(game, XMLfile);
+			// specify the location and name of xml file to be created
 
-   // Writing to console
+			File XMLfile = new File("/home/khanshai/workspace/T2/Team_24/Game.xml");
 
-   jaxbMarshaller.marshal(game, System.out);
+			// Writing to XML file
 
-  } catch (JAXBException e) {
+			jaxbMarshaller.marshal(game, XMLfile);
 
-   // some exception occured
+			// Writing to console
 
-   e.printStackTrace();
+			jaxbMarshaller.marshal(game, System.out);
 
-  }
+		} catch (JAXBException e) {
 
- }
+			// some exception occured
+
+			e.printStackTrace();
+
+		}
+
+	}
 
 }

@@ -28,7 +28,8 @@ import kaukau.storage.JAXBJavaToXml;
 public class ApplicationWindow extends JFrame{
 
 	//generate XML
-	JAXBJavaToXml toXML = new JAXBJavaToXml();
+	//private JAXBJavaToXml toXML = new JAXBJavaToXml();
+	//private int saveNumber = 1;
 
 
 	// path to the images folder
@@ -100,7 +101,8 @@ public class ApplicationWindow extends JFrame{
 		save.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				toXML.generateXML(game);
+				JAXBJavaToXml toXml = new JAXBJavaToXml();
+				toXml.generateXML(game);
 			}
 		});
 		JMenu load = new JMenu("Load");

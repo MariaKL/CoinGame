@@ -24,7 +24,7 @@ import java.io.Serializable;
 //@XmlType(propOrder = { "allPlayers"})
 public class GameWorld implements Serializable{
 
-	private GameMap board;
+	private GameMap board;	
 	private boolean gameOver;
 
 	/**
@@ -270,6 +270,7 @@ public class GameWorld implements Serializable{
 	 * Return the current state of the game.
 	 * @return
 	 */
+	@XmlElement(name="isGameOver") 
 	public boolean isOver(){
 		return gameOver;
 	}
