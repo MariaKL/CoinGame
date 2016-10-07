@@ -1,5 +1,6 @@
 package kaukau.model;
 
+import java.awt.Graphics;
 import java.io.Serializable;
 
 public class Key extends PickupableItem implements Serializable{

@@ -25,7 +25,7 @@ import kaukau.model.Tile;
  * 	in the Kaukau game. This class interacts with the
  * 	application window to form the gui of the game.
  *
- * @author Patrick
+ * @author Patrick and Matthias
  *
  */
 @SuppressWarnings("serial")
@@ -690,6 +690,10 @@ public class RenderWindow extends JPanel {
      */
     public void addClient(Client client){
     	this.client = client;
+    }
+    
+    public Client getClient() {
+    	return this.client;
     }
     
     /**

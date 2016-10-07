@@ -1,6 +1,12 @@
 package kaukau.model;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+
+import javax.imageio.ImageIO;
 
 /**
  * A Pickupable object is something a player can pick up, inspect, store in a container or drop.

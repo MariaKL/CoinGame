@@ -1,26 +1,45 @@
 package kaukau.view;
 
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
 
+import kaukau.control.Client;
 import kaukau.model.GameWorld;
+import kaukau.model.Player;
 
 /**
  * This class is in charge of creating the application window
  * 	for the Kaukau adventure game. The application window interfaces
  * 	with the rendering window to create the game gui.
  *
- * @author Patrick
+ * @author Patrick and Matthias
  *
  */
 @SuppressWarnings("serial")
@@ -34,6 +53,17 @@ public class ApplicationWindow extends JFrame{
 	
 	// Field to store application window's copy of the game
 	public GameWorld game;
+	
+	// Field to store the inventory frame
+	public Inventory inventory;
+	
+	// Private instance variable for Client
+	private Client client;
+	
+	// Final Variables to avoid magic numbers
+	public final int WINDOW_WIDTH = 765;
+	public final int WINDOW_HEIGHT = 525;
+	public final int INVENTORY_HEIGHT = 150;
 
 	public ApplicationWindow(GameWorld game){
 		super("Kaukau");
@@ -45,6 +75,11 @@ public class ApplicationWindow extends JFrame{
 		
 		// construct render window with GameWorld
 		rw = new RenderWindow(this.game);
+		
+		// make inventory
+		inventory = new Inventory();
+		
+		// initialize client private instance variable
 
 		// adding the rendering window to the application
 		add(rw);
@@ -52,9 +87,11 @@ public class ApplicationWindow extends JFrame{
 		// setting title
 		setTitle("Kaukau");
 		// set size
-		setSize(765, 525);
+		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		// set display location
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
+		add(createCenterPanel(),BorderLayout.CENTER);		
+		add(createBottomPanel(),BorderLayout.SOUTH);
 		// set close operation
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// pack to minimum size
@@ -67,6 +104,28 @@ public class ApplicationWindow extends JFrame{
                 confirmExit();
             }
         });
+	}
+	
+	private JPanel createCenterPanel() {
+		//MainDisplay display = new MainDisplay();
+		
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
+		Border cb = BorderFactory.createCompoundBorder(BorderFactory
+				.createEmptyBorder(3, 3, 3, 3), BorderFactory
+				.createLineBorder(Color.gray));
+		centerPanel.setBorder(cb);
+		centerPanel.add(rw, BorderLayout.CENTER);
+		return centerPanel;
+	}
+	
+	private JPanel createBottomPanel() {
+		JPanel bottomPanel = new JPanel();
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+		bottomPanel.setBorder(BorderFactory.createTitledBorder(blackline, "Inventory"));
+		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));				
+		bottomPanel.add(inventory);
+		return bottomPanel;
 	}
 
 	/**
@@ -126,8 +185,88 @@ public class ApplicationWindow extends JFrame{
 		int result = JOptionPane.showConfirmDialog(this, msg,
 		        "Alert", JOptionPane.OK_CANCEL_OPTION);
 		if(result==0){
+			//client.closeClientSock();  //client 
+			//TODO: remove from gameworld hashmap
 			System.exit(0);
 			dispose();
 		}
+	}
+	
+	public class Inventory extends Canvas implements MouseListener {
+
+		
+		private final int SIZE_DIVISOR = 6;
+		private final int NUM_ITEMS = 8;
+		
+		public Inventory() {
+			setBounds(0, 0, (WINDOW_WIDTH*NUM_ITEMS)/SIZE_DIVISOR, (INVENTORY_HEIGHT)/SIZE_DIVISOR);
+			addMouseListener(this);
+		}
+		
+		public void paint (Graphics g){
+			//get Player and his inventory
+			//paint
+			
+			client = rw.getClient();
+			long uid = client.getId();
+			System.out.println("Got player id through app window: "+ uid); //test see player uid
+			HashMap<Integer, Player> players = game.getAllPlayers();
+			ArrayList<kaukau.model.PickupableItem> inv = players.get(uid).getInventory();			
+			for(int i=0;i<inv.size();++i) {
+				kaukau.model.PickupableItem item = null;
+				if(i < inv.size()) {
+					item = inv.get(i);
+				}				
+				drawLocation(i,0,WINDOW_WIDTH/SIZE_DIVISOR,INVENTORY_HEIGHT/SIZE_DIVISOR,item,g);
+			}
+			 
+		}
+		
+		/* (non-Javadoc)
+		 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+		 */
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			int x = (e.getX()*SIZE_DIVISOR) / WINDOW_WIDTH;
+			//				
+			/*List<Item> inventory = game.getPlayer().getInventory();
+			
+			if(x < inventory.size()) {
+				createActionMenu(e,inventory.get(x));
+			} 
+			//					
+			GraphicalUserInterface.this.repaint(); */
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+
+		@Override
+		public void mouseExited(MouseEvent e) {}
+
+		@Override
+		public void mousePressed(MouseEvent e) {}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
+		
+	} //end of inventory window class
+	
+	private void drawLocation(int x, int y, int width, int height, kaukau.model.PickupableItem item, Graphics g) {
+		g.translate(x*width,y*height);
+		g.setClip(0,0,width,height);
+		if(item != null) { 
+			try {
+				String name = item.getName();
+				BufferedImage image = ImageIO.read(new File("images/" + name));
+				if(image != null){
+	    			g.drawImage(image, x, y, this);
+	    		}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		g.translate(-(x*width), -(y*height));
 	}
 }
