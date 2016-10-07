@@ -22,6 +22,7 @@ import java.util.Date;
 public class Client extends Thread {
 	private String address = "127.0.0.1";
 	private Socket sock;
+	private boolean connected;
 
 	private GameWorld game;
 	private ApplicationWindow aw;
@@ -37,8 +38,12 @@ public class Client extends Thread {
 		// makes a new socket and sets input/output streams
 		try{
 	        sock = new Socket(address, Server.portNumber);
+	        connected = true;
 	        this.aw = aw;
 	        this.game = aw.game;
+		} catch(ConnectException e){
+			connected = false;
+			System.out.println("Server unavailable.");
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -47,6 +52,13 @@ public class Client extends Thread {
 	@Override
 	public void run(){
 		try {
+			// single player game
+			if(!connected){
+				System.out.println("Single player game begun");
+				closeClientSock();
+				return;
+			}
+			// multiplayer game
 			if(initialRun){
 				// TODO: get client to read its uid from server BEFORE running client
 
@@ -72,16 +84,17 @@ public class Client extends Thread {
 			boolean closed = false;
 			while(!closed){
 		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
+				System.out.println("Players size before update: " + game.getAllPlayers().size());
 				// wait for game updates from server
 				game.fromByteArray((byte[])input.readObject());
 				System.out.println("Received game update");
+				System.out.println("Players size after update: " + game.getAllPlayers().size());
 			}
 			sock.close();
-		} catch(EOFException e){
-			System.out.println("UID not read");
-			System.out.println(uid + " : uid");
 		} catch(ConnectException e){
 			System.out.println("Server not running");
+		} catch(EOFException e){
+			System.out.println("No input read");
 		} catch(IOException e) {
 			e.printStackTrace();
 		} catch(ClassNotFoundException e) {
@@ -94,7 +107,9 @@ public class Client extends Thread {
 	 */
 	public void closeClientSock(){
 		try{
-			sock.close();
+			if(!sock.isClosed()){
+				sock.close();
+			}
 		}
 		catch(IOException e){
 			e.printStackTrace();
@@ -108,9 +123,11 @@ public class Client extends Thread {
 	 */
 	public void sendAction(int code){
 		try {
-	        ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
-			output.writeInt(uid);
-			output.writeInt(code);
+			if(connected){
+		        ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
+				output.writeInt(uid);
+				output.writeInt(code);
+			}
 		} catch (IOException e) {
 			// problem with sending to the server
 //			e.printStackTrace();

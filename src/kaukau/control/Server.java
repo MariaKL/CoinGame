@@ -194,6 +194,8 @@ public class Server{
     public static void updateAll(){
     	try{
           for(Socket sock: sockets.values()){
+        	  if(sock.isClosed())
+        		  continue;
         	  // sends game to byte array to each client
         	  ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
         	  out.writeObject(game.toByteArray());
@@ -202,6 +204,7 @@ public class Server{
     	  System.out.println("Sent updated game to players");
     	}
     	catch(IOException e){
+    		e.printStackTrace();
     		System.out.println("Failed to create buffered writer.\n");
     	}
     }

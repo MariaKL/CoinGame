@@ -13,6 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import kaukau.control.Client;
 import kaukau.model.GameWorld;
 
 /**
@@ -31,18 +32,18 @@ public class ApplicationWindow extends JFrame{
 
 	// Field to store the rendering window for the game
 	public RenderWindow rw;
-	
+
 	// Field to store application window's copy of the game
 	public GameWorld game;
 
 	public ApplicationWindow(GameWorld game){
 		super("Kaukau");
-		
+
 		this.game = game;
 
 		// creating a menu
 		initMenu();
-		
+
 		// construct render window with GameWorld
 		rw = new RenderWindow(this.game);
 
