@@ -155,10 +155,10 @@ public class Server{
 				        	output.flush();
 				        	// send new game to all clients
 							System.out.println("Server: number of players: " + game.getAllPlayers().size());
-							output.flush();
+							System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
+				        	// send new game to all players
 				        	updateAll();
 		            	}
-			        	System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 		            }
 		        } catch(IOException e){
 		        	e.printStackTrace();
@@ -232,6 +232,7 @@ public class Server{
     }
 
     /**
+<<<<<<< HEAD
      * Returns the id of a player given the socket.
      * @param sock
      * @return
@@ -245,6 +246,8 @@ public class Server{
     }
 
 	/**
+=======
+>>>>>>> c5df32e9ef6a6180c3f3c83a5f2b2a2722265af8
      * Closes all sockets.
      */
     public void closeAll(){
