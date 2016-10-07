@@ -2,11 +2,14 @@ package kaukau.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * This class represent a Door object that can placed on GameMap's tile.
  * @author Vivienne Yapp, 300339524
  *
  */
+@XmlRootElement
 public class Door implements Item, Serializable{
 
 	private Tile location;

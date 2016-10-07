@@ -3,6 +3,10 @@ package kaukau.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import kaukau.model.GameMap.TileType;
 
 import java.awt.Point;
@@ -13,9 +17,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+@XmlRootElement(name="GameWorld")
+@XmlType(propOrder = { "board", "gameOver", "uid", "players"})
 public class GameWorld implements Serializable{
 
+	@XmlElement
 	private GameMap board;
+	@XmlElement
 	private boolean gameOver;
 
 	/**
@@ -23,11 +31,13 @@ public class GameWorld implements Serializable{
 	 * required in order to synchronise the movements of different players
 	 * across boards.
 	 */
+	@XmlElement
 	private int uid = 0;
 
 	/**
 	 * The current players of this game. Max number of player = 2.
 	 */
+	@XmlElement
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	public GameWorld(){
