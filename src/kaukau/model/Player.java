@@ -3,16 +3,24 @@ package kaukau.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlAccessorType; 
+import javax.xml.bind.annotation.XmlElement; 
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class Player implements Serializable{
-
-	private String name;
-	private Tile location;
-	private Container inventory;
-	private CoinBox coinbox;
-	private Direction facing;
+	@XmlElement 	
+	private String name; 	
+	//@XmlElement(name="location") 	
+	private Tile location; 	
+	@XmlElement 	
+	private Container inventory; 	
+	@XmlElement 	
+	private CoinBox coinbox; 	
+	@XmlElement 	
+	private Direction facing; 	
+	@XmlElement 	
 	private final int userId;
 
 	public Player (int uid, String name, Tile startLocation, Direction facing){
@@ -36,22 +44,11 @@ public class Player implements Serializable{
 	 * Sets the items location to be the argument
 	 * */
 	public void setLocation(Tile loc) {
-		if(loc != null){
-			this.location = loc;
-		}
-		setFacingDirection(loc);
+		this.location = loc;
 	}
 
-	public void setFacingDirection(Tile loc){
-		if (location.Y() == loc.Y()){
-			if (location.X() - loc.X() == 1)
-				facing = Direction.WEST;
-			else facing = Direction.EAST;
-		} else {
-			if (location.Y() - loc.Y() == 1)
-				facing = Direction.NORTH;
-			else facing = Direction.SOUTH;
-		}
+	public void setFacingDirection(Direction direct){
+		this.facing = direct;
 	}
 
 	public Direction facingDirection(){
