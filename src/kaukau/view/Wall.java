@@ -3,9 +3,9 @@ package kaukau.view;
 public class Wall extends Block {
 
 	// Field for type of tile
-	private int wallType;
+	private char wallType;
 	
-	public Wall(int wallType, int x, int y){
+	public Wall(char wallType, int x, int y){
 		super(x,y);
 		this.wallType = wallType;
 	}
@@ -13,12 +13,12 @@ public class Wall extends Block {
 	/*
 	 * Setter methods
 	 */
-	public void setWallType(int wType){
+	public void setWallType(char wType){
 		this.wallType = wType;
 	}
 
 	/*
 	 * Getter methods
 	 */
-	public int getWallType() { return wallType;	}	
+	public char getWallType() { return wallType; }	
 }

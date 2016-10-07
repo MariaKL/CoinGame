@@ -164,7 +164,7 @@ public class GameWorld implements Serializable{
 	public boolean validPoint(Point pos){
 		if (board.width() <= pos.x || board.height() <= pos.y ||
 				pos.x < 0 || pos.y < 0) return false;
-		return false;
+		return true;
 	}
 
 	/**
