@@ -30,8 +30,6 @@ public class Server{
 	private ServerSocket listener; // accepts clients
 	// client sockets
 	private static HashMap<Integer, Socket> sockets = new HashMap<Integer, Socket>();
-	// client threads associated with sockets
-//	private Set<ClientThread> threads = new HashSet<ClientThread>();
 	// commands received from clients
 	private Queue<String> commands = new LinkedList<String>();
 	// game
@@ -39,6 +37,10 @@ public class Server{
 	// current player to listen to
 	private static int player = 0;
 
+	/**
+	 * Creates the listening socket and the two threads to connect clients and handle player actions.
+	 * @param game
+	 */
 	public Server(GameWorld game){
 		this.game = game;
         try {
@@ -53,56 +55,6 @@ public class Server{
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Checks there's at least one socket that's connected.
-	 * @return
-	 */
-	private static boolean atleastOneConnection() {
-		for (Socket s : sockets.values()) {
-			if (s.isConnected()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-     * Sends updated game to all clients.
-     * @param message
-     */
-    public static void updateAll(){
-    	try{
-          for(Socket sock: sockets.values()){
-        	  // sends game to byte array to each client
-        	  ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
-        	  out.write(game.toByteArray());
-        	  out.flush();
-          }
-    	  System.out.println("Sent updated game to players");
-    	}
-    	catch(IOException e){
-    		System.out.println("Failed to create buffered writer.\n");
-    	}
-    }
-
-    /**
-     * Sends String command to all clients.
-     * @param message
-     */
-    public static void sendToAll(String message){
-    	try{
-          for(Socket sock: sockets.values()){
-        	  // sends game to byte array to each client
-        	  ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
-        	  output.writeUTF(message);
-        	  output.flush();
-          }
-    	}
-    	catch(IOException e){
-    		System.out.println("Failed to create buffered writer.\n");
-    	}
-    }
 
 	/**
 	 * Constructs a thread to handle player commands.
@@ -180,14 +132,14 @@ public class Server{
 		    	//TODO: allow for multiple players
 		        try{
 		        	System.out.println("Listening");
-		            while(true){
+		            while(game.getAllPlayers().size() < 2){ // max two players
 						Socket socket = listener.accept();
-						ObjectOutputStream output;
 						// if there are more than two players then don't accept the new player
 		            	if(sockets.size() > 2){
-		            		output = new ObjectOutputStream(socket.getOutputStream());
+		            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 		    				output.writeBoolean(false);
 		    				output.writeUTF("Cannot accept another player");
+				        	output.flush();
 		            	}
 		            	// otherwise accept a new player
 		            	else{
@@ -196,15 +148,17 @@ public class Server{
 							sockets.put(uid, socket);
 							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
 
-							output = new ObjectOutputStream(socket.getOutputStream());
+		            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 		    				output.writeBoolean(true);
 							// send the client's uid to the client
 							output.writeInt(uid);
-				        	System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
-				        	// send new game to all players
+				        	output.flush();
+				        	// send new game to all clients
+							System.out.println("Server: number of players: " + game.getAllPlayers().size());
+							output.flush();
 				        	updateAll();
 		            	}
-			        	output.flush();
+			        	System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 		            }
 		        } catch(IOException e){
 		        	e.printStackTrace();
@@ -223,6 +177,85 @@ public class Server{
 		};
 		return listeningThread;
 	}
+
+	/**
+	 * Checks there's at least one socket that's connected.
+	 * @return
+	 */
+	private static boolean atleastOneConnection() {
+		for (Socket s : sockets.values()) {
+			if (s.isConnected()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+     * Sends updated game to all clients.
+     * @param message
+     */
+    public static void updateAll(){
+    	try{
+          for(Socket sock: sockets.values()){
+        	  if(sock.isClosed())
+        		  continue;
+        	  // sends game to byte array to each client
+        	  ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
+        	  out.writeObject(game.toByteArray());
+        	  out.flush();
+          }
+    	  System.out.println("Sent updated game to players");
+    	}
+    	catch(IOException e){
+    		e.printStackTrace();
+    		System.out.println("Failed to create buffered writer.\n");
+    	}
+    }
+
+    /**
+     * Sends String command to all clients.
+     * @param message
+     */
+    public static void sendToAll(String message){
+    	try{
+          for(Socket sock: sockets.values()){
+        	  // sends game to byte array to each client
+        	  ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
+        	  output.writeUTF(message);
+        	  output.flush();
+          }
+    	}
+    	catch(IOException e){
+    		System.out.println("Failed to create buffered writer.\n");
+    	}
+    }
+
+    /**
+     * Returns the id of a player given the socket.
+     * @param sock
+     * @return
+     */
+    private static Integer getUid(Socket sock){
+    	for(Integer i: sockets.keySet()){
+    		if(sockets.get(i) == sock)
+    			return i;
+    	}
+    	return -1;
+    }
+
+	/**
+     * Closes all sockets.
+     */
+    public void closeAll(){
+    	for(Socket sock: sockets.values()){
+    		try {
+				sock.close();
+			} catch (IOException e) {
+				System.out.println("Unable to close socket");
+			}
+    	}
+    }
 
     /**
      * Starts a game and associates it with a server.
