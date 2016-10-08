@@ -3,7 +3,10 @@ package kaukau.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -18,7 +21,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 @XmlRootElement(name="GameWorld")
-@XmlType(propOrder = { "board", "gameOver", "uid", "players"})
+//@XmlType(propOrder = { "allPlayers"})
 public class GameWorld implements Serializable{
 
 	@XmlElement
@@ -38,7 +41,6 @@ public class GameWorld implements Serializable{
 	/**
 	 * The current players of this game. Max number of player = 2.
 	 */
-	@XmlElement
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	public GameWorld(){
@@ -50,6 +52,7 @@ public class GameWorld implements Serializable{
 	 * Register a new player into the game.
 	 * @return the user id of the new player.
 	 */
+	//@XmlElement(name="players1")
 	public synchronized int addPlayer(){
 		Tile tile = board.getTileAt(new Point(2, 1+uid));
 		Player player = new Player(++uid, "Player", tile, Direction.EAST);
@@ -253,6 +256,7 @@ public class GameWorld implements Serializable{
 	 * Return the current board of the game.
 	 * @return
 	 */
+	//@XmlElement(name="map")
 	public GameMap getGameMap(){
 		return board;
 	}
@@ -261,6 +265,10 @@ public class GameWorld implements Serializable{
 	 * Return the current players of the game.
 	 * @return
 	 */
+	@XmlElementWrapper(name="allPlayers")
+    @XmlElements({
+    @XmlElement(name="player") }
+    )
 	public HashMap<Integer, Player> getAllPlayers(){
 		return players;
 	}
@@ -269,6 +277,7 @@ public class GameWorld implements Serializable{
 	 * Return the current state of the game.
 	 * @return
 	 */
+	@XmlElement(name="isGameOver")
 	public boolean isOver(){
 		return gameOver;
 	}
@@ -277,6 +286,7 @@ public class GameWorld implements Serializable{
 	 * Return the current board of the game.
 	 * @return
 	 */
+	//@XmlElement(name="board")
 	public Tile[][] getGameTiles(){
 		return board.getBoard();
 	}

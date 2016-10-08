@@ -3,24 +3,25 @@ package kaukau.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.xml.bind.annotation.XmlAccessorType; 
-import javax.xml.bind.annotation.XmlElement; 
-
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class Player implements Serializable{
-	@XmlElement 	
-	private String name; 	
-	//@XmlElement(name="location") 	
-	private Tile location; 	
-	@XmlElement 	
-	private Container inventory; 	
-	@XmlElement 	
-	private CoinBox coinbox; 	
-	@XmlElement 	
-	private Direction facing; 	
-	@XmlElement 	
+	@XmlElement
+	private String name;
+	//@XmlElement(name="location")
+	private Tile location;
+	//@XmlElement
+	private Container inventory;
+	@XmlElement
+	private CoinBox coinbox;
+	@XmlElement
+	private Direction facing;
+	@XmlElement
 	private final int userId;
 
 	public Player (int uid, String name, Tile startLocation, Direction facing){
@@ -66,6 +67,7 @@ public class Player implements Serializable{
 	/**
 	 * Gets the items location
 	 * @return Tile*/
+	@XmlElement(name="location")
 	public Tile getLocation() {
 		return this.location;
 	}
@@ -94,6 +96,10 @@ public class Player implements Serializable{
 	/**
 	 * adds item to players bag
 	 * */
+	@XmlElementWrapper(name="inventory")
+    @XmlElements({
+    @XmlElement(name="item") }
+    )
 	public ArrayList <PickupableItem> getInventory(){
 		return inventory.getStorage();
 	}
