@@ -49,12 +49,12 @@ public class ApplicationWindow extends JFrame{
 		rw = new RenderWindow(game, this);
 
 		// adding the rendering window to the application
-		add(rw);
+		add(rw.getCanvas());
 
 		// setting title
 		setTitle("Kaukau");
 		// set size
-		setSize(865, 625);
+		setSize(1020, 620);
 		// set display location
 		setLocationRelativeTo(null);
 		// set close operation
