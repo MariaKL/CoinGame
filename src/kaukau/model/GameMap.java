@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+@SuppressWarnings("serial")
 @XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable{
 	
@@ -27,7 +28,7 @@ public class GameMap implements Serializable{
 	private ArrayList<Door> doors;
 
 	public enum TileType{
-		WALL, EMPTY, DOOR;
+		WALL, DOOR, TILE, TILE_CRACKED;
 	}
 
 
@@ -80,8 +81,11 @@ public class GameMap implements Serializable{
 		    					case 'X':
 		    						keyCount = addCoin(eElement, coinCount, col+startX, row+startY);
 		    						break;
+		    					case 'T':
+		    						board[col+startX][row+startY] = new Tile(TileType.TILE, col+startX, row+startY);
+		    						break;
 		    					case 'C':
-		    						board[col+startX][row+startY] = new Tile(TileType.EMPTY, col+startX, row+startY);
+		    						board[col+startX][row+startY] = new Tile(TileType.TILE_CRACKED, col+startX, row+startY);
 		    						break;
 	    					}
 	    				}
@@ -123,7 +127,7 @@ public class GameMap implements Serializable{
 	 * @return the next index number for next key item
 	 */
 	public int addKey(Element element, int count, int x, int y){
-		Tile tile = new Tile(TileType.EMPTY, x, y);
+		Tile tile = new Tile(TileType.TILE, x, y);
 		int keycode = Integer.valueOf(element.getElementsByTagName("Key"+String.valueOf(count)).item(0).getTextContent());
 		Key key = new Key(keycode);
 		tile.setItem(key);
@@ -140,7 +144,7 @@ public class GameMap implements Serializable{
 	 * @return the next index number for next key item
 	 */
 	public int addCoin(Element element, int count, int x, int y){
-		Tile tile = new Tile(TileType.EMPTY, x, y);
+		Tile tile = new Tile(TileType.TILE, x, y);
 		int amount = Integer.valueOf(element.getElementsByTagName("Coin"+String.valueOf(count)).item(0).getTextContent());
 		Coin coin = new Coin(amount);
 		tile.setItem(coin);

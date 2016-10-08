@@ -700,7 +700,8 @@ public class RenderWindow extends JPanel {
 		Tile[][] tiles = parent.getGame().getGameTiles();
 		for (int i=0;i<tiles.length;i++){
 			for (int j=0;j<tiles[0].length;j++){
-				if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.EMPTY){
+				if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.TILE
+					||tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.TILE_CRACKED){
 					//empty tile is 0
 					levelData[i-1][j-1] = 0; //shift over to account for walls in tile map
 				} else if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.WALL){

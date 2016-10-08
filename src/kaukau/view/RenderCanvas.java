@@ -70,16 +70,29 @@ public class RenderCanvas extends JPanel {
 				// the block to be created
 				Block b = null;
 				// Creating a Tile block for rendering
-				if(tile.getTileType() == GameMap.TileType.EMPTY){
+				if(tile.getTileType() == GameMap.TileType.TILE){
 					// setting the tile in the level data
 					levelData[c][r] = 'T';
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = RenderWindow.twoDToIso(new Point(x, y));		
 					// adjusting the position of the render
 					b = new RenderTile(0, pos.x+50, pos.y+65);
+					allTiles.add((RenderTile) b);
+					// adding blocks in order for painters algorithm
+					blocks.add(b);
+				} else if (tile.getTileType() == GameMap.TileType.TILE_CRACKED){
+					// setting the tile in the level data
+					levelData[c][r] = 'C';
+					// getting the x & y position of the tile
+					int x = r * tileWidth;
+					int y = c * tileHeight;
+					// converting 2d point to isometic
+					Point pos = RenderWindow.twoDToIso(new Point(x, y));		
+					// adjusting the position of the render
+					b = new RenderTile(1, pos.x+50, pos.y+65);
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
@@ -140,7 +153,15 @@ public class RenderCanvas extends JPanel {
 		    		} else { continue; }
 		    	// the level block is a floor tile
 		    	} else {
-		    		image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
+		    		int type = ((RenderTile) b).getTileType();
+		    		switch(type){
+		    			case 0:
+		    				image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
+		    				break;
+		    			case 1:
+		    				image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
+		    				break;
+		    		}
 		    	}	
 		    	// drawing the block image to the screen
 		    	if(image != null){
@@ -184,6 +205,7 @@ public class RenderCanvas extends JPanel {
 	    	    char dir = levelData[r][c];
 	    	    switch(dir){
 	    	    	case 'T':
+	    	    	case 'C':
 	    	    		break;
 	    	    	case 'N':
 	    	    		levelData[r][c] = 'E';
@@ -213,8 +235,8 @@ public class RenderCanvas extends JPanel {
 				// getting the tile type
 				char tileType = ret[i][j];
 				Block b = null;
-				// block is a tile
-				if(tileType != 'T'){
+				// block is a wall
+				if(tileType != 'T' && tileType != 'C'){
 					// setting the wall direction in the level data
 					if(i==ret.length-1){
 						ret[i][j] = 'W';
@@ -235,8 +257,16 @@ public class RenderCanvas extends JPanel {
 				} else {
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
-					// adjusting the position of the render
-					b = new RenderTile(0, pos.x+50, pos.y+65);
+					switch(ret[i][j]){
+						case 'T':
+							// adjusting the position of the render
+							b = new RenderTile(0, pos.x+50, pos.y+65);
+							break;
+						case 'C':
+							// adjusting the position of the render
+							b = new RenderTile(1, pos.x+50, pos.y+65);
+							break;
+					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);

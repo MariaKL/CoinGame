@@ -3,15 +3,15 @@
   <room name="Gym">
     <startX>0</startX>
     <startY>0</startY>
-    <L0>WWCCWWWWWW</L0>
-    <L1>WCCCCKCCCW</L1>
-    <L2>WCCCCCCCCW</L2>
-    <L3>WCCCCCCCCW</L3>
-    <L4>WCCCWCCCCW</L4>
-    <L5>WCCCWWCCCW</L5>
-    <L6>WCCCCCCCCW</L6>
-	<L7>WCCCCCCCCW</L7>
-	<L8>WCCCCCCCCW</L8>
+    <L0>WWWWWWWWWW</L0>
+    <L1>WTTTTTTTTW</L1>
+    <L2>WTTTTTTTTW</L2>
+    <L3>WTTTTCCTTW</L3>
+    <L4>TTTTWTCTTW</L4>
+    <L5>TTTCWWTTTW</L5>
+    <L6>WTTCCTTTTW</L6>
+	<L7>WTTTTTTTTW</L7>
+	<L8>WTTTTTTTTW</L8>
 	<L9>WWWWWWWWWW</L9>
     <Door0>0</Door0>
     <Door1>0</Door1>

@@ -3,13 +3,10 @@ package kaukau.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import kaukau.model.GameMap.TileType;
 
 import java.awt.Point;
@@ -20,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 @XmlRootElement(name="GameWorld")
 //@XmlType(propOrder = { "allPlayers"})
 public class GameWorld implements Serializable{
@@ -75,7 +73,9 @@ public class GameWorld implements Serializable{
 		// if the tile is emptyTile and not occupy, then move player to this new position
 		if (validPoint(newPos)){
 			Tile tile = board.getTileAt(newPos);
-			if (tile.getTileType() == TileType.EMPTY && !tile.isTileOccupied()){
+			if ((tile.getTileType() == TileType.TILE 
+					|| tile.getTileType() == TileType.TILE_CRACKED) 
+					&& !tile.isTileOccupied()){
 				oldPos.removePlayer();
 				player.setLocation(tile);
 				player.setFacingDirection(direction);
@@ -100,7 +100,7 @@ public class GameWorld implements Serializable{
 		// then player can pick up the item only if there is one
 		if (validPoint(pos)){
 			Tile tile = board.getTileAt(pos);
-			if (tile.getTileType() == TileType.EMPTY && tile.containsPickupItem()){
+			if (tile.getTileType() == TileType.TILE && tile.containsPickupItem()){
 				if (player.addToBag((PickupableItem)tile.getItem())){
 					tile.removeItem();
 					return true;

@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import kaukau.model.GameMap.TileType;
+@SuppressWarnings("serial")
 @XmlRootElement
 public class Tile implements Serializable {
 
@@ -47,7 +48,7 @@ public class Tile implements Serializable {
 	 * @return true if the player successfully added, otherwise false.
 	 */
 	public boolean addPlayer(Player player){
-		if (type != TileType.EMPTY) return false;
+		if (type != TileType.TILE || type != TileType.TILE_CRACKED) return false;
 		else {
 			if (this.player == null && this.item == null){
 				this.player = player;
@@ -62,7 +63,7 @@ public class Tile implements Serializable {
 	 * @return true if the player successfully removed, otherwise false.
 	 */
 	public boolean removePlayer(){
-		if (type != TileType.EMPTY) return false;
+		if (type != TileType.TILE) return false;
 		else {
 			if (this.player != null){
 				this.player = null;
@@ -78,7 +79,7 @@ public class Tile implements Serializable {
 	 * @return true if both the player and item fields are NULL, otherwise false.
 	 */
 	public boolean dropItem(PickupableItem dropItem){
-		if (type != TileType.EMPTY) return false;
+		if (type != TileType.TILE) return false;
 		else {
 			if (item == null && player == null){
 				item = dropItem;
@@ -94,7 +95,7 @@ public class Tile implements Serializable {
 	 * and item fields are NULL, otherwise false .
 	 */
 	public boolean removeItem(){
-		if (type != TileType.EMPTY) return false;
+		if (type != TileType.TILE) return false;
 		else {
 			if (item == null) return false;
 			else item = null;
@@ -107,9 +108,9 @@ public class Tile implements Serializable {
 	 * @return true if there is a pickupableItem on an empty tile, otherwise false.
 	 */
 	public boolean containsPickupItem(){
-		if (type != TileType.EMPTY) return false;
+		if (type != TileType.TILE) return false;
 		else {
-			if (type == TileType.EMPTY && item instanceof PickupableItem){
+			if (type == TileType.TILE && item instanceof PickupableItem){
 				return true;
 			}
 		}
@@ -122,9 +123,9 @@ public class Tile implements Serializable {
 	 * the player and item fields are NULL.
 	 */
 	public boolean isTileOccupied(){
-		if (type != TileType.EMPTY)
+		if (type != TileType.TILE)
 			return true;
-		else if (type == TileType.EMPTY && player == null && item == null)
+		else if (type == TileType.TILE && player == null && item == null)
 			return false;
 		else return true;
 	}
