@@ -310,6 +310,14 @@ public class Server{
     }
 
     /**
+     * Returns the main game.
+     * @return
+     */
+    public static GameWorld getGame(){
+    	return game;
+    }
+
+    /**
      * Starts a game and associates it with a server.
      * @param args
      * @throws IOException
