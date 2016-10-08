@@ -8,8 +8,10 @@ import org.junit.Test;
 
 import kaukau.model.Direction;
 import kaukau.model.GameMap;
+import kaukau.model.GameMap.TileType;
 import kaukau.model.GameWorld;
 import kaukau.model.Player;
+import kaukau.model.Tile;
 
 public class GameWorldTests {
 
@@ -61,18 +63,49 @@ public class GameWorldTests {
 		assertTrue(game.movePlayer(uid, Direction.SOUTH));
 		assertTrue(player.facingDirection() == Direction.SOUTH);
 	}
+	
+	/**
+	 * Test player move to an empty tile.
+	 */
+	@Test
+	public void testMovePlayer_2() {
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		int uid = game.addPlayer();
+		Player player = game.player(uid);
+		assertTrue(game.movePlayer(uid, Direction.SOUTH));
+		assertTrue(player.facingDirection() == Direction.SOUTH);
+		assertTrue(game.movePlayer(uid, Direction.EAST));
+		assertTrue(player.facingDirection() == Direction.EAST);
+	}
+
+	/**
+	 * Test invalid move when player try to move into a door, 
+	 * player use enter commands to interact with door.
+	 */
+	@Test
+	public void testInvalidMovePlayer_1() {
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		int uid = game.addPlayer();
+		Player player = game.player(uid);
+		Tile pos = player.getLocation();
+		Tile wall = board.getTileAt(new Point(pos.X(), pos.Y()-1));
+		assertTrue(wall.getTileType() == TileType.DOOR);
+		assertFalse(game.movePlayer(uid, Direction.NORTH));
+	}
 
 	@Test
 	public void testCreateGame_1() {
 		GameWorld game = new GameWorld();
 		GameMap board = game.getGameMap();
-		assertTrue(board.width() == 14);
-		assertTrue(board.height() == 14);
+		kaukau.model.Tile[][] tiles = board.getBoard();
+		for(int row = 0; row < board.height(); row++){
+			for (int col = 0; col < board.width(); col++){
+				assertTrue(tiles[col][row] != null);
+			}
+		}
 	}
-
-
-
-
 
 
 }
