@@ -1,4 +1,4 @@
-package Testing;
+package kaukau.tests;
 
 import static org.junit.Assert.*;
 
