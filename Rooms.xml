@@ -8,15 +8,17 @@
     <L2>WCCCCCCCCW</L2>
     <L3>WCCCCCCCCW</L3>
     <L4>WCCCWCCCCW</L4>
-    <L5>WCCCWWCCCW</L5>
+    <L5>WCCXWWCCCW</L5>
     <L6>WCCCCCCCCW</L6>
-	<L7>WCCCCCCCCW</L7>
-	<L8>WCCCCCCCCW</L8>
-	<L9>WWWWWWWWWW</L9>
+    <L7>WCCCCCCCCW</L7>
+    <L8>WCCCCCCCXW</L8>
+    <L9>WWWWWWWWWW</L9>
     <Door0>0</Door0>
     <Door1>0</Door1>
     <Door2>0</Door2>
     <Key0>123</Key0>
+    <Coin0>30</Coin0>
+    <Coin1>40</Coin1>
   </room>
   <room name="Office">
     <startX>10</startX>
@@ -25,7 +27,7 @@
     <L1>CCXCCCCCCW</L1>
     <L2>CCCCCCCCCW</L2>
     <L3>CCCCCCCCCW</L3>
-    <L4>CCCCCCCC@W</L4>
+    <L4>CCCCCCCCCW</L4>
     <L5>CCCCCCCCCW</L5>
     <L6>CCCCCCCCDW</L6>
 	<L7>CCCCCCCCCC</L7>
@@ -44,9 +46,9 @@
     <L4>CCCCCCCCCC</L4>
     <L5>CKCCCCCCCC</L5>
     <L6>CCCCCCCCCC</L6>
-	<L7>WCCCCCCCCC</L7>
-	<L8>WCCCCCCCCC</L8>
-	<L9>WCCCCCCCCC</L9>
+    <L7>WCCCCCCCCC</L7>
+    <L8>WCCCCCCCCC</L8>
+    <L9>WCCCCCCCCC</L9>
     <Key0>124</Key0>
 `   <Key1>125</Key1>
     <Coin0>30</Coin0>
@@ -61,10 +63,11 @@
     <L4>CCCCCCCCCC</L4>
     <L5>CCCCCXCCCC</L5>
     <L6>CCCCCCCCCC</L6>
-	<L7>WCCCCCCCCC</L7>
-	<L8>WCCCCCCCCC</L8>
-	<L9>WCCCCCCCCC</L9>
+    <L7>WCCCCCCCCC</L7>
+    <L8>WCCCCCCCCC</L8>
+    <L9>WCCCCCCCCX</L9>
     <Coin0>40</Coin0>
     <Coin1>80</Coin1>
+    <Coin2>50</Coin2>
   </room>
 </map>

@@ -36,7 +36,7 @@ public class GameWorld implements Serializable{
 	 * across boards.
 	 */
 	@XmlElement
-	private int uid = 0;
+	private static int uid;
 
 	/**
 	 * The current players of this game. Max number of player = 2.
@@ -46,6 +46,7 @@ public class GameWorld implements Serializable{
 	public GameWorld(){
 		board =  new GameMap();
 		gameOver = false;
+		uid = 0;
 	}
 
 	/**
@@ -297,8 +298,8 @@ public class GameWorld implements Serializable{
 		GameMap board = game.getGameMap();
 		Tile[][] tiles = board.getBoard();
 
-		for (int x = 0; x < 14; x++){
-			for (int y = 0; y < 14; y++){
+		for (int x = 0; x < board.BOARD_WIDTH; x++){
+			for (int y = 0; y < board.BOARD_HEIGHT; y++){
 				Tile tile = tiles[y][x];
 				if(tile.containsPickupItem()) System.out.print(tile.getItem().getName().charAt(0));
 				else System.out.print(tiles[y][x].getTileType().toString().charAt(0));
