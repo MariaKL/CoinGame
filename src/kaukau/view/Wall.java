@@ -1,33 +1,24 @@
 package kaukau.view;
 
-public class Wall {
+public class Wall extends Block {
 
 	// Field for type of tile
-	private int wallType;
-	// Fields for x & y position of tile
-	private final int x;
-	private final int y;
+	private char wallType;
 	
-	public Wall(int wallType, int x, int y){
+	public Wall(char wallType, int x, int y){
+		super(x,y);
 		this.wallType = wallType;
-		this.x = x;
-		this.y = y;
 	}
 	
 	/*
 	 * Setter methods
 	 */
-	
-	public void setWallType(int wType){
+	public void setWallType(char wType){
 		this.wallType = wType;
 	}
 
 	/*
 	 * Getter methods
 	 */
-	public int getWallType() { return wallType;	}
-	public int X() { return x; }
-	public int Y() { return y; }
-
-	
+	public char getWallType() { return wallType; }	
 }

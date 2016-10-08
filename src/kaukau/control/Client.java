@@ -40,7 +40,7 @@ public class Client extends Thread {
 		// makes a new socket and sets input/output streams
 			// sets references to the game and ui window
 			this.aw = aw;
-			this.game = aw.game;
+			this.game = aw.getGame();
 			System.out.println("Set window and game");
 			// sets networking fields
 	        setupSocket();

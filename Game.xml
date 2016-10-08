@@ -1,7 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <GameWorld xmlns:ns2="Team_24.kaukau.model.GameWorld">
-    <board/>
-    <gameOver>false</gameOver>
-    <uid>0</uid>
-    <players/>
+    <allPlayers>
+        <entry>
+            <key>1</key>
+            <value>
+                <name>Player</name>
+                <coinbox>
+                    <CoinBox>
+                        <coins/>
+                        <coins/>
+                    </CoinBox>
+                </coinbox>
+                <facing>EAST</facing>
+                <userId>1</userId>
+                <inventory>
+                    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
+                        <CoinBox>
+                            <coins/>
+                            <coins/>
+                        </CoinBox>
+                    </item>
+                    <item/>
+                </inventory>
+                <location/>
+            </value>
+        </entry>
+        <entry>
+            <key>2</key>
+            <value>
+                <name>Player</name>
+                <coinbox>
+                    <CoinBox/>
+                </coinbox>
+                <facing>EAST</facing>
+                <userId>2</userId>
+                <inventory>
+                    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
+                        <CoinBox/>
+                    </item>
+                    <item/>
+                </inventory>
+                <location/>
+            </value>
+        </entry>
+    </allPlayers>
+    <isGameOver>false</isGameOver>
 </GameWorld>

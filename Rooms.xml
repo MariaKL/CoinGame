@@ -3,55 +3,67 @@
   <room name="Gym">
     <startX>0</startX>
     <startY>0</startY>
-    <L0>WWDDWWW</L0>
-    <L1>WCCCCKW</L1>
-    <L2>WCCCCCW</L2>
-    <L3>WCCCCCD</L3>
-    <L4>WCCCCCW</L4>
-    <L5>WCCCCCW</L5>
-    <L6>WWWWWWW</L6>
+    <L0>WWCCWWWWWW</L0>
+    <L1>WCCCCKCCCW</L1>
+    <L2>WCCCCCCCCW</L2>
+    <L3>WCCCCCCCCW</L3>
+    <L4>WCCCWCCCCW</L4>
+    <L5>WCCCWWCCCW</L5>
+    <L6>WCCCCCCCCW</L6>
+	<L7>WCCCCCCCCW</L7>
+	<L8>WCCCCCCCCW</L8>
+	<L9>WWWWWWWWWW</L9>
     <Door0>0</Door0>
     <Door1>0</Door1>
     <Door2>0</Door2>
     <Key0>123</Key0>
   </room>
   <room name="Office">
-    <startX>7</startX>
+    <startX>10</startX>
     <startY>0</startY>
-    <L0>WWWWWWW</L0>
-    <L1>CCXCCCW</L1>
-    <L2>CCCCCCW</L2>
-    <L3>CCCCCCW</L3>
-    <L4>CCCCCCW</L4>
-    <L5>CCCCCCW</L5>
-    <L6>WWWWWDW</L6>
+    <L0>WWWWWWWWWW</L0>
+    <L1>CCXCCCCCCW</L1>
+    <L2>CCCCCCCCCW</L2>
+    <L3>CCCCCCCCCW</L3>
+    <L4>CCCCCCCC@W</L4>
+    <L5>CCCCCCCCCW</L5>
+    <L6>CCCCCCCCDW</L6>
+	<L7>CCCCCCCCCC</L7>
+	<L8>CCCCCCCCCC</L8>
+	<L9>CCCCCCCCCC</L9>
     <Door0>0</Door0>
     <Coin0>50</Coin0>
   </room>
   <room name="Hallway 1">
     <startX>0</startX>
-    <startY>7</startY>
-    <L0>CCCCCCC</L0>
-    <L1>CCCCKCC</L1>
-    <L2>CCCCCCC</L2>
-    <L3>CCCXCCC</L3>
-    <L4>CCCCCCC</L4>
-    <L5>CKCCCCC</L5>
-    <L6>CCCCCCC</L6>
+    <startY>10</startY>
+    <L0>CCCCCCCCCC</L0>
+    <L1>CCCCKCCCCC</L1>
+    <L2>CCCCCCCCCC</L2>
+    <L3>CCCXCCCCCC</L3>
+    <L4>CCCCCCCCCC</L4>
+    <L5>CKCCCCCCCC</L5>
+    <L6>CCCCCCCCCC</L6>
+	<L7>WCCCCCCCCC</L7>
+	<L8>WCCCCCCCCC</L8>
+	<L9>WCCCCCCCCC</L9>
     <Key0>124</Key0>
 `   <Key1>125</Key1>
     <Coin0>30</Coin0>
   </room>
   <room name="Hallway 2">
-    <startX>7</startX>
-    <startY>7</startY>
-    <L0>CCCCCCC</L0>
-    <L1>CCCXCCC</L1>
-    <L2>CCCCCCC</L2>
-    <L3>CCCCCCC</L3>
-    <L4>CCCCCCC</L4>
-    <L5>CCCCCXC</L5>
-    <L6>CCCCCCC</L6>
+    <startX>10</startX>
+    <startY>10</startY>
+    <L0>CCCCCCCCCC</L0>
+    <L1>CCCXCCCCCC</L1>
+    <L2>CCCCCCCCCC</L2>
+    <L3>CCCCCCCCCC</L3>
+    <L4>CCCCCCCCCC</L4>
+    <L5>CCCCCXCCCC</L5>
+    <L6>CCCCCCCCCC</L6>
+	<L7>WCCCCCCCCC</L7>
+	<L8>WCCCCCCCCC</L8>
+	<L9>WCCCCCCCCC</L9>
     <Coin0>40</Coin0>
     <Coin1>80</Coin1>
   </room>

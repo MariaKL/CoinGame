@@ -3,6 +3,10 @@ package kaukau.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
+
 /**
  * A CoinBox is a pickupable item which can be carry by player.
  * This CoinBox object can be stored in Player's inventory and
@@ -24,6 +28,11 @@ public class CoinBox extends PickupableItem implements Serializable{
 		totalCoinAmount = 0;
 	}
 
+	@SuppressWarnings("unused")
+	public CoinBox(){
+		this(null);
+	}
+
 	/**
 	 * Add coin to the coinbox.
 	 * @param item the item to add
@@ -43,6 +52,10 @@ public class CoinBox extends PickupableItem implements Serializable{
 	 * Returns the list of coin in the coin box.
 	 * @return return all the coin objects
 	 */
+	@XmlElementWrapper(name="CoinBox")
+    @XmlElements({
+    @XmlElement(name="coins") }
+    )
 	public ArrayList <PickupableItem> getStorage(){
 		return this.storage.getStorage();
 	}
@@ -59,6 +72,7 @@ public class CoinBox extends PickupableItem implements Serializable{
 	 * Check if this coin box is full or not.
 	 * @return
 	 */
+	@XmlElement(name="isFull")
 	public boolean isStorageFull(){
 		return storage.isStorageFull();
 	}
