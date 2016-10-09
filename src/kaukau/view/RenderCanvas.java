@@ -17,6 +17,7 @@ import javax.swing.KeyStroke;
 
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
+import kaukau.model.Item;
 import kaukau.model.Tile;
 
 @SuppressWarnings("serial")
@@ -80,9 +81,14 @@ public class RenderCanvas extends JPanel {
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));		
 					// adjusting the position of the render
 					b = new RenderTile(0, pos.x+50, pos.y+65);
+					// setting the tile item if one
+					if(tile.getItem()!=null){
+						((RenderTile)b).setItem(tile.getItem());
+					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
+				// creating a cracked tile block for rendering
 				} else if (tile.getTileType() == GameMap.TileType.TILE_CRACKED){
 					// setting the tile in the level data
 					levelData[c][r] = 'C';
@@ -93,6 +99,10 @@ public class RenderCanvas extends JPanel {
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));		
 					// adjusting the position of the render
 					b = new RenderTile(1, pos.x+50, pos.y+65);
+					// setting the tile item if one
+					if(tile.getItem()!=null){
+						((RenderTile)b).setItem(tile.getItem());
+					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
@@ -167,8 +177,15 @@ public class RenderCanvas extends JPanel {
 		    	if(image != null){
 		    		g.drawImage(image, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
 		    	}
+		    	// checking if block was a tile & contains an item
+		    	if(b instanceof RenderTile){
+		    		Item token = ((RenderTile)b).getItem();
+			    	if(token != null){
+			    		System.out.println(token.getName());
+			    	}
+		    	}
 		    }
-		} catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

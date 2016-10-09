@@ -89,12 +89,9 @@ public class GameMap implements Serializable{
 		    						break;
 	    					}
 	    				}
-
 	    			}
     			}
-
     		}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
