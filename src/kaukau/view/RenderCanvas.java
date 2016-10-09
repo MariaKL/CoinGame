@@ -1,5 +1,6 @@
 package kaukau.view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import kaukau.model.Direction;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
 import kaukau.model.Item;
@@ -41,28 +43,38 @@ public class RenderCanvas extends JPanel {
 	private List<Block> blocks = new ArrayList<Block>();
 	
 	// stores a array representation of the current 
-	// game level that is to be rendered
+	// game level blocks that are to be rendered
 	private Block[][] levelBlocks;
 
 	private HashMap<Integer, Player> players;
+
+	private GameWorld game;
 	
-	
-	
+	private final Player player;
+		
 	/**This class take a gameworld parameter and 
 	 * creates a rendering based on the state of 
 	 * the game.
 	 * @param game
 	 */
-	public RenderCanvas(GameWorld game){
+	public RenderCanvas(GameWorld gameWorld, Player user){
 		
 		levelBlocks = new Block[20][20];
+		
+		this.game = gameWorld;
+		this.setPlayers(game.getAllPlayers());
+		this.player = user;
+		
+		this.setBackground(new Color(79,100,90));
 		
 		initBlocks(game);
 		attachBindings();
 		repaint();
 		
-		players = game.getAllPlayers();
-
+	}
+	
+	private void setPlayers(HashMap<Integer, Player> all){
+		this.players = all;
 	}
 
 	/**initialises the blocks (tiles & walls) which make up
@@ -72,7 +84,13 @@ public class RenderCanvas extends JPanel {
 	 * @param game
 	 */
 	private void initBlocks(GameWorld game) {
-			
+		
+		allWalls.clear();
+		allTiles.clear();
+		blocks.clear();
+		
+		Tile loc = player.getLocation();
+		
 		Tile[][] tiles = game.getGameTiles();
 		for(int r=0; r!=levelBlocks.length; r++){
 			for(int c=0; c!=levelBlocks[0].length; c++){
@@ -83,6 +101,7 @@ public class RenderCanvas extends JPanel {
 				
 				// Creating a Tile block for rendering
 				if(tile.getTileType() == GameMap.TileType.TILE){
+					
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
@@ -93,6 +112,9 @@ public class RenderCanvas extends JPanel {
 					// setting the tile item if one
 					if(tile.getItem()!=null){
 						((RenderTile)b).setItem(tile.getItem());
+					}
+					if(r==loc.X()&&c==loc.Y()){
+						((RenderTile)b).setPlayer(player);
 					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
@@ -111,6 +133,9 @@ public class RenderCanvas extends JPanel {
 					// setting the tile item if one
 					if(tile.getItem()!=null){
 						((RenderTile)b).setItem(tile.getItem());
+					}
+					if(r==loc.X()&&c==loc.Y()){
+						((RenderTile)b).setPlayer(player);
 					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
@@ -208,26 +233,31 @@ public class RenderCanvas extends JPanel {
 				    		g.drawImage(itemImg, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
 				    	}
 			    	}
+			    	
+		    		// getting the player on this tile if one
+		    		Player user = ((RenderTile)b).getPlayer();
+			    	if(user != null){
+			    		BufferedImage playerImg = null;
+			    		switch(player.facingDirection()){
+				    		case NORTH:
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png")); 
+				    			break;
+				    		case EAST:
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png")); 
+				    			break;
+				    		case SOUTH:
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png")); 
+				    			break;
+				    		case WEST:
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png")); 
+				    			break;
+			    		}
+			    		// draw the item image if not null
+			    		if(playerImg != null){
+				    		g.drawImage(playerImg, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8)-75, this);
+				    	}
+			    	}	
 		    	}
-		    	// iterate over all players and draw each to the board
-		    	// TODO: make players look different
-				for (Entry<Integer, Player> entry : players.entrySet()) {
-				    Player player = entry.getValue();
-				    Tile loc = player.getLocation();
-				    // getting the render position of the player 
-				    Point twoD = 
-				    		RenderWindow.get2dFromTileCoordinates(
-				    		new Point(loc.getX(), loc.getY()),50);
-				    Point pos = 
-				    		RenderWindow.twoDToIso(
-				    		new Point(twoD.x, twoD.y));
-				    // TODO: player directions & animation
-				    BufferedImage img = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
-				    // draw the player image if not null
-		    		if(img != null){
-			    		g.drawImage(img, pos.x + TILE_MARGIN, pos.y + (TILE_MARGIN/8)+10, this);
-			    	}
-				}
 		    }
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -244,6 +274,95 @@ public class RenderCanvas extends JPanel {
 		this.getActionMap().put("rotate", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				rotateWorld();
+				repaint();
+			}
+		});
+		
+		// player move down
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_S, 0), "moveDown");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_DOWN, 0), "moveDown");
+		this.getActionMap().put("moveDown", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// getting players current location
+				Tile oloc = player.getLocation();
+				// attempt to move player
+				if(game.movePlayer(player.getUserId(), Direction.SOUTH)){
+					// getting players new location if moved
+					Tile nloc = player.getLocation();
+					// update rendering
+					Block rold = levelBlocks[oloc.Y()][oloc.X()];
+					((RenderTile)rold).setPlayer(null);
+					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+					((RenderTile)rnew).setPlayer(player);
+				}
+				repaint();
+			}
+		});
+		// player move up
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_W, 0), "moveUp");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_UP, 0), "moveUp");
+		this.getActionMap().put("moveUp", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// getting players current location
+				Tile oloc = player.getLocation();
+				// attempt to move player
+				if(game.movePlayer(player.getUserId(), Direction.NORTH)){
+					// getting players new location if moved
+					Tile nloc = player.getLocation();
+					// update rendering
+					Block rold = levelBlocks[oloc.Y()][oloc.X()];
+					((RenderTile)rold).setPlayer(null);
+					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+					((RenderTile)rnew).setPlayer(player);
+				}
+				repaint();
+			}
+		});
+		// player move left
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_A, 0), "moveLeft");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_LEFT, 0), "moveLeft");
+		this.getActionMap().put("moveLeft", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// getting players current location
+				Tile oloc = player.getLocation();
+				// attempt to move player
+				if(game.movePlayer(player.getUserId(), Direction.WEST)){
+					// getting players new location if moved
+					Tile nloc = player.getLocation();
+					// update rendering
+					Block rold = levelBlocks[oloc.Y()][oloc.X()];
+					((RenderTile)rold).setPlayer(null);
+					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+					((RenderTile)rnew).setPlayer(player);
+				}
+				repaint();
+			}
+		});
+		// player move right
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_D, 0), "moveRight");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_RIGHT, 0), "moveRight");
+		this.getActionMap().put("moveRight", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// getting players current location
+				Tile oloc = player.getLocation();
+				// attempt to move player
+				if(game.movePlayer(player.getUserId(), Direction.EAST)){
+					// getting players new location if moved
+					Tile nloc = player.getLocation();
+					// update rendering
+					Block rold = levelBlocks[oloc.Y()][oloc.X()];
+					((RenderTile)rold).setPlayer(null);
+					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+					((RenderTile)rnew).setPlayer(player);
+				}
 				repaint();
 			}
 		});

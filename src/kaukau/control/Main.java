@@ -26,8 +26,8 @@ public class Main {
 			@Override
 			public void run() {
 				GameWorld gw = new GameWorld();
-				gw.addPlayer();
-				ApplicationWindow aw = new ApplicationWindow(gw);
+				Player user = gw.player(gw.addPlayer());
+				ApplicationWindow aw = new ApplicationWindow(gw, user);
 				aw.setVisible(true);
 				Client pClient = new Client(aw);
 		    	pClient.start();

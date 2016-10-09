@@ -73,9 +73,9 @@ public class GameWorld implements Serializable{
 		// if the tile is emptyTile and not occupy, then move player to this new position
 		if (validPoint(newPos)){
 			Tile tile = board.getTileAt(newPos);
-			if ((tile.getTileType() == TileType.TILE 
-					|| tile.getTileType() == TileType.TILE_CRACKED) 
-					&& !tile.isTileOccupied()){
+			if (!tile.isTileOccupied() && 
+					(tile.getTileType()==GameMap.TileType.TILE
+					||tile.getTileType()==GameMap.TileType.TILE_CRACKED)){
 				oldPos.removePlayer();
 				player.setLocation(tile);
 				player.setFacingDirection(direction);
@@ -170,8 +170,10 @@ public class GameWorld implements Serializable{
 	 */
 	public boolean validPoint(Point pos){
 		if (board.width() <= pos.x || board.height() <= pos.y ||
-				pos.x < 0 || pos.y < 0) return false;
-		return true;
+				pos.x < 0 || pos.y < 0) {
+			return false;
+		}
+		return (!this.getGameTiles()[pos.x][pos.y].isTileOccupied());
 	}
 
 	/**
