@@ -1,10 +1,13 @@
 package kaukau.storage;
 
+import java.awt.Component;
 import java.io.File;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.xml.bind.JAXBContext;
 
 import javax.xml.bind.JAXBException;
@@ -100,6 +103,9 @@ public class JAXBJavaToXml {
 			// File XMLfile = new File("/home/khanshai/workspace/T2/Team_24/Game.xml");
 			// for testing at home
 			File XMLfile = new File("/C:/Oishi/WORK/Work/2016/TRI 2/SWEN 222/PROJECT/Team_24/Game.xml");
+			JFileChooser jFileChooser = new JFileChooser();
+			jFileChooser.setSelectedFile(XMLfile);
+			int save = jFileChooser.showDialog(new JFrame(), null);
 			// Writing to XML file
 
 			jaxbMarshaller.marshal(game, XMLfile);
