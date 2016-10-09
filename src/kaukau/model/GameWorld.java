@@ -24,7 +24,7 @@ import java.io.Serializable;
 //@XmlType(propOrder = { "allPlayers"})
 public class GameWorld implements Serializable{
 
-	@XmlElement
+	//@XmlElement
 	private GameMap board;
 
 	@XmlElement
