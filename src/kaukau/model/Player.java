@@ -3,24 +3,25 @@ package kaukau.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.xml.bind.annotation.XmlAccessorType; 
-import javax.xml.bind.annotation.XmlElement; 
-
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class Player implements Serializable{
-	@XmlElement 	
-	private String name; 	
-	//@XmlElement(name="location") 	
-	private Tile location; 	
-	@XmlElement 	
-	private Container inventory; 	
-	@XmlElement 	
-	private CoinBox coinbox; 	
-	@XmlElement 	
-	private Direction facing; 	
-	@XmlElement 	
+	@XmlElement
+	private String name;
+	//@XmlElement(name="location")
+	private Tile location;
+	//@XmlElement
+	private Container inventory;
+	//@XmlElement
+	private CoinBox coinbox;
+	@XmlElement
+	private Direction facing;
+	@XmlElement
 	private final int userId;
 
 	public Player (int uid, String name, Tile startLocation, Direction facing){
@@ -66,6 +67,7 @@ public class Player implements Serializable{
 	/**
 	 * Gets the items location
 	 * @return Tile*/
+	@XmlElement(name="location")
 	public Tile getLocation() {
 		return this.location;
 	}
@@ -97,6 +99,45 @@ public class Player implements Serializable{
 	public ArrayList <PickupableItem> getInventory(){
 		return inventory.getStorage();
 	}
+
+	/**
+	 * Returns the list of coin boxes in the container
+	 * for JAXB serializing
+	 * @return ArrayList <Collectable>
+	 * */
+	@XmlElementWrapper(name="CoinBox")
+    @XmlElements({
+    @XmlElement(name="getCoins") }
+    )
+	public ArrayList <CoinBox> getCoinBoxes(){
+		ArrayList<CoinBox> coinboxes = new ArrayList<CoinBox>();
+		for (PickupableItem p : this.getInventory()) {
+			if(p instanceof CoinBox){
+				coinboxes.add((CoinBox) p);
+			}
+		}
+		return coinboxes;
+	}
+
+	/**
+	 * Returns the list of coin boxes in the container
+	 * for JAXB serializing
+	 * @return ArrayList <Collectable>
+	 * */
+	@XmlElementWrapper(name="Keys")
+    @XmlElements({
+    @XmlElement(name="key") }
+    )
+	public ArrayList <Key> getKeys(){
+		ArrayList<Key> keys = new ArrayList<Key>();
+		for (PickupableItem p : this.getInventory()) {
+			if(p instanceof Key){
+				keys.add((Key) p);
+			}
+		}
+		return keys;
+	}
+
 
 	/**
 	 * Return the user id of this player.

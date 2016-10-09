@@ -14,18 +14,21 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+@SuppressWarnings("serial")
 @XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable{
-	private static final int ROOM_WIDTH = 7;
-	private static final int ROOM_HEIGHT = 7;
-	private static final int BOARD_WIDTH = 14;
-	private static final int BOARD_HEIGHT = 14;
+	
+	public static final int ROOM_WIDTH = 10;
+	public static final int ROOM_HEIGHT = 10;
+	public static final int BOARD_WIDTH = 20;
+	public static final int BOARD_HEIGHT = 20;
+	
 	private Tile[][] board;
 	private ArrayList<Room> rooms;
 	private ArrayList<Door> doors;
 
 	public enum TileType{
-		WALL, EMPTY, DOOR;
+		WALL, DOOR, TILE, TILE_CRACKED;
 	}
 
 
@@ -78,17 +81,17 @@ public class GameMap implements Serializable{
 		    					case 'X':
 		    						keyCount = addCoin(eElement, coinCount, col+startX, row+startY);
 		    						break;
+		    					case 'T':
+		    						board[col+startX][row+startY] = new Tile(TileType.TILE, col+startX, row+startY);
+		    						break;
 		    					case 'C':
-		    						board[col+startX][row+startY] = new Tile(TileType.EMPTY, col+startX, row+startY);
+		    						board[col+startX][row+startY] = new Tile(TileType.TILE_CRACKED, col+startX, row+startY);
 		    						break;
 	    					}
 	    				}
-
 	    			}
     			}
-
     		}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -121,7 +124,7 @@ public class GameMap implements Serializable{
 	 * @return the next index number for next key item
 	 */
 	public int addKey(Element element, int count, int x, int y){
-		Tile tile = new Tile(TileType.EMPTY, x, y);
+		Tile tile = new Tile(TileType.TILE, x, y);
 		int keycode = Integer.valueOf(element.getElementsByTagName("Key"+String.valueOf(count)).item(0).getTextContent());
 		Key key = new Key(keycode);
 		tile.setItem(key);
@@ -138,7 +141,7 @@ public class GameMap implements Serializable{
 	 * @return the next index number for next key item
 	 */
 	public int addCoin(Element element, int count, int x, int y){
-		Tile tile = new Tile(TileType.EMPTY, x, y);
+		Tile tile = new Tile(TileType.TILE, x, y);
 		int amount = Integer.valueOf(element.getElementsByTagName("Coin"+String.valueOf(count)).item(0).getTextContent());
 		Coin coin = new Coin(amount);
 		tile.setItem(coin);

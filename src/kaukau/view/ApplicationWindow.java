@@ -34,6 +34,7 @@ import javax.swing.border.Border;
 import kaukau.control.Client;
 import kaukau.model.GameWorld;
 import kaukau.model.Player;
+import kaukau.storage.JAXBJavaToXml;
 
 /**
  * This class is in charge of creating the application window
@@ -46,6 +47,11 @@ import kaukau.model.Player;
 @SuppressWarnings("serial")
 public class ApplicationWindow extends JFrame{
 
+	//generate XML
+	//private JAXBJavaToXml toXML = new JAXBJavaToXml();
+	//private int saveNumber = 1;
+
+
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
 
@@ -53,7 +59,6 @@ public class ApplicationWindow extends JFrame{
 	public RenderWindow rw;
 
 	// Field to store application window's copy of the game
-	public GameWorld game;
 	
 	// Field to store the inventory frame
 	public Inventory inventory;
@@ -65,35 +70,34 @@ public class ApplicationWindow extends JFrame{
 	public final int WINDOW_WIDTH = 765;
 	public final int WINDOW_HEIGHT = 525;
 	public final int INVENTORY_HEIGHT = 150;
+	
+	private GameWorld game;
+
 
 	public ApplicationWindow(GameWorld game){
 		super("Kaukau");
 
 		this.game = game;
 
-		this.game = game;
-
 		// creating a menu
 		initMenu();
-
-		// construct render window with GameWorld
-		rw = new RenderWindow(this.game);
-
-		// construct render window with GameWorld
-		rw = new RenderWindow(this.game);
 		
 		// make inventory
 		inventory = new Inventory();
 		
 		// initialize client private instance variable
 
+		rw = new RenderWindow(game, this);
+
 		// adding the rendering window to the application
-		add(rw);
+		add(rw.getCanvas());
 
 		// setting title
 		setTitle("Kaukau");
 		// set size
-		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		//setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		setSize(1020, 620);
+
 		// set display location
 		//setLocationRelativeTo(null);
 		add(createCenterPanel(),BorderLayout.CENTER);		
@@ -112,6 +116,7 @@ public class ApplicationWindow extends JFrame{
         });
 	}
 	
+
 	private JPanel createCenterPanel() {
 		//MainDisplay display = new MainDisplay();
 		
@@ -135,6 +140,13 @@ public class ApplicationWindow extends JFrame{
 	}
 
 	/**
+	 * @return the applications copy of the game world
+	 */
+	public GameWorld getGame(){
+		return this.game;
+	}
+
+	/**
 	 * Creates the menu bar for the game
 	 */
 	private void initMenu() {
@@ -151,9 +163,16 @@ public class ApplicationWindow extends JFrame{
 		JMenu help = new JMenu("Help");
 		help.setMnemonic(KeyEvent.VK_H);
 		JMenu save = new JMenu("Save");
-		help.setMnemonic(KeyEvent.VK_S);
+		save.setMnemonic(KeyEvent.VK_S);
+		save.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JAXBJavaToXml toXml = new JAXBJavaToXml();
+				toXml.generateXML(game);
+			}
+		});
 		JMenu load = new JMenu("Load");
-		help.setMnemonic(KeyEvent.VK_L);
+		load.setMnemonic(KeyEvent.VK_L);
 
 		// creating the view help menu item
 		JMenuItem hMenuItem = new JMenuItem("View Help", iconHelp);
@@ -179,6 +198,8 @@ public class ApplicationWindow extends JFrame{
 		});
 		// adding menu and help menus
 		menu.add(eMenuItem);
+//		menu.add(save);
+//		menu.add(load);
 		help.add(hMenuItem);
 		// adding menus to menubar
 		menuBar.add(menu);

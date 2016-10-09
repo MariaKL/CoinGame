@@ -24,6 +24,11 @@ public abstract class PickupableItem implements Item, Serializable{
 		this.name = name;
 	}
 
+	@SuppressWarnings("unused")
+	public PickupableItem(){
+		this(null);
+	}
+
 	/**
 	 * Return the name of this item.
 	 * @return the name of this item
