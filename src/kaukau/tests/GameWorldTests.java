@@ -85,6 +85,7 @@ public class GameWorldTests {
 		Player player = game.player(uid);
 		assertTrue(game.movePlayer(uid, Direction.SOUTH));
 		assertTrue(player.facingDirection() == Direction.SOUTH);
+		assertTrue(player.getLocation().isTileOccupied());
 	}
 
 	/**
@@ -101,6 +102,7 @@ public class GameWorldTests {
 		assertTrue(player.facingDirection() == Direction.SOUTH);
 		assertTrue(game.movePlayer(uid, Direction.EAST));
 		assertTrue(player.facingDirection() == Direction.EAST);
+		assertTrue(player.getLocation().isTileOccupied());
 	}
 
 	/**
@@ -170,10 +172,44 @@ public class GameWorldTests {
 		assertEquals("Player's inventory size is " + size + " players but should have 1 after pick up a coin."
 				+ "Coin should be stored in the Coinbox that inside the inventory.", 1, size);
 		CoinBox coinBox = player.getCoinBox();
-		assertEquals("The total coin in the CoinBox is " + player.totalMoney() + ", it should be" 
-					+coinAmount, coinAmount, player.totalMoney());
+		assertEquals("The total money of the player is " + player.totalMoney() + ", it should be 30", coinAmount, player.totalMoney());
+		assertEquals("The total coin in the CoinBox is " + coinBox.getStorage().size() + ", it should be 1.", 1, coinBox.getStorage().size());
 	}
 
+	/**
+	 * Test a player to open a door. Player only open a door when 
+	 * facing direction contain a door.
+	 */
+	@Test
+	public void testOpenDoor_1(){
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		int uid = game.addPlayer();
+		Player player = game.player(uid);
+		player.setLocation(board.getTileAt(new Point(15,8)));
+		player.setFacingDirection(Direction.SOUTH);
+		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
+		assertTrue(game.openDoor(uid));
+		assertFalse(board.getTileAt(new Point(15,8)).isTileOccupied());
+		assertTrue(board.getTileAt(new Point(15,10)).isTileOccupied());
+		// player's location should be updated by two tiles
+		assertTrue(player.getLocation().equals(board.getTileAt(new Point(15,10))));
+	}
+	
+	/**
+	 * Test invalid open door action while the player facing other direction.
+	 */
+	@Test
+	public void testInvalidOpenDoor_1(){
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		int uid = game.addPlayer();
+		Player player = game.player(uid);
+		player.setLocation(board.getTileAt(new Point(15,8)));
+		player.setFacingDirection(Direction.WEST);
+		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
+		assertFalse(game.openDoor(uid));
+	}
 
 	/**
 	 * Test invalid move when player try to move into a door,
