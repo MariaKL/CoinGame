@@ -26,7 +26,11 @@
                         <getCode>7</getCode>
                     </key>
                 </Keys>
-                <location/>
+                <getLocation>
+                    <tileType>EMPTY</tileType>
+                    <xCoord>2</xCoord>
+                    <yCoord>1</yCoord>
+                </getLocation>
             </value>
         </entry>
         <entry>
@@ -45,7 +49,11 @@
                         <getCode>71</getCode>
                     </key>
                 </Keys>
-                <location/>
+                <getLocation>
+                    <tileType>EMPTY</tileType>
+                    <xCoord>2</xCoord>
+                    <yCoord>2</yCoord>
+                </getLocation>
             </value>
         </entry>
     </allPlayers>

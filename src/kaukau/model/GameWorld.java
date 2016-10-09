@@ -256,7 +256,7 @@ public class GameWorld implements Serializable{
 	 * Return the current board of the game.
 	 * @return
 	 */
-	//@XmlElement(name="map")
+	@XmlElement(name="map")
 	public GameMap getGameMap(){
 		return board;
 	}

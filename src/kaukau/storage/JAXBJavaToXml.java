@@ -64,14 +64,14 @@ public class JAXBJavaToXml {
 		// create 2 players
 		game.addPlayer();
 		game.addPlayer();
-		//add items already in inventory including coinBox
+		// add items already in inventory including coinBox
 		HashMap<Integer, Player> players = game.getAllPlayers();
 		Player p1 = game.player(1);
 		Player p2 = game.player(2);
-		p1.addToBag(new Coin (50));
-		p1.addToBag(new Coin (100));
-		p1.addToBag(new Key (7));
-		p2.addToBag(new Key (71));
+		p1.addToBag(new Coin(50));
+		p1.addToBag(new Coin(100));
+		p1.addToBag(new Key(7));
+		p2.addToBag(new Key(71));
 
 		return game;
 	}
@@ -96,9 +96,10 @@ public class JAXBJavaToXml {
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
 			// specify the location and name of xml file to be created
-
-			File XMLfile = new File("/home/khanshai/workspace/T2/Team_24/Game.xml");
-
+			// for testing at uni
+			// File XMLfile = new File("/home/khanshai/workspace/T2/Team_24/Game.xml");
+			// for testing at home
+			File XMLfile = new File("/C:/Oishi/WORK/Work/2016/TRI 2/SWEN 222/PROJECT/Team_24/Game.xml");
 			// Writing to XML file
 
 			jaxbMarshaller.marshal(game, XMLfile);

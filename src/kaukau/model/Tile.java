@@ -2,6 +2,7 @@ package kaukau.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -151,15 +152,21 @@ public class Tile implements Serializable {
 	 * Return the column number of this tile.
 	 * @return the column number
 	 */
-	@XmlElement(name = "xCoord")
+	//@XmlElement(name = "xCoord")
 	public int X() { return x; }
+	
+	@XmlElement(name = "xCoord")
+	public int getX() { return x; }
 
 	/**
 	 * Return the row number of this tile.
 	 * @return the row number
 	 */
-	@XmlElement(name = "yCoord")
+	//@XmlElement(name = "yCoord")
 	public int Y() { return y; }
+	
+	@XmlElement(name = "yCoord")
+	public int getY() { return y; }
 
 	public String toString(){
 		return "row = "+this.x+", col = "+this.y;

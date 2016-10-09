@@ -14,10 +14,8 @@ public class Player implements Serializable{
 	@XmlElement
 	private String name;
 	//@XmlElement(name="location")
-	private Tile location;
-	//@XmlElement
-	private Container inventory;
-	//@XmlElement
+	private Tile location;	
+	private Container inventory;	
 	private CoinBox coinbox;
 	@XmlElement
 	private Direction facing;
@@ -67,7 +65,7 @@ public class Player implements Serializable{
 	/**
 	 * Gets the items location
 	 * @return Tile*/
-	@XmlElement(name="location")
+	@XmlElement(name="getLocation")
 	public Tile getLocation() {
 		return this.location;
 	}
