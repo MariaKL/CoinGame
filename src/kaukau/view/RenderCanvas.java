@@ -15,7 +15,6 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import kaukau.model.Coin;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
 import kaukau.model.Item;
@@ -40,7 +39,7 @@ public class RenderCanvas extends JPanel {
 	
 	// stores a array representation of the current 
 	// game level that is to be rendered
-	private char[][] levelData;
+	private Block[][] levelBlocks;
 	
 	/**This class take a gameworld parameter and 
 	 * creates a rendering based on the state of 
@@ -49,7 +48,7 @@ public class RenderCanvas extends JPanel {
 	 */
 	public RenderCanvas(GameWorld game){
 		
-		levelData = new char[10][10];
+		levelBlocks = new Block[10][10];
 		initBlocks(game);
 		attachBindings();
 		repaint();
@@ -65,16 +64,14 @@ public class RenderCanvas extends JPanel {
 	private void initBlocks(GameWorld game) {
 		
 		Tile[][] tiles = game.getGameTiles();
-		for(int r=0; r!=levelData.length; r++){
-			for(int c=0; c!=levelData[0].length; c++){
+		for(int r=0; r!=levelBlocks.length; r++){
+			for(int c=0; c!=levelBlocks[0].length; c++){
 				// getting the gameworld model tile
 				Tile tile = tiles[c][r];
 				// the block to be created
 				Block b = null;
 				// Creating a Tile block for rendering
 				if(tile.getTileType() == GameMap.TileType.TILE){
-					// setting the tile in the level data
-					levelData[c][r] = 'T';
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
@@ -85,19 +82,13 @@ public class RenderCanvas extends JPanel {
 					// setting the tile item if one
 					if(tile.getItem()!=null){
 						((RenderTile)b).setItem(tile.getItem());
-						switch(tile.getItem().getName()){
-							case "Coin":
-								levelData[c][r] = 'X';
-								break;
-						}
 					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
+					levelBlocks[c][r] = b;
 				// creating a cracked tile block for rendering
 				} else if (tile.getTileType() == GameMap.TileType.TILE_CRACKED){
-					// setting the tile in the level data
-					levelData[c][r] = 'C';
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
@@ -108,37 +99,36 @@ public class RenderCanvas extends JPanel {
 					// setting the tile item if one
 					if(tile.getItem()!=null){
 						((RenderTile)b).setItem(tile.getItem());
-						switch(tile.getItem().getName()){
-						case "Coin":
-							levelData[c][r] = 'X';
-							break;
-					}
 					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
+					levelBlocks[c][r] = b;
 				// Creating a Wall block for rendering 
 				} else if(tile.getTileType() == GameMap.TileType.WALL){
-					// setting the wall direction in the level data
-					if(r==levelData.length-1){
-						levelData[c][r] = 'W';
-					} else if(c==levelData.length-1){
-						levelData[c][r] = 'S';
-					} else if(r==0){
-						levelData[c][r] = 'E';
-					} else {
-						levelData[c][r] = 'N';
-					}
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
-					// adjusting the position of the render
-					b = new Wall(levelData[c][r], pos.x+50, pos.y-170);
+					// setting the wall direction in the level data
+					if(r==levelBlocks.length-1){
+						// west wall
+						b = new Wall('W', pos.x+50, pos.y-170);
+					} else if(c==levelBlocks.length-1){
+						// south wall
+						b = new Wall('S', pos.x+50, pos.y-170);
+					} else if(r==0){
+						// east wall
+						b = new Wall('E', pos.x+50, pos.y-170);
+					} else {
+						// north wall
+						b = new Wall('N', pos.x+50, pos.y-170);
+					}
 					allWalls.add((Wall) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
+					levelBlocks[c][r] = b;
 				}
 			}
 		}
@@ -197,8 +187,11 @@ public class RenderCanvas extends JPanel {
 			    		// getting the item image
 			    		switch(token.getName()){
 			    			case "Coin":
-			    				 itemImg = ImageIO.read(new File(IMAGE_PATH + "coin.png"));
-			    				 break;	 
+			    				itemImg = ImageIO.read(new File(IMAGE_PATH + "coin.png"));
+			    				break;	 
+			    			case "Key":
+			    				itemImg = ImageIO.read(new File(IMAGE_PATH + "cube2.png"));
+								break;
 			    		}
 			    		// draw the item image
 			    		if(itemImg != null){
@@ -233,34 +226,15 @@ public class RenderCanvas extends JPanel {
 	 */
 	protected void rotateWorld() {
 		//rotate int[][] 90 degrees into new 2d array
-		final int M = levelData.length;
-	    final int N = levelData[0].length;
+		final int M = levelBlocks.length;
+	    final int N = levelBlocks[0].length;
 	    
 	    // rotate the array data
-	    char[][] ret = new char[M][N];
+	    Block[][] ret = new Block[M][N];
 	    for (int r = 0; r < M; r++) {
 	        for (int c = 0; c < N; c++) {
-	    	    // switching the direction of wall blocks
-	    	    char dir = levelData[r][c];
-	    	    switch(dir){
-	    	    	case 'T':
-	    	    	case 'C':
-	    	    	case 'X':
-	    	    		break;
-	    	    	case 'N':
-	    	    		levelData[r][c] = 'E';
-	    	    		break;
-	    	    	case 'E':
-	    	    		levelData[r][c] = 'S';
-	    	    		break;
-	    	    	case 'S':
-	    	    		levelData[r][c] = 'W';
-	    	    		break;
-	    	    	case 'W':
-	    	    		levelData[r][c] = 'N';
-	    	    		break;
-	    	    }
-	            ret[c][M-1-r] = levelData[r][c];
+	    	    // rotating the level 90 degree
+	            ret[c][M-1-r] = levelBlocks[r][c];
 	        }
 	    }
 	    //clear old lists, insert new rotated tile arrangement
@@ -272,57 +246,59 @@ public class RenderCanvas extends JPanel {
 				// getting the x & y position of the tile
 				int x = j * tileWidth;
 				int y = i * tileHeight;
-				// getting the tile type
-				char tileType = ret[i][j];
-				Block b = null;
+				Block b = ret[i][j];
 				// block is a wall
-				if(tileType == 'N' || tileType == 'E' 
-						|| tileType == 'S' || tileType == 'W'){
-					// setting the wall direction in the level data
-					if(i==ret.length-1){
-						ret[i][j] = 'W';
-					} else if(j==ret.length-1){
-						ret[i][j] = 'S';
-					} else if(i==0){
-						ret[i][j] = 'E';
-					} else {
-						ret[i][j] = 'N';
-					}
+				if(b instanceof Wall){
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
-					// adjusting the position of the render
-					b = new Wall(ret[i][j], pos.x+50, pos.y-170);
+					// getting the new direction of the wall
+					if(i==ret.length-1){
+						// west wall
+						b = new Wall('W', pos.x+50, pos.y-170);
+					} else if(j==ret.length-1){
+						// south wall
+						b = new Wall('S', pos.x+50, pos.y-170);
+					} else if(i==0){
+						// east wall
+						b = new Wall('E', pos.x+50, pos.y-170);
+					} else {
+						// north wall
+						b = new Wall('N', pos.x+50, pos.y-170);
+					}
+					// adding wall to a list of all walls
 					allWalls.add((Wall) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
+				// block is a tile
 				} else {
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
-					switch(ret[i][j]){
-						case 'T':
-							// adjusting the position of the render
+					// getting the tiles item if there is one
+					Item item = ((RenderTile)b).getItem();
+					// getting the tile type
+					int type = ((RenderTile)b).getTileType();
+					switch(type){
+						case 0:
+							// blue tile
 							b = new RenderTile(0, pos.x+50, pos.y+65);
 							break;
-						case 'C':
-							// adjusting the position of the render
+						case 1:
+							// cracked tile
 							b = new RenderTile(1, pos.x+50, pos.y+65);
 							break;
-						case 'X':
-							// adjusting the position of the render
-							b = new RenderTile(0, pos.x+50, pos.y+65);
-							// adding a coin to the tile
-							((RenderTile)b).setItem(new Coin(10));
-							break;
 					}
+					// setting the tiles item if there is one
+					((RenderTile)b).setItem(item);
+					// adding tile to a list of all tiles
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
 				}			
 			}
 	    }
-	    //replace levelData with new 2d array for future rotations
-	    for(int a=0; a<levelData.length; a++)
-	    	  for(int b=0; b<levelData[0].length; b++)
-	    	    levelData[a][b]=ret[a][b];
+	    //replace levelBlocks array with new 2d array for future rotations
+	    for(int a=0; a<levelBlocks.length; a++)
+	    	  for(int b=0; b<levelBlocks[0].length; b++)
+	    	    levelBlocks[a][b]=ret[a][b];
 	}
 }
