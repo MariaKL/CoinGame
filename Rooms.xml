@@ -3,16 +3,16 @@
   <room name="Gym">
     <startX>0</startX>
     <startY>0</startY>
-    <L0>WWCCWWWWWW</L0>
-    <L1>WCCCCKCCCW</L1>
-    <L2>WCCCCCCCCW</L2>
-    <L3>WCCCCCCCCW</L3>
-    <L4>WCCCWCCCCW</L4>
-    <L5>WCCCWWCCCW</L5>
-    <L6>WCCCCCCCCW</L6>
-	<L7>WCCCCCCCCW</L7>
-	<L8>WCCCCCCCCW</L8>
-	<L9>WWWWWWWWWW</L9>
+        <L0>WWWWWWWWWW</L0>     
+	<L1>WTTTTTTTTW</L1>     
+	<L2>WTTTTTCTTW</L2>     
+	<L3>WTTTTCCCTW</L3>     
+	<L4>WTTTWTCTTT</L4>     
+	<L5>WTTCTWKTTT</L5>     
+	<L6>WTCCCTTTTW</L6> 	
+	<L7>WTTCTTXTTW</L7> 	
+	<L8>WTTTTTTTTC</L8> 	
+	<L9>WWWTTTTTCC</L9>
     <Door0>0</Door0>
     <Door1>0</Door1>
     <Door2>0</Door2>
@@ -25,7 +25,7 @@
     <L1>CCXCCCCCCW</L1>
     <L2>CCCCCCCCCW</L2>
     <L3>CCCCCCCCCW</L3>
-    <L4>CCCCCCCC@W</L4>
+    <L4>CCCCCCCCCW</L4>
     <L5>CCCCCCCCCW</L5>
     <L6>CCCCCCCCDW</L6>
 	<L7>CCCCCCCCCC</L7>
