@@ -26,7 +26,7 @@ public class Client extends Thread {
 	private GameWorld game;
 	private ApplicationWindow aw;
 
-	private int uid;
+	private int uid = 0;
 	private boolean initialRun = true;
 
 

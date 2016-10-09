@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -219,9 +220,19 @@ public class ApplicationWindow extends JFrame{
 			//paint
 			
 			client = rw.getClient();
-			long uid = client.getId();
+			int uid = client.getUID()+1;
+			//temp instance of player in temp instance of 
+			game.addPlayer();
 			System.out.println("Got player id through app window: "+ uid); //test see player uid
 			HashMap<Integer, Player> players = game.getAllPlayers();
+			//here 
+			if (!players.containsKey(uid)) {
+				System.out.println("Player id not in hashmap");
+				if (players.isEmpty())
+					System.out.println("hashmap is emtpty");
+			}
+			Set<Integer> temp = players.keySet();
+			System.out.println(temp.toString());
 			ArrayList<kaukau.model.PickupableItem> inv = players.get(uid).getInventory();			
 			for(int i=0;i<inv.size();++i) {
 				kaukau.model.PickupableItem item = null;
@@ -264,6 +275,7 @@ public class ApplicationWindow extends JFrame{
 		
 	} //end of inventory window class
 	
+	//TODO: fix the image file read and get files for item icons
 	private void drawLocation(int x, int y, int width, int height, kaukau.model.PickupableItem item, Graphics g) {
 		g.translate(x*width,y*height);
 		g.setClip(0,0,width,height);
