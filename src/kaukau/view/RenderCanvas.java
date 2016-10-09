@@ -140,9 +140,6 @@ public class RenderCanvas extends JPanel {
 		
 		paintBlocks(g);
 		
-		//paintLevelWalls(g);
-		//paintLevelTiles(g);
-		
 	}
 	
 	/**Paints the blocks which make up the current level.
@@ -178,7 +175,7 @@ public class RenderCanvas extends JPanel {
 		    	if(image != null){
 		    		g.drawImage(image, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
 		    	}
-		    	// checking if block was a tile & contains an item
+		    	// checking if block was a tile & contained an item
 		    	if(b instanceof RenderTile){
 		    		// getting the item contained in the tile
 		    		Item token = ((RenderTile)b).getItem();
@@ -193,7 +190,7 @@ public class RenderCanvas extends JPanel {
 			    				itemImg = ImageIO.read(new File(IMAGE_PATH + "cube2.png"));
 								break;
 			    		}
-			    		// draw the item image
+			    		// draw the item image if not null
 			    		if(itemImg != null){
 				    		g.drawImage(itemImg, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
 				    	}
