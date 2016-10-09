@@ -5,18 +5,19 @@
     <startY>0</startY>
     <L0>WWWWWWWWWW</L0>
     <L1>WTTTTTTTTW</L1>
-    <L2>WTTTTTTTTW</L2>
-    <L3>WTTTTCCTTW</L3>
+    <L2>WTTTTTCTTW</L2>
+    <L3>WTTTTCCCTW</L3>
     <L4>TTTTWTCTTW</L4>
     <L5>TTTCWWTTTW</L5>
-    <L6>WTTCCTTTTW</L6>
-	<L7>WTTTTTTTTW</L7>
+    <L6>WTCCCTTTTW</L6>
+	<L7>WTTCTTXTTW</L7>
 	<L8>WTTTTTTTTW</L8>
 	<L9>WWWWWWWWWW</L9>
     <Door0>0</Door0>
     <Door1>0</Door1>
     <Door2>0</Door2>
     <Key0>123</Key0>
+	<Coin0>10</Coin0>
   </room>
   <room name="Office">
     <startX>10</startX>

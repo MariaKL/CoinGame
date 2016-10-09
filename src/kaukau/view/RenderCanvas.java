@@ -15,6 +15,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import kaukau.model.Coin;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
 import kaukau.model.Item;
@@ -84,6 +85,11 @@ public class RenderCanvas extends JPanel {
 					// setting the tile item if one
 					if(tile.getItem()!=null){
 						((RenderTile)b).setItem(tile.getItem());
+						switch(tile.getItem().getName()){
+							case "Coin":
+								levelData[c][r] = 'X';
+								break;
+						}
 					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
@@ -102,6 +108,11 @@ public class RenderCanvas extends JPanel {
 					// setting the tile item if one
 					if(tile.getItem()!=null){
 						((RenderTile)b).setItem(tile.getItem());
+						switch(tile.getItem().getName()){
+						case "Coin":
+							levelData[c][r] = 'X';
+							break;
+					}
 					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
@@ -179,9 +190,20 @@ public class RenderCanvas extends JPanel {
 		    	}
 		    	// checking if block was a tile & contains an item
 		    	if(b instanceof RenderTile){
+		    		// getting the item contained in the tile
 		    		Item token = ((RenderTile)b).getItem();
 			    	if(token != null){
-			    		System.out.println(token.getName());
+			    		BufferedImage itemImg = null;
+			    		// getting the item image
+			    		switch(token.getName()){
+			    			case "Coin":
+			    				 itemImg = ImageIO.read(new File(IMAGE_PATH + "coin.png"));
+			    				 break;	 
+			    		}
+			    		// draw the item image
+			    		if(itemImg != null){
+				    		g.drawImage(itemImg, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
+				    	}
 			    	}
 		    	}
 		    }
@@ -218,11 +240,12 @@ public class RenderCanvas extends JPanel {
 	    char[][] ret = new char[M][N];
 	    for (int r = 0; r < M; r++) {
 	        for (int c = 0; c < N; c++) {
-	    	    // switching the direction of blocks
+	    	    // switching the direction of wall blocks
 	    	    char dir = levelData[r][c];
 	    	    switch(dir){
 	    	    	case 'T':
 	    	    	case 'C':
+	    	    	case 'X':
 	    	    		break;
 	    	    	case 'N':
 	    	    		levelData[r][c] = 'E';
@@ -240,7 +263,7 @@ public class RenderCanvas extends JPanel {
 	            ret[c][M-1-r] = levelData[r][c];
 	        }
 	    }
-	    //clear old list, insert new tile arrangement
+	    //clear old lists, insert new rotated tile arrangement
 	    allTiles.clear();
 	    allWalls.clear();
 	    blocks.clear();
@@ -253,7 +276,8 @@ public class RenderCanvas extends JPanel {
 				char tileType = ret[i][j];
 				Block b = null;
 				// block is a wall
-				if(tileType != 'T' && tileType != 'C'){
+				if(tileType == 'N' || tileType == 'E' 
+						|| tileType == 'S' || tileType == 'W'){
 					// setting the wall direction in the level data
 					if(i==ret.length-1){
 						ret[i][j] = 'W';
@@ -282,6 +306,12 @@ public class RenderCanvas extends JPanel {
 						case 'C':
 							// adjusting the position of the render
 							b = new RenderTile(1, pos.x+50, pos.y+65);
+							break;
+						case 'X':
+							// adjusting the position of the render
+							b = new RenderTile(0, pos.x+50, pos.y+65);
+							// adding a coin to the tile
+							((RenderTile)b).setItem(new Coin(10));
 							break;
 					}
 					allTiles.add((RenderTile) b);
