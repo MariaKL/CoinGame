@@ -2,9 +2,12 @@ package kaukau.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents a Coin object which can be pickup or drop by the player.
@@ -34,7 +37,7 @@ public class Coin extends PickupableItem implements Serializable{
 	 * Get the amount of this coin.
 	 * @return the amount of this coin
 	 */
-    @XmlElement(name="Coin")
+    @XmlElement(name="getAmmount")
 	public int getAmount(){
 		return amount;
 	}

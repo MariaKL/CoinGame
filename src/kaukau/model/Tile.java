@@ -3,9 +3,11 @@ package kaukau.model;
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import kaukau.model.GameMap.TileType;
+@SuppressWarnings("serial")
 @XmlRootElement
 public class Tile implements Serializable {
 
@@ -16,8 +18,8 @@ public class Tile implements Serializable {
 
 	public Tile(TileType type, int x, int y){
 		this.type = type;
-		this.x = x;
-		this.y = y;
+		this.setX(x);
+		this.setY(y);
 		item = null;
 		player = null;
 	}
@@ -47,12 +49,9 @@ public class Tile implements Serializable {
 	 * @return true if the player successfully added, otherwise false.
 	 */
 	public boolean addPlayer(Player player){
-		if (type != TileType.EMPTY) return false;
-		else {
-			if (this.player == null && this.item == null){
-				this.player = player;
-				return true;
-			}
+		if (this.player == null && this.item == null){
+			this.player = player;
+			return true;
 		}
 		return false;
 	}
@@ -62,14 +61,23 @@ public class Tile implements Serializable {
 	 * @return true if the player successfully removed, otherwise false.
 	 */
 	public boolean removePlayer(){
-		if (type != TileType.EMPTY) return false;
-		else {
-			if (this.player != null){
-				this.player = null;
-				return true;
-			}
+		if (this.player != null){
+			this.player = null;
+			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns the player currently on this tile or null if none
+	 * @return
+	 */
+	public Player getPlayer(){
+		if(this.player != null){
+			return player;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -78,7 +86,7 @@ public class Tile implements Serializable {
 	 * @return true if both the player and item fields are NULL, otherwise false.
 	 */
 	public boolean dropItem(PickupableItem dropItem){
-		if (type != TileType.EMPTY) return false;
+		if (type != TileType.TILE) return false;
 		else {
 			if (item == null && player == null){
 				item = dropItem;
@@ -94,7 +102,7 @@ public class Tile implements Serializable {
 	 * and item fields are NULL, otherwise false .
 	 */
 	public boolean removeItem(){
-		if (type != TileType.EMPTY) return false;
+		if (type != TileType.TILE) return false;
 		else {
 			if (item == null) return false;
 			else item = null;
@@ -107,9 +115,9 @@ public class Tile implements Serializable {
 	 * @return true if there is a pickupableItem on an empty tile, otherwise false.
 	 */
 	public boolean containsPickupItem(){
-		if (type != TileType.EMPTY) return false;
+		if (type != TileType.TILE) return false;
 		else {
-			if (type == TileType.EMPTY && item instanceof PickupableItem){
+			if (type == TileType.TILE && item instanceof PickupableItem){
 				return true;
 			}
 		}
@@ -122,17 +130,18 @@ public class Tile implements Serializable {
 	 * the player and item fields are NULL.
 	 */
 	public boolean isTileOccupied(){
-		if (type != TileType.EMPTY)
-			return true;
-		else if (type == TileType.EMPTY && player == null && item == null)
-			return false;
-		else return true;
+		if (type != TileType.TILE || type != TileType.TILE_CRACKED)
+			if (player == null && item == null){
+				return false;
+			}
+		return true;
 	}
 
 	/**
 	 * Return the type of this tile.
 	 * @return the type of this tile
 	 */
+	@XmlElement(name = "tileType")
 	public TileType getTileType() { return type; }
 
 	/**
@@ -158,16 +167,36 @@ public class Tile implements Serializable {
 	 * Return the column number of this tile.
 	 * @return the column number
 	 */
-	public int X() { return x; }
+	@XmlElement(name = "xCoord")
+	public int X() { return getX(); }
+
 
 	/**
 	 * Return the row number of this tile.
 	 * @return the row number
 	 */
-	public int Y() { return y; }
+	@XmlElement(name = "yCoord")
+	public int Y() { return getY(); }
+
 
 	public String toString(){
-		return "row = "+this.x+", col = "+this.y;
+		return "row = "+this.getX()+", col = "+this.getY();
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 
 }

@@ -85,10 +85,6 @@ public class Container implements Item, Serializable{
 	 * Returns the list of items in the container
 	 * @return ArrayList <Collectable>
 	 * */
-	@XmlElementWrapper(name="Container")
-    @XmlElements({
-    @XmlElement(name="Item") }
-    )
 	public ArrayList <PickupableItem> getStorage(){
 		return this.storage;
 	}

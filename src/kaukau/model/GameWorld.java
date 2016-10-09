@@ -3,13 +3,10 @@ package kaukau.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import kaukau.model.GameMap.TileType;
 
 import java.awt.Point;
@@ -20,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 @XmlRootElement(name="GameWorld")
 //@XmlType(propOrder = { "allPlayers"})
 public class GameWorld implements Serializable{
@@ -38,10 +36,11 @@ public class GameWorld implements Serializable{
 	@XmlElement
 	private static int uid;
 
+
 	/**
 	 * The current players of this game. Max number of player = 2.
 	 */
-	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	private static HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	public GameWorld(){
 		board =  new GameMap();
@@ -55,10 +54,10 @@ public class GameWorld implements Serializable{
 	 */
 	//@XmlElement(name="players1")
 	public synchronized int addPlayer(){
-		Tile tile = board.getTileAt(new Point(2, 1+uid));
+		Tile tile = board.getTileAt(new Point(9-(++uid), 3));
 		Player player = new Player(++uid, "Player", tile, Direction.EAST);
 		tile.addPlayer(player);
-		this.players.put(uid, player);
+		GameWorld.players.put(uid, player);
 		return uid;
 	}
 
@@ -76,7 +75,9 @@ public class GameWorld implements Serializable{
 		// if the tile is emptyTile and not occupy, then move player to this new position
 		if (validPoint(newPos)){
 			Tile tile = board.getTileAt(newPos);
-			if (tile.getTileType() == TileType.EMPTY && !tile.isTileOccupied()){
+			if (!tile.isTileOccupied() && 
+					(tile.getTileType()==GameMap.TileType.TILE
+					||tile.getTileType()==GameMap.TileType.TILE_CRACKED)){
 				oldPos.removePlayer();
 				player.setLocation(tile);
 				player.setFacingDirection(direction);
@@ -101,7 +102,7 @@ public class GameWorld implements Serializable{
 		// then player can pick up the item only if there is one
 		if (validPoint(pos)){
 			Tile tile = board.getTileAt(pos);
-			if (tile.getTileType() == TileType.EMPTY && tile.containsPickupItem()){
+			if (tile.getTileType() == TileType.TILE && tile.containsPickupItem()){
 				if (player.addToBag((PickupableItem)tile.getItem())){
 					tile.removeItem();
 					return true;
@@ -171,8 +172,10 @@ public class GameWorld implements Serializable{
 	 */
 	public boolean validPoint(Point pos){
 		if (board.width() <= pos.x || board.height() <= pos.y ||
-				pos.x < 0 || pos.y < 0) return false;
-		return true;
+				pos.x < 0 || pos.y < 0) {
+			return false;
+		}
+		return (!this.getGameTiles()[pos.x][pos.y].isTileOccupied());
 	}
 
 	/**
