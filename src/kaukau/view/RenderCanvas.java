@@ -8,7 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -18,6 +20,7 @@ import javax.swing.KeyStroke;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
 import kaukau.model.Item;
+import kaukau.model.Player;
 import kaukau.model.Tile;
 
 @SuppressWarnings("serial")
@@ -40,6 +43,10 @@ public class RenderCanvas extends JPanel {
 	// stores a array representation of the current 
 	// game level that is to be rendered
 	private Block[][] levelBlocks;
+
+	private HashMap<Integer, Player> players;
+	
+	
 	
 	/**This class take a gameworld parameter and 
 	 * creates a rendering based on the state of 
@@ -49,9 +56,12 @@ public class RenderCanvas extends JPanel {
 	public RenderCanvas(GameWorld game){
 		
 		levelBlocks = new Block[20][20];
+		
 		initBlocks(game);
 		attachBindings();
 		repaint();
+		
+		players = game.getAllPlayers();
 
 	}
 
@@ -70,6 +80,7 @@ public class RenderCanvas extends JPanel {
 				Tile tile = tiles[c][r];
 				// the block to be created
 				Block b = null;
+				
 				// Creating a Tile block for rendering
 				if(tile.getTileType() == GameMap.TileType.TILE){
 					// getting the x & y position of the tile
@@ -87,6 +98,7 @@ public class RenderCanvas extends JPanel {
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
 					levelBlocks[c][r] = b;
+					
 				// creating a cracked tile block for rendering
 				} else if (tile.getTileType() == GameMap.TileType.TILE_CRACKED){
 					// getting the x & y position of the tile
@@ -104,6 +116,7 @@ public class RenderCanvas extends JPanel {
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
 					levelBlocks[c][r] = b;
+				
 				// Creating a Wall block for rendering 
 				} else if(tile.getTileType() == GameMap.TileType.WALL){
 					// getting the x & y position of the tile
@@ -196,6 +209,25 @@ public class RenderCanvas extends JPanel {
 				    	}
 			    	}
 		    	}
+		    	// iterate over all players and draw each to the board
+		    	// TODO: make players look different
+				for (Entry<Integer, Player> entry : players.entrySet()) {
+				    Player player = entry.getValue();
+				    Tile loc = player.getLocation();
+				    // getting the render position of the player 
+				    Point twoD = 
+				    		RenderWindow.get2dFromTileCoordinates(
+				    		new Point(loc.getX(), loc.getY()),50);
+				    Point pos = 
+				    		RenderWindow.twoDToIso(
+				    		new Point(twoD.x, twoD.y));
+				    // TODO: player directions & animation
+				    BufferedImage img = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
+				    // draw the player image if not null
+		    		if(img != null){
+			    		g.drawImage(img, pos.x + TILE_MARGIN, pos.y + (TILE_MARGIN/8)+10, this);
+			    	}
+				}
 		    }
 		} catch(IOException e) {
 			e.printStackTrace();

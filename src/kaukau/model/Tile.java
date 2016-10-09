@@ -17,8 +17,8 @@ public class Tile implements Serializable {
 
 	public Tile(TileType type, int x, int y){
 		this.type = type;
-		this.x = x;
-		this.y = y;
+		this.setX(x);
+		this.setY(y);
 		item = null;
 		player = null;
 	}
@@ -71,6 +71,18 @@ public class Tile implements Serializable {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns the player currently on this tile or null if none
+	 * @return
+	 */
+	public Player getPlayer(){
+		if(this.player != null){
+			return player;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -150,16 +162,32 @@ public class Tile implements Serializable {
 	 * Return the column number of this tile.
 	 * @return the column number
 	 */
-	public int X() { return x; }
+	public int X() { return getX(); }
 
 	/**
 	 * Return the row number of this tile.
 	 * @return the row number
 	 */
-	public int Y() { return y; }
+	public int Y() { return getY(); }
 
 	public String toString(){
-		return "row = "+this.x+", col = "+this.y;
+		return "row = "+this.getX()+", col = "+this.getY();
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 
 }

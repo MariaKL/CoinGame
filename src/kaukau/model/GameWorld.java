@@ -34,12 +34,12 @@ public class GameWorld implements Serializable{
 	 * across boards.
 	 */
 	@XmlElement
-	private int uid = 0;
+	private static int uid = 0;
 
 	/**
 	 * The current players of this game. Max number of player = 2.
 	 */
-	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	private static HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	public GameWorld(){
 		board =  new GameMap();
@@ -52,10 +52,10 @@ public class GameWorld implements Serializable{
 	 */
 	//@XmlElement(name="players1")
 	public synchronized int addPlayer(){
-		Tile tile = board.getTileAt(new Point(2, 1+uid));
+		Tile tile = board.getTileAt(new Point(9-(++uid), 3));
 		Player player = new Player(++uid, "Player", tile, Direction.EAST);
 		tile.addPlayer(player);
-		this.players.put(uid, player);
+		GameWorld.players.put(uid, player);
 		return uid;
 	}
 
