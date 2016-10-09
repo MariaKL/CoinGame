@@ -13,13 +13,13 @@
     <L7>WTTCTTXTTW</L7>
     <L8>WTTTTTTTTC</L8>
     <L9>WWWTTTTTCC</L9>
+
     <Door0>0</Door0>
     <Door1>0</Door1>
     <Door2>0</Door2>
     <Key0>123</Key0>
     <Coin0>30</Coin0>
     <Coin1>40</Coin1>
-    <Coin0>10</Coin0>
   </room>
   <room name="Office">
     <startX>10</startX>
@@ -51,7 +51,7 @@
     <L8>WCCCCCCCCC</L8>
     <L9>WWWWWWWWWW</L9>
     <Key0>124</Key0>
-`   <Key1>125</Key1>
+   <Key1>125</Key1>
     <Coin0>30</Coin0>
   </room>
   <room name="Hallway 2">
