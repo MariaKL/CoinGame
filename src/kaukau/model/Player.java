@@ -17,7 +17,7 @@ public class Player implements Serializable{
 	private Tile location;
 	//@XmlElement
 	private Container inventory;
-	//@XmlElement
+	@XmlElement
 	private CoinBox coinbox;
 	@XmlElement
 	private Direction facing;
@@ -59,17 +59,26 @@ public class Player implements Serializable{
 	/**
 	 * Gets the item name
 	 * @return String name
-	 * */
+	 */
 	public String getName() {
 		return this.name;
 	}
 
 	/**
 	 * Gets the items location
-	 * @return Tile*/
+	 * @return Tile
+	 */
 	@XmlElement(name="location")
 	public Tile getLocation() {
 		return this.location;
+	}
+
+	/**
+	 * Return the coinbox that belong to this player.
+	 * @return a CoinBox type object, otherwise null if player drop it.
+	 */
+	public CoinBox getCoinBox() {
+		return this.coinbox;
 	}
 
 	/**
@@ -96,48 +105,13 @@ public class Player implements Serializable{
 	/**
 	 * adds item to players bag
 	 * */
+	@XmlElementWrapper(name="inventory")
+    @XmlElements({
+    @XmlElement(name="item") }
+    )
 	public ArrayList <PickupableItem> getInventory(){
 		return inventory.getStorage();
 	}
-
-	/**
-	 * Returns the list of coin boxes in the container
-	 * for JAXB serializing
-	 * @return ArrayList <Collectable>
-	 * */
-	@XmlElementWrapper(name="CoinBox")
-    @XmlElements({
-    @XmlElement(name="getCoins") }
-    )
-	public ArrayList <CoinBox> getCoinBoxes(){
-		ArrayList<CoinBox> coinboxes = new ArrayList<CoinBox>();
-		for (PickupableItem p : this.getInventory()) {
-			if(p instanceof CoinBox){
-				coinboxes.add((CoinBox) p);
-			}
-		}
-		return coinboxes;
-	}
-
-	/**
-	 * Returns the list of coin boxes in the container
-	 * for JAXB serializing
-	 * @return ArrayList <Collectable>
-	 * */
-	@XmlElementWrapper(name="Keys")
-    @XmlElements({
-    @XmlElement(name="key") }
-    )
-	public ArrayList <Key> getKeys(){
-		ArrayList<Key> keys = new ArrayList<Key>();
-		for (PickupableItem p : this.getInventory()) {
-			if(p instanceof Key){
-				keys.add((Key) p);
-			}
-		}
-		return keys;
-	}
-
 
 	/**
 	 * Return the user id of this player.

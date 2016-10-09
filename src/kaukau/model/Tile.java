@@ -145,6 +145,15 @@ public class Tile implements Serializable {
 	public TileType getTileType() { return type; }
 
 	/**
+	 * Return the player that occupy this tile.
+	 * @return a player on this tile, otherwise null if there is no one
+	 */
+	public Player getPlayer() {
+		if (player != null) return player;
+		return null;
+	}
+
+	/**
 	 * Return the item that occupy this tile.
 	 * @return an item if it is pickupable item and there is one, otherwise returns null.
 	 */
