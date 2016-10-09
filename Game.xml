@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <GameWorld xmlns:ns2="Team_24.kaukau.model.GameWorld">
-    <board/>
+    <board>
+        <roomWidth>10</roomWidth>
+        <roomHeight>10</roomHeight>
+        <boardWidth>20</boardWidth>
+        <boardHeight>20</boardHeight>
+        <getAllDoors>
+            <Door>
+                <doorCode>0</doorCode>
+                <getLocation>
+                    <tileType>DOOR</tileType>
+                    <xCoord>18</xCoord>
+                    <yCoord>6</yCoord>
+                </getLocation>
+                <isLocked>false</isLocked>
+            </Door>
+        </getAllDoors>
+        <getAllRooms>
+            <Room>
+                <name>Gym</name>
+                <startX>0</startX>
+                <startY>0</startY>
+            </Room>
+            <Room>
+                <name>Office</name>
+                <startX>10</startX>
+                <startY>0</startY>
+            </Room>
+            <Room>
+                <name>Hallway 1</name>
+                <startX>0</startX>
+                <startY>10</startY>
+            </Room>
+            <Room>
+                <name>Hallway 2</name>
+                <startX>10</startX>
+                <startY>10</startY>
+            </Room>
+        </getAllRooms>
+    </board>
     <gameOver>false</gameOver>
     <uid>2</uid>
     <allPlayers>
@@ -57,5 +95,44 @@
             </value>
         </entry>
     </allPlayers>
+    <map>
+        <roomWidth>10</roomWidth>
+        <roomHeight>10</roomHeight>
+        <boardWidth>20</boardWidth>
+        <boardHeight>20</boardHeight>
+        <getAllDoors>
+            <Door>
+                <doorCode>0</doorCode>
+                <getLocation>
+                    <tileType>DOOR</tileType>
+                    <xCoord>18</xCoord>
+                    <yCoord>6</yCoord>
+                </getLocation>
+                <isLocked>false</isLocked>
+            </Door>
+        </getAllDoors>
+        <getAllRooms>
+            <Room>
+                <name>Gym</name>
+                <startX>0</startX>
+                <startY>0</startY>
+            </Room>
+            <Room>
+                <name>Office</name>
+                <startX>10</startX>
+                <startY>0</startY>
+            </Room>
+            <Room>
+                <name>Hallway 1</name>
+                <startX>0</startX>
+                <startY>10</startY>
+            </Room>
+            <Room>
+                <name>Hallway 2</name>
+                <startX>10</startX>
+                <startY>10</startY>
+            </Room>
+        </getAllRooms>
+    </map>
     <isGameOver>false</isGameOver>
 </GameWorld>

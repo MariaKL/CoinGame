@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,9 +20,13 @@ import org.w3c.dom.NodeList;
 @XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable{
 	
+	@XmlElement(name="roomWidth")
 	public static final int ROOM_WIDTH = 10;
+	@XmlElement(name="roomHeight")
 	public static final int ROOM_HEIGHT = 10;
+	@XmlElement(name="boardWidth")
 	public static final int BOARD_WIDTH = 20;
+	@XmlElement(name="boardHeight")
 	public static final int BOARD_HEIGHT = 20;
 	
 	private Tile[][] board;
@@ -165,8 +172,20 @@ public class GameMap implements Serializable{
 		return board;
 	}
 
+	@XmlElementWrapper(name="getAllRooms")
+    @XmlElements({
+    @XmlElement(name="Room") }
+    )
 	public ArrayList<Room> getAllRooms(){
 		return rooms;
+	}
+	
+	@XmlElementWrapper(name="getAllDoors")
+    @XmlElements({
+    @XmlElement(name="Door") }
+    )
+	public ArrayList<Door> getAllDoors(){
+		return doors;
 	}
 
 	/**
