@@ -59,17 +59,26 @@ public class Player implements Serializable{
 	/**
 	 * Gets the item name
 	 * @return String name
-	 * */
+	 */
 	public String getName() {
 		return this.name;
 	}
 
 	/**
 	 * Gets the items location
-	 * @return Tile*/
+	 * @return Tile
+	 */
 	@XmlElement(name="location")
 	public Tile getLocation() {
 		return this.location;
+	}
+
+	/**
+	 * Return the coinbox that belong to this player.
+	 * @return a CoinBox type object, otherwise null if player drop it.
+	 */
+	public CoinBox getCoinBox() {
+		return this.coinbox;
 	}
 
 	/**
