@@ -48,7 +48,7 @@ public class RenderCanvas extends JPanel {
 	 */
 	public RenderCanvas(GameWorld game){
 		
-		levelBlocks = new Block[10][10];
+		levelBlocks = new Block[20][20];
 		initBlocks(game);
 		attachBindings();
 		repaint();
@@ -62,7 +62,7 @@ public class RenderCanvas extends JPanel {
 	 * @param game
 	 */
 	private void initBlocks(GameWorld game) {
-		
+			
 		Tile[][] tiles = game.getGameTiles();
 		for(int r=0; r!=levelBlocks.length; r++){
 			for(int c=0; c!=levelBlocks[0].length; c++){
@@ -271,9 +271,13 @@ public class RenderCanvas extends JPanel {
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
 					// getting the tiles item if there is one
-					Item item = ((RenderTile)b).getItem();
+					Item item = null;
+					int type = 0;
+					try{
+						item = ((RenderTile)b).getItem();
+						type = ((RenderTile)b).getTileType();
+					} catch (NullPointerException e){ }
 					// getting the tile type
-					int type = ((RenderTile)b).getTileType();
 					switch(type){
 						case 0:
 							// blue tile
@@ -285,7 +289,9 @@ public class RenderCanvas extends JPanel {
 							break;
 					}
 					// setting the tiles item if there is one
-					((RenderTile)b).setItem(item);
+					if(item != null){
+						((RenderTile)b).setItem(item);
+					}
 					// adding tile to a list of all tiles
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
