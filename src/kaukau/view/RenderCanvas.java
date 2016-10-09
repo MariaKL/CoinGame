@@ -1,5 +1,6 @@
 package kaukau.view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -8,15 +9,20 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import kaukau.model.Direction;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
+import kaukau.model.Item;
+import kaukau.model.Player;
 import kaukau.model.Tile;
 
 @SuppressWarnings("serial")
@@ -37,21 +43,38 @@ public class RenderCanvas extends JPanel {
 	private List<Block> blocks = new ArrayList<Block>();
 	
 	// stores a array representation of the current 
-	// game level that is to be rendered
-	private char[][] levelData;
+	// game level blocks that are to be rendered
+	private Block[][] levelBlocks;
+
+	private HashMap<Integer, Player> players;
+
+	private GameWorld game;
 	
+	private final Player player;
+		
 	/**This class take a gameworld parameter and 
 	 * creates a rendering based on the state of 
 	 * the game.
 	 * @param game
 	 */
-	public RenderCanvas(GameWorld game){
+	public RenderCanvas(GameWorld gameWorld, Player user){
 		
-		levelData = new char[10][10];
+		levelBlocks = new Block[20][20];
+		
+		this.game = gameWorld;
+		this.setPlayers(game.getAllPlayers());
+		this.player = user;
+		
+		this.setBackground(new Color(79,100,90));
+		
 		initBlocks(game);
 		attachBindings();
 		repaint();
-
+		
+	}
+	
+	private void setPlayers(HashMap<Integer, Player> all){
+		this.players = all;
 	}
 
 	/**initialises the blocks (tiles & walls) which make up
@@ -62,49 +85,88 @@ public class RenderCanvas extends JPanel {
 	 */
 	private void initBlocks(GameWorld game) {
 		
+		allWalls.clear();
+		allTiles.clear();
+		blocks.clear();
+		
+		Tile loc = player.getLocation();
+		
 		Tile[][] tiles = game.getGameTiles();
-		for(int r=0; r!=levelData.length; r++){
-			for(int c=0; c!=levelData[0].length; c++){
+		for(int r=0; r!=levelBlocks.length; r++){
+			for(int c=0; c!=levelBlocks[0].length; c++){
 				// getting the gameworld model tile
 				Tile tile = tiles[c][r];
 				// the block to be created
 				Block b = null;
+				
 				// Creating a Tile block for rendering
-				if(tile.getTileType() == GameMap.TileType.EMPTY){
-					// setting the tile in the level data
-					levelData[c][r] = 'T';
+				if(tile.getTileType() == GameMap.TileType.TILE){
+					
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = RenderWindow.twoDToIso(new Point(x, y));		
 					// adjusting the position of the render
 					b = new RenderTile(0, pos.x+50, pos.y+65);
+					// setting the tile item if one
+					if(tile.getItem()!=null){
+						((RenderTile)b).setItem(tile.getItem());
+					}
+					if(r==loc.X()&&c==loc.Y()){
+						((RenderTile)b).setPlayer(player);
+					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
+					levelBlocks[c][r] = b;
+					
+				// creating a cracked tile block for rendering
+				} else if (tile.getTileType() == GameMap.TileType.TILE_CRACKED){
+					// getting the x & y position of the tile
+					int x = r * tileWidth;
+					int y = c * tileHeight;
+					// converting 2d point to isometic
+					Point pos = RenderWindow.twoDToIso(new Point(x, y));		
+					// adjusting the position of the render
+					b = new RenderTile(1, pos.x+50, pos.y+65);
+					// setting the tile item if one
+					if(tile.getItem()!=null){
+						((RenderTile)b).setItem(tile.getItem());
+					}
+					if(r==loc.X()&&c==loc.Y()){
+						((RenderTile)b).setPlayer(player);
+					}
+					allTiles.add((RenderTile) b);
+					// adding blocks in order for painters algorithm
+					blocks.add(b);
+					levelBlocks[c][r] = b;
+				
 				// Creating a Wall block for rendering 
 				} else if(tile.getTileType() == GameMap.TileType.WALL){
-					// setting the wall direction in the level data
-					if(r==levelData.length-1){
-						levelData[c][r] = 'W';
-					} else if(c==levelData.length-1){
-						levelData[c][r] = 'S';
-					} else if(r==0){
-						levelData[c][r] = 'E';
-					} else {
-						levelData[c][r] = 'N';
-					}
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
-					// adjusting the position of the render
-					b = new Wall(levelData[c][r], pos.x+50, pos.y-170);
+					// setting the wall direction in the level data
+					if(r==levelBlocks.length-1){
+						// west wall
+						b = new Wall('W', pos.x+50, pos.y-170);
+					} else if(c==levelBlocks.length-1){
+						// south wall
+						b = new Wall('S', pos.x+50, pos.y-170);
+					} else if(r==0){
+						// east wall
+						b = new Wall('E', pos.x+50, pos.y-170);
+					} else {
+						// north wall
+						b = new Wall('N', pos.x+50, pos.y-170);
+					}
 					allWalls.add((Wall) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
+					levelBlocks[c][r] = b;
 				}
 			}
 		}
@@ -115,9 +177,6 @@ public class RenderCanvas extends JPanel {
 		super.paintComponent(g);
 		
 		paintBlocks(g);
-		
-		//paintLevelWalls(g);
-		//paintLevelTiles(g);
 		
 	}
 	
@@ -140,14 +199,67 @@ public class RenderCanvas extends JPanel {
 		    		} else { continue; }
 		    	// the level block is a floor tile
 		    	} else {
-		    		image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
+		    		int type = ((RenderTile) b).getTileType();
+		    		switch(type){
+		    			case 0:
+		    				image = ImageIO.read(new File(IMAGE_PATH + "blue-tile.png"));
+		    				break;
+		    			case 1:
+		    				image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
+		    				break;
+		    		}
 		    	}	
 		    	// drawing the block image to the screen
 		    	if(image != null){
 		    		g.drawImage(image, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
 		    	}
+		    	// checking if block was a tile & contained an item
+		    	if(b instanceof RenderTile){
+		    		// getting the item contained in the tile
+		    		Item token = ((RenderTile)b).getItem();
+			    	if(token != null){
+			    		BufferedImage itemImg = null;
+			    		// getting the item image
+			    		switch(token.getName()){
+			    			case "Coin":
+			    				itemImg = ImageIO.read(new File(IMAGE_PATH + "coin.png"));
+			    				break;	 
+			    			case "Key":
+			    				itemImg = ImageIO.read(new File(IMAGE_PATH + "cube2.png"));
+								break;
+			    		}
+			    		// draw the item image if not null
+			    		if(itemImg != null){
+				    		g.drawImage(itemImg, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
+				    	}
+			    	}
+			    	
+		    		// getting the player on this tile if one
+		    		Player user = ((RenderTile)b).getPlayer();
+			    	if(user != null){
+			    		BufferedImage playerImg = null;
+			    		switch(player.facingDirection()){
+				    		case NORTH:
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png")); 
+				    			break;
+				    		case EAST:
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png")); 
+				    			break;
+				    		case SOUTH:
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png")); 
+				    			break;
+				    		case WEST:
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png")); 
+				    			break;
+			    		}
+			    		// draw the item image if not null
+			    		if(playerImg != null){
+				    		g.drawImage(playerImg, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8)-75, this);
+				    	}
+			    	}	
+		    	}
 		    }
-		} catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -165,6 +277,95 @@ public class RenderCanvas extends JPanel {
 				repaint();
 			}
 		});
+		
+		// player move down
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_S, 0), "moveDown");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_DOWN, 0), "moveDown");
+		this.getActionMap().put("moveDown", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// getting players current location
+				Tile oloc = player.getLocation();
+				// attempt to move player
+				if(game.movePlayer(player.getUserId(), Direction.SOUTH)){
+					// getting players new location if moved
+					Tile nloc = player.getLocation();
+					// update rendering
+					Block rold = levelBlocks[oloc.Y()][oloc.X()];
+					((RenderTile)rold).setPlayer(null);
+					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+					((RenderTile)rnew).setPlayer(player);
+				}
+				repaint();
+			}
+		});
+		// player move up
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_W, 0), "moveUp");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_UP, 0), "moveUp");
+		this.getActionMap().put("moveUp", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// getting players current location
+				Tile oloc = player.getLocation();
+				// attempt to move player
+				if(game.movePlayer(player.getUserId(), Direction.NORTH)){
+					// getting players new location if moved
+					Tile nloc = player.getLocation();
+					// update rendering
+					Block rold = levelBlocks[oloc.Y()][oloc.X()];
+					((RenderTile)rold).setPlayer(null);
+					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+					((RenderTile)rnew).setPlayer(player);
+				}
+				repaint();
+			}
+		});
+		// player move left
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_A, 0), "moveLeft");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_LEFT, 0), "moveLeft");
+		this.getActionMap().put("moveLeft", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// getting players current location
+				Tile oloc = player.getLocation();
+				// attempt to move player
+				if(game.movePlayer(player.getUserId(), Direction.WEST)){
+					// getting players new location if moved
+					Tile nloc = player.getLocation();
+					// update rendering
+					Block rold = levelBlocks[oloc.Y()][oloc.X()];
+					((RenderTile)rold).setPlayer(null);
+					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+					((RenderTile)rnew).setPlayer(player);
+				}
+				repaint();
+			}
+		});
+		// player move right
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_D, 0), "moveRight");
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_RIGHT, 0), "moveRight");
+		this.getActionMap().put("moveRight", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// getting players current location
+				Tile oloc = player.getLocation();
+				// attempt to move player
+				if(game.movePlayer(player.getUserId(), Direction.EAST)){
+					// getting players new location if moved
+					Tile nloc = player.getLocation();
+					// update rendering
+					Block rold = levelBlocks[oloc.Y()][oloc.X()];
+					((RenderTile)rold).setPlayer(null);
+					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+					((RenderTile)rnew).setPlayer(player);
+				}
+				repaint();
+			}
+		});
 	}
 
 	/**Rotates the current game level by applying
@@ -173,35 +374,18 @@ public class RenderCanvas extends JPanel {
 	 */
 	protected void rotateWorld() {
 		//rotate int[][] 90 degrees into new 2d array
-		final int M = levelData.length;
-	    final int N = levelData[0].length;
+		final int M = levelBlocks.length;
+	    final int N = levelBlocks[0].length;
 	    
 	    // rotate the array data
-	    char[][] ret = new char[M][N];
+	    Block[][] ret = new Block[M][N];
 	    for (int r = 0; r < M; r++) {
 	        for (int c = 0; c < N; c++) {
-	    	    // switching the direction of blocks
-	    	    char dir = levelData[r][c];
-	    	    switch(dir){
-	    	    	case 'T':
-	    	    		break;
-	    	    	case 'N':
-	    	    		levelData[r][c] = 'E';
-	    	    		break;
-	    	    	case 'E':
-	    	    		levelData[r][c] = 'S';
-	    	    		break;
-	    	    	case 'S':
-	    	    		levelData[r][c] = 'W';
-	    	    		break;
-	    	    	case 'W':
-	    	    		levelData[r][c] = 'N';
-	    	    		break;
-	    	    }
-	            ret[c][M-1-r] = levelData[r][c];
+	    	    // rotating the level 90 degree
+	            ret[c][M-1-r] = levelBlocks[r][c];
 	        }
 	    }
-	    //clear old list, insert new tile arrangement
+	    //clear old lists, insert new rotated tile arrangement
 	    allTiles.clear();
 	    allWalls.clear();
 	    blocks.clear();
@@ -210,42 +394,65 @@ public class RenderCanvas extends JPanel {
 				// getting the x & y position of the tile
 				int x = j * tileWidth;
 				int y = i * tileHeight;
-				// getting the tile type
-				char tileType = ret[i][j];
-				Block b = null;
-				// block is a tile
-				if(tileType != 'T'){
-					// setting the wall direction in the level data
-					if(i==ret.length-1){
-						ret[i][j] = 'W';
-					} else if(j==ret.length-1){
-						ret[i][j] = 'S';
-					} else if(i==0){
-						ret[i][j] = 'E';
-					} else {
-						ret[i][j] = 'N';
-					}
+				Block b = ret[i][j];
+				// block is a wall
+				if(b instanceof Wall){
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
-					// adjusting the position of the render
-					b = new Wall(ret[i][j], pos.x+50, pos.y-170);
+					// getting the new direction of the wall
+					if(i==ret.length-1){
+						// west wall
+						b = new Wall('W', pos.x+50, pos.y-170);
+					} else if(j==ret.length-1){
+						// south wall
+						b = new Wall('S', pos.x+50, pos.y-170);
+					} else if(i==0){
+						// east wall
+						b = new Wall('E', pos.x+50, pos.y-170);
+					} else {
+						// north wall
+						b = new Wall('N', pos.x+50, pos.y-170);
+					}
+					// adding wall to a list of all walls
 					allWalls.add((Wall) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
+				// block is a tile
 				} else {
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
-					// adjusting the position of the render
-					b = new RenderTile(0, pos.x+50, pos.y+65);
+					// getting the tiles item if there is one
+					Item item = null;
+					int type = 0;
+					try{
+						item = ((RenderTile)b).getItem();
+						type = ((RenderTile)b).getTileType();
+					} catch (NullPointerException e){ }
+					// getting the tile type
+					switch(type){
+						case 0:
+							// blue tile
+							b = new RenderTile(0, pos.x+50, pos.y+65);
+							break;
+						case 1:
+							// cracked tile
+							b = new RenderTile(1, pos.x+50, pos.y+65);
+							break;
+					}
+					// setting the tiles item if there is one
+					if(item != null){
+						((RenderTile)b).setItem(item);
+					}
+					// adding tile to a list of all tiles
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
 				}			
 			}
 	    }
-	    //replace levelData with new 2d array for future rotations
-	    for(int a=0; a<levelData.length; a++)
-	    	  for(int b=0; b<levelData[0].length; b++)
-	    	    levelData[a][b]=ret[a][b];
+	    //replace levelBlocks array with new 2d array for future rotations
+	    for(int a=0; a<levelBlocks.length; a++)
+	    	  for(int b=0; b<levelBlocks[0].length; b++)
+	    	    levelBlocks[a][b]=ret[a][b];
 	}
 }

@@ -1,6 +1,5 @@
 package kaukau.view;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -14,8 +13,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import kaukau.control.Client;
 import kaukau.model.GameWorld;
+import kaukau.model.Player;
 import kaukau.storage.JAXBJavaToXml;
 
 /**
@@ -38,29 +37,33 @@ public class ApplicationWindow extends JFrame{
 	private static final String IMAGE_PATH = "images/";
 
 	// Field to store the rendering window for the game
-	public RenderWindow rw;
+	public RenderCanvas rc;
 
 	// Field to store application window's copy of the game
 	private GameWorld game;
+	
+	//field to store the player of the game
+	private Player player;
 
-	public ApplicationWindow(GameWorld game){
+	public ApplicationWindow(GameWorld gameWorld, Player user){
 		super("Kaukau");
 
-		this.game = game;
+		this.game = gameWorld;
+		this.player = user;
 
 		// creating a menu
 		initMenu();
 
 		// construct render window with GameWorld
-		rw = new RenderWindow(game, this);
+		rc = new RenderCanvas(game, user);
 
 		// adding the rendering window to the application
-		add(rw);
+		add(rc);
 
 		// setting title
 		setTitle("Kaukau");
 		// set size
-		setSize(865, 625);
+		setSize(1020, 620);
 		// set display location
 		setLocationRelativeTo(null);
 		// set close operation

@@ -3,20 +3,22 @@
   <room name="Gym">
     <startX>0</startX>
     <startY>0</startY>
-        <L0>WWWWWWWWWW</L0>     
-	<L1>WTTTTTTTTW</L1>     
-	<L2>WTTTTTCTTW</L2>     
-	<L3>WTTTTCCCTW</L3>     
-	<L4>WTTTWTCTTT</L4>     
-	<L5>WTTCTWKTTT</L5>     
-	<L6>WTCCCTTTTW</L6> 	
-	<L7>WTTCTTXTTW</L7> 	
-	<L8>WTTTTTTTTC</L8> 	
+    <L0>WWWWWWWWWW</L0>
+    <L1>WTTTTTTTTW</L1>
+    <L2>WTTTTTCTTW</L2>
+    <L3>WTTTTCCCTW</L3>
+    <L4>WTTTWTCTTT</L4>
+    <L5>WTTCTWKTTT</L5>
+    <L6>WTCCCTTTTW</L6>
+	<L7>WTTCTTXTTW</L7>
+	<L8>WTTTTTTTTC</L8>
 	<L9>WWWTTTTTCC</L9>
     <Door0>0</Door0>
     <Door1>0</Door1>
     <Door2>0</Door2>
     <Key0>123</Key0>
+    <Coin0>30</Coin0>
+    <Coin1>40</Coin1>
   </room>
   <room name="Office">
     <startX>10</startX>
@@ -27,10 +29,10 @@
     <L3>CCCCCCCCCW</L3>
     <L4>CCCCCCCCCW</L4>
     <L5>CCCCCCCCCW</L5>
-    <L6>CCCCCCCCDW</L6>
-	<L7>CCCCCCCCCC</L7>
-	<L8>CCCCCCCCCC</L8>
-	<L9>CCCCCCCCCC</L9>
+    <L6>CCCCCCCCCW</L6>
+	<L7>CCCCCCCCCW</L7>
+	<L8>CCCCCCCCCW</L8>
+	<L9>WWWWWDWWWW</L9>
     <Door0>0</Door0>
     <Coin0>50</Coin0>
   </room>
@@ -44,11 +46,11 @@
     <L4>CCCCCCCCCC</L4>
     <L5>CKCCCCCCCC</L5>
     <L6>CCCCCCCCCC</L6>
-	<L7>WCCCCCCCCC</L7>
-	<L8>WCCCCCCCCC</L8>
-	<L9>WCCCCCCCCC</L9>
+    <L7>WCCCCCCCCC</L7>
+    <L8>WCCCCCCCCC</L8>
+    <L9>WCCCCCCCCC</L9>
     <Key0>124</Key0>
-`   <Key1>125</Key1>
+   <Key1>125</Key1>
     <Coin0>30</Coin0>
   </room>
   <room name="Hallway 2">
@@ -59,12 +61,13 @@
     <L2>CCCCCCCCCC</L2>
     <L3>CCCCCCCCCC</L3>
     <L4>CCCCCCCCCC</L4>
-    <L5>CCCCCXCCCC</L5>
-    <L6>CCCCCCCCCC</L6>
-	<L7>WCCCCCCCCC</L7>
-	<L8>WCCCCCCCCC</L8>
-	<L9>WCCCCCCCCC</L9>
+    <L5>WCCCCXCCCC</L5>
+    <L6>WCCCCCCCCC</L6>
+    <L7>WCCCCCCCCC</L7>
+    <L8>WCCCCCCCCC</L8>
+    <L9>WCCCCCCCCX</L9>
     <Coin0>40</Coin0>
     <Coin1>80</Coin1>
+    <Coin2>50</Coin2>
   </room>
 </map>

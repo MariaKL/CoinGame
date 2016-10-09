@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <GameWorld xmlns:ns2="Team_24.kaukau.model.GameWorld">
+    <board/>
+    <gameOver>false</gameOver>
+    <uid>2</uid>
     <allPlayers>
         <entry>
             <key>1</key>
             <value>
                 <name>Player</name>
-                <coinbox>
-                    <CoinBox>
-                        <coins/>
-                        <coins/>
-                    </CoinBox>
-                </coinbox>
                 <facing>EAST</facing>
                 <userId>1</userId>
-                <inventory>
-                    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
-                        <CoinBox>
-                            <coins/>
-                            <coins/>
-                        </CoinBox>
-                    </item>
-                    <item/>
-                </inventory>
+                <CoinBox>
+                    <getCoins>
+                        <coin>
+                            <getAmmount>50</getAmmount>
+                        </coin>
+                        <coin>
+                            <getAmmount>100</getAmmount>
+                        </coin>
+                        <isFull>false</isFull>
+                    </getCoins>
+                </CoinBox>
+                <Keys>
+                    <key>
+                        <getCode>7</getCode>
+                    </key>
+                </Keys>
                 <location/>
             </value>
         </entry>
@@ -29,17 +33,18 @@
             <key>2</key>
             <value>
                 <name>Player</name>
-                <coinbox>
-                    <CoinBox/>
-                </coinbox>
                 <facing>EAST</facing>
                 <userId>2</userId>
-                <inventory>
-                    <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
-                        <CoinBox/>
-                    </item>
-                    <item/>
-                </inventory>
+                <CoinBox>
+                    <getCoins>
+                        <isFull>false</isFull>
+                    </getCoins>
+                </CoinBox>
+                <Keys>
+                    <key>
+                        <getCode>71</getCode>
+                    </key>
+                </Keys>
                 <location/>
             </value>
         </entry>
