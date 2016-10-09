@@ -3,6 +3,7 @@ package kaukau.model;
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import kaukau.model.GameMap.TileType;
@@ -146,6 +147,7 @@ public class Tile implements Serializable {
 	 * Return the type of this tile.
 	 * @return the type of this tile
 	 */
+	@XmlElement(name = "tileType")
 	public TileType getTileType() { return type; }
 
 	/**
@@ -162,13 +164,17 @@ public class Tile implements Serializable {
 	 * Return the column number of this tile.
 	 * @return the column number
 	 */
+	@XmlElement(name = "xCoord")
 	public int X() { return getX(); }
+
 
 	/**
 	 * Return the row number of this tile.
 	 * @return the row number
 	 */
+	@XmlElement(name = "yCoord")
 	public int Y() { return getY(); }
+
 
 	public String toString(){
 		return "row = "+this.getX()+", col = "+this.getY();
