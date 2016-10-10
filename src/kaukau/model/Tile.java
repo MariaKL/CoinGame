@@ -67,18 +67,6 @@ public class Tile implements Serializable {
 		}
 		return false;
 	}
-	
-	/**
-	 * Returns the player currently on this tile or null if none
-	 * @return
-	 */
-	public Player getPlayer(){
-		if(this.player != null){
-			return player;
-		} else {
-			return null;
-		}
-	}
 
 	/**
 	 * Drop an item to an empty tile if the tile is not occupy.
@@ -130,7 +118,7 @@ public class Tile implements Serializable {
 	 * the player and item fields are NULL.
 	 */
 	public boolean isTileOccupied(){
-		if (type != TileType.TILE || type != TileType.TILE_CRACKED)
+		if (type == TileType.TILE || type == TileType.TILE_CRACKED)
 			if (player == null && item == null){
 				return false;
 			}
