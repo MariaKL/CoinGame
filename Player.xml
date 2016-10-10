@@ -10,12 +10,14 @@
     </getLocation>
     <inventory>
         <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
-            <coin>
-                <getAmmount>50</getAmmount>
-            </coin>
-            <coin>
-                <getAmmount>100</getAmmount>
-            </coin>
+            <coins>
+                <coin>
+                    <getAmmount>50</getAmmount>
+                </coin>
+                <coin>
+                    <getAmmount>100</getAmmount>
+                </coin>
+            </coins>
             <isFull>false</isFull>
         </item>
         <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="key">

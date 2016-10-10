@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBException;
 
 import javax.xml.bind.Unmarshaller;
 
+import kaukau.model.Coin;
 import kaukau.model.CoinBox;
 import kaukau.model.GameWorld;
 import kaukau.model.Key;
@@ -52,6 +53,9 @@ public class JAXBXmlToJava {
 					System.out.println("Player inventory key code: " + k.getCode());
 				}else if(p instanceof CoinBox){
 					CoinBox cb = (CoinBox)p;
+					for(Coin c : cb.getStorage()){
+						System.out.println("Coin : " + c.getAmount());
+					}
 					System.out.println("Player coinbox ammount: " + cb.totalCoins());
 				}
 			}

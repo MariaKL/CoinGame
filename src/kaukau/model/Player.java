@@ -27,7 +27,8 @@ public class Player implements Serializable{
 		this.name = name;
 		this.location = startLocation;
 		this.facing = facing;
-		inventory = new Container("Backpack", startLocation);
+		//inventory = new Container("Backpack", startLocation);
+		inventory = new Container("Backpack");
 		inventory.setAmount(8);
 		this.coinbox = new CoinBox(this);
 		this.inventory.addItem(this.coinbox);
@@ -44,6 +45,13 @@ public class Player implements Serializable{
 	 * */
 	public void setLocation(Tile loc) {
 		this.location = loc;
+//		ArrayList <PickupableItem> inventoryItems = this.inventory.getStorage();
+//		for(PickupableItem p : inventoryItems){
+//			if(p instanceof CoinBox){
+//				CoinBox cb = (CoinBox)p;
+//				cb.setLocation(this.location);
+//			}
+//		}
 	}
 
 	public void setfacingDirection(Direction direct){
