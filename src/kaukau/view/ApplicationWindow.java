@@ -107,7 +107,7 @@ public class ApplicationWindow extends JFrame {
 			}
 		});
 		JMenuItem load = new JMenuItem("Load");
-		save.addActionListener(new ActionListener() {
+		load.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				confirmLoad();
@@ -160,8 +160,7 @@ public class ApplicationWindow extends JFrame {
 		}
 	}
 
-	private void confirmSave() {
-		System.out.println("Clicking?");
+	private void confirmSave() {		
 		int result = JOptionPane.showConfirmDialog(this, "Save current Game State?", "Alert",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == 0) {
@@ -174,8 +173,7 @@ public class ApplicationWindow extends JFrame {
 		}
 	}
 
-	private void confirmLoad() {
-		System.out.println("Clicking?");
+	private void confirmLoad() {		
 		int result = JOptionPane.showConfirmDialog(this, "Load last Game State?", "Alert",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == 0) {
