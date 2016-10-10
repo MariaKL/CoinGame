@@ -99,7 +99,7 @@ public class Client extends Thread {
 			System.out.println("Waiting for game updates");
 			boolean closed = false;
 			while(!closed){
-//				ObjectInputStream readGame = new ObjectInputStream(sock.getInputStream());
+		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 				System.out.println("Players size before update: " + game.getAllPlayers().size());
 				// wait for game updates from server
 				game.fromByteArray((byte[])input.readObject());
