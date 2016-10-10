@@ -100,12 +100,12 @@ public class JAXBJavaToXml {
 
 			// specify the location and name of xml file to be created
 			// for testing at uni
-			// File XMLfile = new File("/home/khanshai/workspace/T2/Team_24/Game.xml");
+			 File XMLfile = new File("Game2.xml");
 			// for testing at home
-			File XMLfile = new File("/C:/Oishi/WORK/Work/2016/TRI 2/SWEN 222/PROJECT/Team_24/Game.xml");
-			JFileChooser jFileChooser = new JFileChooser();
-			jFileChooser.setSelectedFile(XMLfile);
-			int save = jFileChooser.showDialog(new JFrame(), null);
+//			File XMLfile = new File("/C:/Oishi/WORK/Work/2016/TRI 2/SWEN 222/PROJECT/Team_24/Game.xml");
+//			JFileChooser jFileChooser = new JFileChooser();
+//			jFileChooser.setSelectedFile(XMLfile);
+//			int save = jFileChooser.showDialog(new JFrame(), null);
 			// Writing to XML file
 
 			jaxbMarshaller.marshal(game, XMLfile);
