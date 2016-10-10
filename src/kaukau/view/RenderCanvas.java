@@ -368,6 +368,27 @@ public class RenderCanvas extends JPanel {
 				repaint();
 			}
 		});
+		
+		// enter door, if not possible give message
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_E, 0), "enter");
+		this.getActionMap().put("enter", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				//enter door
+				game.openDoor(player.getUserId());
+			}
+		});
+		
+		//pick up object in front if possible
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_P, 0), "pickup");
+		this.getActionMap().put("pickup", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				//pick up object if possible
+				game.pickupAnItem(player.getUserId());
+			}
+		});
+		
 	}
 
 	/**Rotates the current game level by applying

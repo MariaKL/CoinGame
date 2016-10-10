@@ -24,11 +24,13 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
 
 import kaukau.control.Client;
@@ -193,7 +195,7 @@ public class ApplicationWindow extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// displays a help message to user
-				//displayHelp();
+				displayHelp();
 			}
 		});
 		// creating the exit menu item
@@ -222,6 +224,22 @@ public class ApplicationWindow extends JFrame{
 	}
 
 	/**
+	 * 
+	 */
+	protected void displayHelp() {
+		
+		JOptionPane.showMessageDialog(this, "Using the keyboard: \nUse W, S, A, D or the arrow keys \n"
+				+ "to move up, down, left, and right respectively.\n\n "
+				+ "Use the R key to rotate the board.\n\n Use the "
+				+ "E key when facing a door to enter it.\n If "
+				+ "the door is locked and you don't have the key,\n "
+				+ "you will not be able to enter.\n\n Press the "
+				+ "P key to pick-up an item you are facing.");
+		
+	}
+
+
+	/**
 	 * Displays dialog asking if user wants to exit the game
 	 */
 	private void confirmExit() {
@@ -245,6 +263,7 @@ public class ApplicationWindow extends JFrame{
 		public Inventory() {
 			setBounds(0, 0, (WINDOW_WIDTH*NUM_ITEMS)/SIZE_DIVISOR, (INVENTORY_HEIGHT)/SIZE_DIVISOR);
 			addMouseListener(this);
+			// makes the inventory unfocusable so key bindings can work for render canvas
 			this.setFocusable(false);
 		}
 		
@@ -257,6 +276,7 @@ public class ApplicationWindow extends JFrame{
 			int uid = player.getUserId();
 			//temp instance of player in temp instance of 
 			//game.addPlayer();
+			System.out.println("");
 			System.out.println("Got player id through app window: "+ uid); //test see player uid
 			HashMap<Integer, Player> players = game.getAllPlayers();
 			//here test
@@ -271,15 +291,17 @@ public class ApplicationWindow extends JFrame{
 			//get the uid of player in hashmap
 			int tempuid = temp.iterator().next(); //
 			System.out.println("Using this player id: " + tempuid); //
-			//add item to player bag for testing purposes
-			players.get(tempuid).addToBag(new kaukau.model.Key(1)); //
 			//get player inventory
 			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();			
+			if (inv.size()<2){
+				//add item to player bag for testing purposes
+				players.get(tempuid).addToBag(new kaukau.model.Key(1)); //
+			}
 			for(int i=0;i<inv.size();++i) {
 				kaukau.model.PickupableItem item = null;
 				if(i < inv.size()) {
-					System.out.println("inventory size: "+inv.size());
-					System.out.println("This is the inventory: "+inv.toString());
+					//System.out.println("inventory size: "+inv.size());
+					//System.out.println("This is the inventory: "+inv.toString());
 					item = inv.get(i);
 				}				
 				drawLocation(i,0,WINDOW_WIDTH/SIZE_DIVISOR,INVENTORY_HEIGHT/SIZE_DIVISOR,item,g);
@@ -299,17 +321,51 @@ public class ApplicationWindow extends JFrame{
 			//get the uid of player in hashmap
 			int tempuid = temp.iterator().next();
 			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();
+			System.out.println("Inventory size: "+inv.size());
 			
 			
 			if(x < inv.size()) {
-				//createActionMenu(e,inv.get(x)); TODO: add this later
-				System.out.println("You clicked item "+ e.getX()*SIZE_DIVISOR/WINDOW_WIDTH);
+				createActionMenu(e,inv.get(x));
+				System.out.println("You clicked item "+ x);
 				
-			} 
-			//					
-			//GraphicalUserInterface.this.repaint(); */
-			
+			} 				
+			this.repaint();
 		}
+		
+		private void createActionMenu(MouseEvent e, kaukau.model.PickupableItem item) {
+			JPopupMenu actionMenu = new JPopupMenu();
+			//String[] actions = item.getActions();
+							
+			JMenuItem mi = new JMenuItem("Description");
+			mi.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(ApplicationWindow.this,item.getName());
+				}			
+			});
+			actionMenu.add(mi);	
+			/*
+			for(int i=0;i!=actions.length;++i) {
+				mi = new JMenuItem(actions[i]);
+				mi.addActionListener(createItemListener(item,actions[i]));
+				actionMenu.add(mi);
+			}			*/	
+			actionMenu.show(e.getComponent(), e.getX(), e.getY());		
+		}
+		
+		/*private ActionListener createItemListener(final Item i, final String action) {
+			return new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					boolean r = i.performAction(action, game.getPlayer());
+					if(!r) {
+						JOptionPane.showMessageDialog(ApplicationWindow.this,"Could not \"" + action + "\" item");
+					}
+					// Force a repain in case anything has changed
+					ApplicationWindow.this.repaint();
+				}			
+			};
+		} */
 
 		@Override
 		public void mouseEntered(MouseEvent e) {}
