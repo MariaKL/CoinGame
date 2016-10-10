@@ -8,18 +8,16 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement	//(namespace = "Team_24.kaukau.model.GameWorld")
+@XmlType(propOrder={"name", "userId", "facingDirection", "location", "inventory"})
 public class Player implements Serializable{
 	@XmlElement
-	private String name;
-	//@XmlElement(name="location")
-	private Tile location;
-	//@XmlElement
-	private Container inventory;
-	@XmlElement
-	private CoinBox coinbox;
-	//@XmlElement
+	private String name;	
+	private Tile location;	
+	private Container inventory;	
+	private CoinBox coinbox;	
 	private Direction facing;
 	@XmlElement
 	private final int userId;
@@ -48,7 +46,7 @@ public class Player implements Serializable{
 		this.location = loc;
 	}
 
-	public void setFacingDirection(Direction direct){
+	public void setfacingDirection(Direction direct){
 		this.facing = direct;
 	}
 

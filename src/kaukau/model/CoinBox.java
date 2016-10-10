@@ -23,9 +23,14 @@ public class CoinBox extends PickupableItem implements Serializable {
 
 	public CoinBox(Player player) {
 		super("Coin Box");
-		this.player = player;
-		this.storage = new Container("Coin Box", player.getLocation());
-		storage.setAmount(20);
+		if (player != null) {
+			this.player = player;
+			this.storage = new Container("Coin Box", player.getLocation());
+			storage.setAmount(20);
+		}else{
+			this.storage = new Container("Coin Box", null);
+			storage.setAmount(20);
+		}
 		totalCoinAmount = 0;
 	}
 
@@ -45,7 +50,7 @@ public class CoinBox extends PickupableItem implements Serializable {
 	public boolean addCoin(Item item) {
 		if (item instanceof Coin) {
 			Coin coin = (Coin) item;
-			if (storage.addItem(item) && !storage.isStorageFull()){
+			if (storage.addItem(item) && !storage.isStorageFull()) {
 				totalCoinAmount += coin.getAmount();
 				return true;
 			}
@@ -58,8 +63,6 @@ public class CoinBox extends PickupableItem implements Serializable {
 	 *
 	 * @return return all the coin objects
 	 */
-//	@XmlElementWrapper(name = "getStorage")
-//	@XmlElements({ @XmlElement(name = "coin") })
 	@XmlElement(name = "coin")
 	public ArrayList<Coin> getStorage() {
 		ArrayList<Coin> coins = new ArrayList<Coin>();
@@ -67,7 +70,6 @@ public class CoinBox extends PickupableItem implements Serializable {
 			coins.add((Coin) p);
 		}
 		return coins;
-		// return this.storage.getStorage();
 	}
 
 	/**

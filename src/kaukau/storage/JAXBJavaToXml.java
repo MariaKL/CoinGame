@@ -103,7 +103,7 @@ public class JAXBJavaToXml {
 			jaxbMarshaller.marshal(player, XMLfile);
 
 			// Writing to console
-			jaxbMarshaller.marshal(player, System.out);
+			//jaxbMarshaller.marshal(player, System.out);
 
 		} catch (JAXBException e) {
 			// some exception occured
@@ -133,7 +133,7 @@ public class JAXBJavaToXml {
 			jaxbMarshaller.marshal(map, XMLfile);
 
 			// Writing to console
-			jaxbMarshaller.marshal(map, System.out);
+			//jaxbMarshaller.marshal(map, System.out);
 
 		} catch (JAXBException e) {
 			// some exception occured
@@ -163,7 +163,7 @@ public class JAXBJavaToXml {
 			jaxbMarshaller.marshal(game, XMLfile);
 
 			// Writing to console
-			//jaxbMarshaller.marshal(game, System.out);
+			jaxbMarshaller.marshal(game, System.out);
 
 		} catch (JAXBException e) {
 			// some exception occured

@@ -75,7 +75,7 @@ public class GameWorld implements Serializable{
 					||tile.getTileType()==GameMap.TileType.TILE_CRACKED)){
 					oldPos.removePlayer();
 					player.setLocation(tile);
-					player.setFacingDirection(direction);
+					player.setfacingDirection(direction);
 					tile.addPlayer(player);
 					return true;
 			}

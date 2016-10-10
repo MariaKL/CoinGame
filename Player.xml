@@ -2,16 +2,24 @@
 <player>
     <name>Player</name>
     <userId>1</userId>
-    <CoinBox>
-        <getCoins>
-            <isFull>false</isFull>
-        </getCoins>
-    </CoinBox>
-    <Keys/>
-    <getLocation>
-        <tileType>EMPTY</tileType>
-        <xCoord>2</xCoord>
-        <yCoord>1</yCoord>
-    </getLocation>
     <getFacingDirection>EAST</getFacingDirection>
+    <getLocation>
+        <tileType>WALL</tileType>
+        <xCoord>9</xCoord>
+        <yCoord>3</yCoord>
+    </getLocation>
+    <inventory>
+        <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
+            <coin>
+                <getAmmount>50</getAmmount>
+            </coin>
+            <coin>
+                <getAmmount>100</getAmmount>
+            </coin>
+            <isFull>false</isFull>
+        </item>
+        <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="key">
+            <getCode>7</getCode>
+        </item>
+    </inventory>
 </player>

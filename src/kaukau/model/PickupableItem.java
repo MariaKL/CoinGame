@@ -2,6 +2,8 @@ package kaukau.model;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 /**
  * A Pickupable object is something a player can pick up, inspect, store in a container or drop.
  * Pickupable items include Keys, pieces of maps, notes and clues.
@@ -10,7 +12,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-
+@XmlSeeAlso({CoinBox.class, Coin.class, Key.class})
+@XmlTransient
 public abstract class PickupableItem implements Item, Serializable{
 
 	protected String name;
