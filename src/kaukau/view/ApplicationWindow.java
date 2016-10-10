@@ -99,6 +99,11 @@ public class ApplicationWindow extends JFrame {
 		return this.game;
 	}
 
+	public void repaint(){
+		rc.initBlocks(game);
+		rc.repaint();
+	}
+
 	/**
 	 * Associates this window with a client.
 	 * @param client
