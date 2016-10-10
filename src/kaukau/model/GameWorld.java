@@ -34,7 +34,8 @@ public class GameWorld implements Serializable{
 	 * across boards.
 	 */
 	@XmlElement
-	private static int uid = 0;
+	private static int uid;
+
 
 	/**
 	 * The current players of this game. Max number of player = 2.
@@ -44,6 +45,7 @@ public class GameWorld implements Serializable{
 	public GameWorld(){
 		board =  new GameMap();
 		gameOver = false;
+		uid = 0;
 	}
 
 	/**
@@ -73,9 +75,9 @@ public class GameWorld implements Serializable{
 		// if the tile is emptyTile and not occupy, then move player to this new position
 		if (validPoint(newPos)){
 			Tile tile = board.getTileAt(newPos);
-			if ((tile.getTileType() == TileType.TILE 
-					|| tile.getTileType() == TileType.TILE_CRACKED) 
-					&& !tile.isTileOccupied()){
+			if (!tile.isTileOccupied() && 
+					(tile.getTileType()==GameMap.TileType.TILE
+					||tile.getTileType()==GameMap.TileType.TILE_CRACKED)){
 				oldPos.removePlayer();
 				player.setLocation(tile);
 				player.setFacingDirection(direction);
@@ -170,8 +172,10 @@ public class GameWorld implements Serializable{
 	 */
 	public boolean validPoint(Point pos){
 		if (board.width() <= pos.x || board.height() <= pos.y ||
-				pos.x < 0 || pos.y < 0) return false;
-		return true;
+				pos.x < 0 || pos.y < 0) {
+			return false;
+		}
+		return (!this.getGameTiles()[pos.x][pos.y].isTileOccupied());
 	}
 
 	/**
@@ -297,8 +301,8 @@ public class GameWorld implements Serializable{
 		GameMap board = game.getGameMap();
 		Tile[][] tiles = board.getBoard();
 
-		for (int x = 0; x < 14; x++){
-			for (int y = 0; y < 14; y++){
+		for (int x = 0; x < board.BOARD_WIDTH; x++){
+			for (int y = 0; y < board.BOARD_HEIGHT; y++){
 				Tile tile = tiles[y][x];
 				if(tile.containsPickupItem()) System.out.print(tile.getItem().getName().charAt(0));
 				else System.out.print(tiles[y][x].getTileType().toString().charAt(0));

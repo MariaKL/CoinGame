@@ -17,6 +17,7 @@ import javax.swing.KeyStroke;
 
 import kaukau.control.Client;
 import kaukau.model.GameWorld;
+import kaukau.model.Player;
 import kaukau.model.Tile;
 
 /**This class handles the rendering of the game levels
@@ -99,9 +100,9 @@ public class RenderWindow extends JPanel {
 	// Field to store the rendering canvas
 	private RenderCanvas canvas;
 
-	public RenderWindow(GameWorld game, ApplicationWindow app){
+	public RenderWindow(GameWorld game, Player user, ApplicationWindow app){
 		
-		this.canvas = new RenderCanvas(game);
+		this.canvas = new RenderCanvas(game, user);
 		this.parent = app;
 		
 		// initilising the level from 2D level data array

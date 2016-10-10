@@ -49,12 +49,9 @@ public class Tile implements Serializable {
 	 * @return true if the player successfully added, otherwise false.
 	 */
 	public boolean addPlayer(Player player){
-		if (type != TileType.TILE || type != TileType.TILE_CRACKED) return false;
-		else {
-			if (this.player == null && this.item == null){
-				this.player = player;
-				return true;
-			}
+		if (this.player == null && this.item == null){
+			this.player = player;
+			return true;
 		}
 		return false;
 	}
@@ -64,12 +61,9 @@ public class Tile implements Serializable {
 	 * @return true if the player successfully removed, otherwise false.
 	 */
 	public boolean removePlayer(){
-		if (type != TileType.TILE) return false;
-		else {
-			if (this.player != null){
-				this.player = null;
-				return true;
-			}
+		if (this.player != null){
+			this.player = null;
+			return true;
 		}
 		return false;
 	}
@@ -136,11 +130,11 @@ public class Tile implements Serializable {
 	 * the player and item fields are NULL.
 	 */
 	public boolean isTileOccupied(){
-		if (type != TileType.TILE)
-			return true;
-		else if (type == TileType.TILE && player == null && item == null)
-			return false;
-		else return true;
+		if (type != TileType.TILE || type != TileType.TILE_CRACKED)
+			if (player == null && item == null){
+				return false;
+			}
+		return true;
 	}
 
 	/**
@@ -149,6 +143,15 @@ public class Tile implements Serializable {
 	 */
 	@XmlElement(name = "tileType")
 	public TileType getTileType() { return type; }
+
+	/**
+	 * Return the player that occupy this tile.
+	 * @return a player on this tile, otherwise null if there is no one
+	 */
+	public Player getPlayer() {
+		if (player != null) return player;
+		return null;
+	}
 
 	/**
 	 * Return the item that occupy this tile.

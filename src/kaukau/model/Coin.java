@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 public class Coin extends PickupableItem implements Serializable{
 
-	private final int amount;
+	private int amount;
 
 	/**
 	 * Create a Coin object.
@@ -42,5 +42,9 @@ public class Coin extends PickupableItem implements Serializable{
 	public int getAmount(){
 		return amount;
 	}
+    
+    public void setAmount(int amount){
+    	this.amount = amount;
+    }
 
 }

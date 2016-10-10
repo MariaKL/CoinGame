@@ -56,7 +56,7 @@ public class ApplicationWindow extends JFrame{
 	private static final String IMAGE_PATH = "images/";
 
 	// Field to store the rendering window for the game
-	public RenderWindow rw;
+	public RenderCanvas rc;
 
 	// Field to store application window's copy of the game
 	
@@ -72,12 +72,19 @@ public class ApplicationWindow extends JFrame{
 	public final int INVENTORY_HEIGHT = 250;
 	
 	private GameWorld game;
+	
+	//field to store the player of the game
+	private Player player;
 
+/*
 
 	public ApplicationWindow(GameWorld game){
+*/
+	public ApplicationWindow(GameWorld gameWorld, Player user){
 		super("Kaukau");
 
-		this.game = game;
+		this.game = gameWorld;
+		this.player = user;
 
 		// creating a menu
 		initMenu();
@@ -87,10 +94,14 @@ public class ApplicationWindow extends JFrame{
 		
 		// initialize client private instance variable
 
+/*
 		rw = new RenderWindow(game, this);
+*/
+		// construct render window with GameWorld
+		rc = new RenderCanvas(game, user);
 
 		// adding the rendering window to the application
-		add(rw.getCanvas());
+		add(rc);
 
 		// setting title
 		setTitle("Kaukau");
@@ -126,7 +137,7 @@ public class ApplicationWindow extends JFrame{
 				.createEmptyBorder(3, 3, 3, 3), BorderFactory
 				.createLineBorder(Color.gray));
 		centerPanel.setBorder(cb);
-		centerPanel.add(rw, BorderLayout.CENTER);
+		centerPanel.add(rc, BorderLayout.CENTER);
 		return centerPanel;
 	}
 	
@@ -240,8 +251,9 @@ public class ApplicationWindow extends JFrame{
 			//get Player and his inventory
 			//paint
 			
-			client = rw.getClient();
-			int uid = client.getUID()+1;
+			//client = rw.getClient();
+			//client = rc.getClient();
+			int uid = player.getUserId();
 			//temp instance of player in temp instance of 
 			//game.addPlayer();
 			System.out.println("Got player id through app window: "+ uid); //test see player uid

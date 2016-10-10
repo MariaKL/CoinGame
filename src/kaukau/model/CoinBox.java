@@ -48,6 +48,7 @@ public class CoinBox extends PickupableItem implements Serializable {
 			Coin coin = (Coin) item;
 			if (storage.addItem(item) && !storage.isStorageFull()) {
 				totalCoinAmount = coin.getAmount();
+				return true;
 			}
 		}
 		return false;
