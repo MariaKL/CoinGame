@@ -295,8 +295,8 @@ public class ApplicationWindow extends JFrame{
 			int uid = player.getUserId();
 			//temp instance of player in temp instance of 
 			//game.addPlayer();
-			System.out.println("");
-			System.out.println("Got player id through app window: "+ uid); //test see player uid
+			//System.out.println("");
+			//System.out.println("Got player id through app window: "+ uid); //test see player uid
 			HashMap<Integer, Player> players = game.getAllPlayers();
 			//here test
 			if (!players.containsKey(uid)) {
@@ -306,10 +306,10 @@ public class ApplicationWindow extends JFrame{
 			}
 			//test to get key set of players hashmap
 			Set<Integer> temp = players.keySet(); //
-			System.out.println(temp.toString()); //
+			//System.out.println(temp.toString()); //
 			//get the uid of player in hashmap
 			int tempuid = temp.iterator().next(); //
-			System.out.println("Using this player id: " + tempuid); //
+			//System.out.println("Using this player id: " + tempuid); //
 			//get player inventory
 			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();			
 			if (inv.size()<2){
@@ -415,7 +415,7 @@ public class ApplicationWindow extends JFrame{
 					name = "cube2";
 				}
 				name.toLowerCase();
-				System.out.println(name);
+				//System.out.println(name);
 				BufferedImage image = ImageIO.read(new File("images/" + name + ".png"));
 				if(image != null){
 	    			g.drawImage(image, x, y, this);
