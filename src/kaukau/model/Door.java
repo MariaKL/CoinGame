@@ -2,6 +2,7 @@ package kaukau.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,11 +29,16 @@ public class Door implements Item, Serializable{
 		if (keyCode > 0) this.locked = true;
 		else this.locked = false;
 	}
+	
+	public Door(){
+		this(-1, null);
+	}
 
 	/**
 	 * Check if this door is locked or not
 	 * @return true if it is locked, otherwise false.
 	 */
+	@XmlElement(name="isLocked")
 	public boolean isLocked(){
 		return this.locked;
 	}
@@ -57,6 +63,7 @@ public class Door implements Item, Serializable{
 	 * Return the door code that need to match with a key.
 	 * @return the door code of this door
 	 */
+	@XmlElement(name="doorCode")
 	public int getDoorCode(){
 		return keyCode;
 	}
@@ -72,6 +79,11 @@ public class Door implements Item, Serializable{
 	@Override
 	public String getName() {
 		return "Door";
+	}
+	
+	@XmlElement(name="getLocation")
+	public Tile getLocation(){
+		return this.location;
 	}
 
 

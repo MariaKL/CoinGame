@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Key extends PickupableItem implements Serializable {
 
 	private int code;
@@ -12,6 +13,10 @@ public class Key extends PickupableItem implements Serializable {
 	public Key(int key) {
 		super("Key");
 		this.code = key;
+	}
+	
+	public Key (){
+		this(-1);
 	}
 
 	@XmlElement(name = "getCode")

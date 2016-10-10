@@ -84,7 +84,7 @@ public class GameWorldTests {
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
 		assertTrue(game.movePlayer(uid, Direction.SOUTH));
-		assertTrue(player.facingDirection() == Direction.SOUTH);
+		assertTrue(player.getfacingDirection() == Direction.SOUTH);
 		assertTrue(player.getLocation().isTileOccupied());
 	}
 
@@ -99,9 +99,9 @@ public class GameWorldTests {
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
 		assertTrue(game.movePlayer(uid, Direction.SOUTH));
-		assertTrue(player.facingDirection() == Direction.SOUTH);
+		assertTrue(player.getfacingDirection() == Direction.SOUTH);
 		assertTrue(game.movePlayer(uid, Direction.EAST));
-		assertTrue(player.facingDirection() == Direction.EAST);
+		assertTrue(player.getfacingDirection() == Direction.EAST);
 		assertTrue(player.getLocation().isTileOccupied());
 	}
 
@@ -121,9 +121,9 @@ public class GameWorldTests {
 		assertTrue(game.movePlayer(uid, Direction.SOUTH));
 		assertTrue(board.getTileAt(new Point(oldPos.x, oldPos.y+1)).isTileOccupied());
 		assertFalse(board.getTileAt(oldPos).isTileOccupied());
-		assertTrue(player.facingDirection() == Direction.SOUTH);
+		assertTrue(player.getfacingDirection() == Direction.SOUTH);
 		assertTrue(game.movePlayer(uid, Direction.EAST));
-		assertTrue(player.facingDirection() == Direction.EAST);
+		assertTrue(player.getfacingDirection() == Direction.EAST);
 	}
 
 	/**
