@@ -107,17 +107,18 @@ public class Server{
 									break;
 							}
 							System.out.println("Updated game");
-							// send back to clients
-							updateAll();
-							//OR
-	//						sendToAll(uid + " " + dir);
-//							Thread.sleep(3000);
-				    		if(player < game.getAllPlayers().size()-1){
+				    		if(player < game.getAllPlayers().size()){
 				    			player++;
 				    		}
 				    		else{
 				    			player = 1;
 				    		}
+				    		System.out.println("Server = " + player);
+							// send back to clients
+							updateAll();
+							//OR
+	//						sendToAll(uid + " " + dir);
+//							Thread.sleep(3000);
 						}
 			    		System.out.println("Game over");
 						// If we get here, then we're in game over mode
