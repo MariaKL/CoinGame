@@ -68,30 +68,31 @@ public class GameMap implements Serializable {
     				int startY =  Integer.valueOf(eElement.getElementsByTagName("startY").item(0).getTextContent());
     				Room room = new Room(name, startX, startY);
     				rooms.add(room);
-
     				for (int row = 0; row < ROOM_HEIGHT; row++){
     					// get the value line by line from XML file e.g. a line is <L0></L0>
 	    				String line = eElement.getElementsByTagName("L"+String.valueOf(row)).item(0).getTextContent();
 	    				for (int col = 0; col < ROOM_WIDTH; ++col) {
 	    					char c = line.charAt(col);
+	    					int x = row+startX;
+	    					int y = col+startY;
 	    					switch (c) {
 		    					case 'W' :
-		    						board[col+startX][row+startY] = new Tile(TileType.WALL, col+startX, row+startY);
+		    						board[x][y] = new Tile(TileType.WALL, x, y);
 		    						break;
 		    					case 'D':
-		    						doorCount = addDoor(eElement, doorCount, col+startX, row+startY, room);
+		    						doorCount = addDoor(eElement, doorCount, x, y, room);
 		    						break;
 		    					case 'K':
-		    						keyCount = addKey(eElement, keyCount, col+startX, row+startY);
+		    						keyCount = addKey(eElement, keyCount, x, y);
 		    						break;
 		    					case 'X':
-		    						keyCount = addCoin(eElement, coinCount, col+startX, row+startY);
+		    						keyCount = addCoin(eElement, coinCount, x, y);
 		    						break;
 		    					case 'T':
-		    						board[col+startX][row+startY] = new Tile(TileType.TILE, col+startX, row+startY);
+		    						board[x][y] = new Tile(TileType.TILE, x, y);
 		    						break;
 		    					case 'C':
-		    						board[col+startX][row+startY] = new Tile(TileType.TILE_CRACKED, col+startX, row+startY);
+		    						board[x][y] = new Tile(TileType.TILE_CRACKED, x, y);
 		    						break;
 	    					}
 	    				}
