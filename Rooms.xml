@@ -22,8 +22,8 @@
     <Coin1>40</Coin1>
   </room>
   <room name="Office">
-    <startX>10</startX>
-    <startY>0</startY>
+    <startX>0</startX>
+    <startY>10</startY>
     <L0>WWWWWWWWWW</L0>
     <L1>CCXCCCCCCW</L1>
     <L2>CCCCCCCCCW</L2>
@@ -38,8 +38,8 @@
     <Coin0>50</Coin0>
   </room>
   <room name="Hallway 1">
-    <startX>0</startX>
-    <startY>10</startY>
+    <startX>10</startX>
+    <startY>0</startY>
     <L0>WWCCCCCCCC</L0>
     <L1>WCCCKCCCCC</L1>
     <L2>WCCCCCCCCC</L2>
