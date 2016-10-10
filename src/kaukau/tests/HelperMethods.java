@@ -31,8 +31,7 @@ public class HelperMethods {
 	 * @return
 	 */
 	public static Server server(){
-		GameWorld newGame = new GameWorld();
     	// make and run a server
-    	return new Server(newGame);
+    	return new Server();
 	}
 }
