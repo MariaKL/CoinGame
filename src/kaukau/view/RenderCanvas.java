@@ -18,6 +18,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import kaukau.control.Client;
 import kaukau.model.Direction;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
@@ -27,72 +28,71 @@ import kaukau.model.Tile;
 
 @SuppressWarnings("serial")
 public class RenderCanvas extends JPanel {
-	
+
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
-	
+
 	// stores the width and height constants of the board tiles
 	private final int tileWidth = 50;
 	private final int tileHeight = 50;
-	
+
 	// Field to store all the walls & tiles in the current level
 	private List<RenderTile> allTiles = new ArrayList<RenderTile>();
 	private List<Wall> allWalls = new ArrayList<Wall>();
-	
+
 	// Field for the blocks to be rendered for the current level
 	private List<Block> blocks = new ArrayList<Block>();
-	
-	// stores a array representation of the current 
+
+	// stores a array representation of the current
 	// game level blocks that are to be rendered
 	private Block[][] levelBlocks;
 
-	private HashMap<Integer, Player> players;
-
 	private GameWorld game;
-	
-	private final Player player;
-		
-	/**This class take a gameworld parameter and 
-	 * creates a rendering based on the state of 
+	private HashMap<Integer, Player> players;
+	private Player player;
+	private Client client;
+
+	/**This class take a gameworld parameter and
+	 * creates a rendering based on the state of
 	 * the game.
 	 * @param game
 	 */
 	public RenderCanvas(GameWorld gameWorld, Player user){
-		
+
 		levelBlocks = new Block[20][20];
-		
+
 		this.game = gameWorld;
 		this.setPlayers(game.getAllPlayers());
 		this.player = user;
-		
+
 		this.setBackground(new Color(79,100,90));
-		
+
 		initBlocks(game);
 		attachBindings();
 		//set focus
 		this.setFocusable(true);
 		repaint();
-		
+
 	}
-	
+
 	private void setPlayers(HashMap<Integer, Player> all){
 		this.players = all;
 	}
 
 	/**initialises the blocks (tiles & walls) which make up
-	 * the current level. The tiles are recieved from the 
+	 * the current level. The tiles are recieved from the
 	 * passed GameWorld parameter.
-	 * 
+	 *
 	 * @param game
 	 */
 	private void initBlocks(GameWorld game) {
-		
+
 		allWalls.clear();
 		allTiles.clear();
 		blocks.clear();
-		
+
 		Tile loc = player.getLocation();
-		
+
 		Tile[][] tiles = game.getGameTiles();
 		for(int r=0; r!=levelBlocks.length; r++){
 			for(int c=0; c!=levelBlocks[0].length; c++){
@@ -100,15 +100,15 @@ public class RenderCanvas extends JPanel {
 				Tile tile = tiles[c][r];
 				// the block to be created
 				Block b = null;
-				
+
 				// Creating a Tile block for rendering
 				if(tile.getTileType() == GameMap.TileType.TILE){
-					
+
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));		
+					Point pos = RenderWindow.twoDToIso(new Point(x, y));
 					// adjusting the position of the render
 					b = new RenderTile(0, pos.x+50, pos.y+65);
 					// setting the tile item if one
@@ -122,14 +122,14 @@ public class RenderCanvas extends JPanel {
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
 					levelBlocks[c][r] = b;
-					
+
 				// creating a cracked tile block for rendering
 				} else if (tile.getTileType() == GameMap.TileType.TILE_CRACKED){
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));		
+					Point pos = RenderWindow.twoDToIso(new Point(x, y));
 					// adjusting the position of the render
 					b = new RenderTile(1, pos.x+50, pos.y+65);
 					// setting the tile item if one
@@ -143,8 +143,8 @@ public class RenderCanvas extends JPanel {
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
 					levelBlocks[c][r] = b;
-				
-				// Creating a Wall block for rendering 
+
+				// Creating a Wall block for rendering
 				} else if(tile.getTileType() == GameMap.TileType.WALL){
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
@@ -173,18 +173,18 @@ public class RenderCanvas extends JPanel {
 			}
 		}
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		paintBlocks(g);
-		
+
 	}
-	
+
 	/**Paints the blocks which make up the current level.
 	 *  the blocks are added to the list from front to back
-	 *  and thus can be correctly rendered in order. 
+	 *  and thus can be correctly rendered in order.
 	 */
 	private void paintBlocks(Graphics g) {
 		final int TILE_MARGIN = 400;
@@ -210,7 +210,7 @@ public class RenderCanvas extends JPanel {
 		    				image = ImageIO.read(new File(IMAGE_PATH + "crack-tile.png"));
 		    				break;
 		    		}
-		    	}	
+		    	}
 		    	// drawing the block image to the screen
 		    	if(image != null){
 		    		g.drawImage(image, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
@@ -225,7 +225,7 @@ public class RenderCanvas extends JPanel {
 			    		switch(token.getName()){
 			    			case "Coin":
 			    				itemImg = ImageIO.read(new File(IMAGE_PATH + "coin.png"));
-			    				break;	 
+			    				break;
 			    			case "Key":
 			    				itemImg = ImageIO.read(new File(IMAGE_PATH + "cube2.png"));
 								break;
@@ -235,37 +235,37 @@ public class RenderCanvas extends JPanel {
 				    		g.drawImage(itemImg, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8), this);
 				    	}
 			    	}
-			    	
+
 		    		// getting the player on this tile if one
 		    		Player user = ((RenderTile)b).getPlayer();
 			    	if(user != null){
 			    		BufferedImage playerImg = null;
-			    		switch(player.facingDirection()){
+			    		switch(user.facingDirection()){
 				    		case NORTH:
-				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png")); 
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
 				    			break;
 				    		case EAST:
-				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png")); 
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
 				    			break;
 				    		case SOUTH:
-				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png")); 
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png"));
 				    			break;
 				    		case WEST:
-				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png")); 
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png"));
 				    			break;
 			    		}
 			    		// draw the item image if not null
 			    		if(playerImg != null){
 				    		g.drawImage(playerImg, b.X() + TILE_MARGIN, b.Y() + (TILE_MARGIN/8)-75, this);
 				    	}
-			    	}	
+			    	}
 		    	}
 		    }
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * assign key to actions using key bindings
 	 */
@@ -279,7 +279,7 @@ public class RenderCanvas extends JPanel {
 				repaint();
 			}
 		});
-		
+
 		// player move down
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_S, 0), "moveDown");
@@ -298,6 +298,9 @@ public class RenderCanvas extends JPanel {
 					((RenderTile)rold).setPlayer(null);
 					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 					((RenderTile)rnew).setPlayer(player);
+					// update server
+					client.sendAction(KeyEvent.VK_DOWN);
+					System.out.println("Down int: " + KeyEvent.VK_DOWN);
 				}
 				repaint();
 			}
@@ -320,6 +323,9 @@ public class RenderCanvas extends JPanel {
 					((RenderTile)rold).setPlayer(null);
 					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 					((RenderTile)rnew).setPlayer(player);
+					// update server
+					client.sendAction(KeyEvent.VK_UP);
+					System.out.println("Up int: " + KeyEvent.VK_UP);
 				}
 				repaint();
 			}
@@ -342,6 +348,9 @@ public class RenderCanvas extends JPanel {
 					((RenderTile)rold).setPlayer(null);
 					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 					((RenderTile)rnew).setPlayer(player);
+					// update server
+					client.sendAction(KeyEvent.VK_LEFT);
+					System.out.println("Left int: " + KeyEvent.VK_LEFT);
 				}
 				repaint();
 			}
@@ -364,6 +373,9 @@ public class RenderCanvas extends JPanel {
 					((RenderTile)rold).setPlayer(null);
 					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 					((RenderTile)rnew).setPlayer(player);
+					// update server
+					client.sendAction(KeyEvent.VK_RIGHT);
+					System.out.println("Right int: " + KeyEvent.VK_RIGHT);
 				}
 				repaint();
 			}
@@ -399,7 +411,7 @@ public class RenderCanvas extends JPanel {
 		//rotate int[][] 90 degrees into new 2d array
 		final int M = levelBlocks.length;
 	    final int N = levelBlocks[0].length;
-	    
+
 	    // rotate the array data
 	    Block[][] ret = new Block[M][N];
 	    for (int r = 0; r < M; r++) {
@@ -470,12 +482,31 @@ public class RenderCanvas extends JPanel {
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
 					blocks.add(b);
-				}			
+				}
 			}
 	    }
 	    //replace levelBlocks array with new 2d array for future rotations
 	    for(int a=0; a<levelBlocks.length; a++)
 	    	  for(int b=0; b<levelBlocks[0].length; b++)
 	    	    levelBlocks[a][b]=ret[a][b];
+	}
+
+	/**
+	 * Sets the updated game for rendering.
+	 * @param game
+	 */
+	public void setGame(GameWorld game){
+		this.game = game;
+		System.out.println("Game players: " + game.getAllPlayers().size());
+		this.player = game.getAllPlayers().get(player.getUserId());
+		System.out.println("RC set player: " + player.getName());
+	}
+
+	/**
+	 * Associates this canvas with a client to update player actions
+	 * @param client
+	 */
+	public void setClient(Client client){
+		this.client = client;
 	}
 }

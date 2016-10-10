@@ -42,8 +42,8 @@ public class Server{
 	 * Creates the listening socket and the two threads to connect clients and handle player actions.
 	 * @param game
 	 */
-	public Server(GameWorld game){
-		this.game = game;
+	public Server(){
+		this.game = new GameWorld();
         try {
 			listener = new ServerSocket(portNumber);
 			System.out.println("Created server");
@@ -70,9 +70,6 @@ public class Server{
 	//					game.setState(Board.READY);
 //						Thread.sleep(3000);
 	//					game.setState(Board.PLAYING);
-
-						//TODO: go through each client and read input
-
 						while(!game.isOver()) {
 				    		System.out.println("Game continues");
 							Socket sock = sockets.get(player);
@@ -115,6 +112,12 @@ public class Server{
 							//OR
 	//						sendToAll(uid + " " + dir);
 //							Thread.sleep(3000);
+				    		if(player < game.getAllPlayers().size()-1){
+				    			player++;
+				    		}
+				    		else{
+				    			player = 1;
+				    		}
 						}
 			    		System.out.println("Game over");
 						// If we get here, then we're in game over mode
@@ -159,6 +162,7 @@ public class Server{
 		            	else{
 							// accept a new client
 							int uid = game.addPlayer();
+//		            		int uid = game.getAllPlayers().size();
 							sockets.put(uid, socket);
 							out.put(uid, output);
 							in.put(uid, input);
@@ -173,11 +177,11 @@ public class Server{
 				        	// send new game to all clients
 							System.out.println("Server: number of players: " + game.getAllPlayers().size());
 							System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
+				        	// send new game to all players
+				        	updateAll();
 							// starts listening for commands when a player is connected
 							if(!commandThread.isAlive())
 								commandThread.start();
-				        	// send new game to all players
-				        	updateAll();
 		            	}
 		            }
 		        } catch(IOException e){
@@ -307,14 +311,20 @@ public class Server{
     }
 
     /**
+     * Returns the main game.
+     * @return
+     */
+    public static GameWorld getGame(){
+    	return game;
+    }
+
+    /**
      * Starts a game and associates it with a server.
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws IOException{
-		// create a new game
-    	GameWorld newGame = new GameWorld();
     	// make and run a server
-    	new Server(newGame);
+    	new Server();
 	}
 }

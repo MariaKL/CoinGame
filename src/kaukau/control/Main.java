@@ -25,13 +25,13 @@ public class Main {
 
 			@Override
 			public void run() {
-				GameWorld gw = new GameWorld();
-				Player user = gw.player(gw.addPlayer());
+				GameWorld gw = new GameWorld(); // default game
+				Player user = gw.player(gw.addPlayer()); // default player
 				ApplicationWindow aw = new ApplicationWindow(gw, user);
 				aw.setVisible(true);
 				Client pClient = new Client(aw);
 		    	pClient.start();
-		    	//aw.rw.addClient(pClient);
+		    	aw.setClient(pClient);
 		    	// TODO: pass info from server where game is saved to client,
 		    	// client should get copy of gameworld from server and pass into app window
 			}

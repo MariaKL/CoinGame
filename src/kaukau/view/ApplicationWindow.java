@@ -74,7 +74,7 @@ public class ApplicationWindow extends JFrame{
 	public final int INVENTORY_HEIGHT = 250;
 	
 	private GameWorld game;
-	
+
 	//field to store the player of the game
 	private Player player;
 
@@ -153,10 +153,29 @@ public class ApplicationWindow extends JFrame{
 	}
 
 	/**
+	 * Sets the application's copy of the game world.
+	 * @param game
+	 */
+	public void setGame(GameWorld game){
+		this.game = game;
+		this.player = game.getAllPlayers().get(player.getUserId());
+		rc.setGame(game);
+	}
+
+	/**
 	 * @return the applications copy of the game world
 	 */
 	public GameWorld getGame(){
 		return this.game;
+	}
+
+	/**
+	 * Associates this window with a client.
+	 * @param client
+	 */
+	public void setClient(Client client){
+		this.client = client;
+		rc.setClient(client);
 	}
 
 	/**

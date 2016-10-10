@@ -103,6 +103,9 @@ public class Client extends Thread {
 				System.out.println("Players size before update: " + game.getAllPlayers().size());
 				// wait for game updates from server
 				game.fromByteArray((byte[])input.readObject());
+				// update rendering
+				aw.setGame(game);
+				aw.rc.repaint();
 				System.out.println("Received game update");
 				System.out.println("Players size after update: " + game.getAllPlayers().size());
 			}
@@ -157,7 +160,7 @@ public class Client extends Thread {
 			}
 		} catch (IOException e) {
 			// problem with sending to the server
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
