@@ -27,9 +27,9 @@ public class Player implements Serializable{
 	public Player (int uid, String name, Tile startLocation, Direction facing){
 		this.userId = uid;
 		this.name = name;
-		this.location = startLocation;
+		location = startLocation;
 		this.facing = facing;
-		inventory = new Container("Backpack", startLocation);
+		inventory = new Container("Backpack", null);
 		inventory.setAmount(8);
 		this.coinbox = new CoinBox(this);
 		this.inventory.addItem(this.coinbox);
@@ -38,7 +38,7 @@ public class Player implements Serializable{
 
 	@SuppressWarnings("unused")
 	private Player() {
-	this(-1, null, null, null);
+		this(-1, null, null, null);
 	}
 
 	/**

@@ -18,6 +18,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import kaukau.model.GameMap.TileType;
+
 @XmlRootElement	//(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable {
 
@@ -72,6 +74,64 @@ public class GameMap implements Serializable {
 	    				String line = eElement.getElementsByTagName("L"+String.valueOf(row)).item(0).getTextContent();
 	    				for (int col = 0; col < ROOM_WIDTH; ++col) {
 	    					char c = line.charAt(col);
+	    					int x = row+startX;
+	    					int y = col+startY;
+	    					switch (c) {
+		    					case 'W' :
+		    						board[x][y] = new Tile(TileType.WALL, x, y);
+		    						break;
+		    					case 'D':
+		    						doorCount = addDoor(eElement, doorCount, x, y, room);
+		    						break;
+		    					case 'K':
+		    						keyCount = addKey(eElement, keyCount, x, y);
+		    						break;
+		    					case 'X':
+		    						keyCount = addCoin(eElement, coinCount, x, y);
+		    						break;
+		    					case 'T':
+		    						board[x][y] = new Tile(TileType.TILE, x, y);
+		    						break;
+		    					case 'C':
+		    						board[x][y] = new Tile(TileType.TILE_CRACKED, x, y);
+		    						break;
+	    					}
+	    				}
+	    			}
+    			}
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*public void createRoomsFromFile() {
+		try {
+			// Document doc = new ReadXMLFile().createDocument("Rooms.xml");
+			File xmlFile = new File("Rooms.xml");
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(xmlFile);
+			NodeList nList = doc.getElementsByTagName("room");  // get elements
+
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+    			Node nNode = nList.item(temp);
+    			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+    				Element eElement = (Element) nNode;
+    				int doorCount = 0;  // use to count the doors
+    				int keyCount = 0;   // use to count the keys
+    				int coinCount = 0;   // use to count the coin
+    				// get the name of the room, the start point of x and y
+    				String name = eElement.getAttribute("name");
+    				int startX =  Integer.valueOf(eElement.getElementsByTagName("startX").item(0).getTextContent());
+    				int startY =  Integer.valueOf(eElement.getElementsByTagName("startY").item(0).getTextContent());
+    				Room room = new Room(name, startX, startY);
+    				rooms.add(room);
+    				for (int row = 0; row < ROOM_HEIGHT; row++){
+    					// get the value line by line from XML file e.g. a line is <L0></L0>
+	    				String line = eElement.getElementsByTagName("L"+String.valueOf(row)).item(0).getTextContent();
+	    				for (int col = 0; col < ROOM_WIDTH; ++col) {
+	    					char c = line.charAt(col);
 	    					switch (c) {
 		    					case 'W' :
 		    						board[col+startX][row+startY] = new Tile(TileType.WALL, col+startX, row+startY);
@@ -99,7 +159,7 @@ public class GameMap implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	/**
 	 * Add the door to the board.
