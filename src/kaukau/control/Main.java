@@ -31,7 +31,7 @@ public class Main {
 				aw.setVisible(true);
 				Client pClient = new Client(aw);
 		    	pClient.start();
-		    	//aw.rw.addClient(pClient);
+		    	aw.rw.addClient(pClient);
 		    	// TODO: pass info from server where game is saved to client,
 		    	// client should get copy of gameworld from server and pass into app window
 			}

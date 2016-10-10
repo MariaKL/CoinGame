@@ -69,7 +69,7 @@ public class ApplicationWindow extends JFrame{
 	// Final Variables to avoid magic numbers
 	public final int WINDOW_WIDTH = 765;
 	public final int WINDOW_HEIGHT = 525;
-	public final int INVENTORY_HEIGHT = 150;
+	public final int INVENTORY_HEIGHT = 250;
 	
 	private GameWorld game;
 
@@ -243,21 +243,30 @@ public class ApplicationWindow extends JFrame{
 			client = rw.getClient();
 			int uid = client.getUID()+1;
 			//temp instance of player in temp instance of 
-			game.addPlayer();
+			//game.addPlayer();
 			System.out.println("Got player id through app window: "+ uid); //test see player uid
 			HashMap<Integer, Player> players = game.getAllPlayers();
-			//here 
+			//here test
 			if (!players.containsKey(uid)) {
 				System.out.println("Player id not in hashmap");
 				if (players.isEmpty())
 					System.out.println("hashmap is emtpty");
 			}
+			//test to get key set of players hashmap
 			Set<Integer> temp = players.keySet();
 			System.out.println(temp.toString());
-			ArrayList<kaukau.model.PickupableItem> inv = players.get(uid).getInventory();			
+			//get the uid of player in hashmap
+			int tempuid = temp.iterator().next();
+			System.out.println("Using this player id: " + tempuid);
+			//add item to player bag for testing purposes
+			players.get(tempuid).addToBag(new kaukau.model.Key(1));
+			//get player inventory
+			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();			
 			for(int i=0;i<inv.size();++i) {
 				kaukau.model.PickupableItem item = null;
 				if(i < inv.size()) {
+					System.out.println("inventory size: "+inv.size());
+					System.out.println("This is the inventory: "+inv.toString());
 					item = inv.get(i);
 				}				
 				drawLocation(i,0,WINDOW_WIDTH/SIZE_DIVISOR,INVENTORY_HEIGHT/SIZE_DIVISOR,item,g);
@@ -271,14 +280,21 @@ public class ApplicationWindow extends JFrame{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			int x = (e.getX()*SIZE_DIVISOR) / WINDOW_WIDTH;
-			//				
-			/*List<Item> inventory = game.getPlayer().getInventory();
+			//get player and his inventory
+			HashMap<Integer, Player> players = game.getAllPlayers();
+			Set<Integer> temp = players.keySet();
+			//get the uid of player in hashmap
+			int tempuid = temp.iterator().next();
+			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();
 			
-			if(x < inventory.size()) {
-				createActionMenu(e,inventory.get(x));
+			
+			if(x < inv.size()) {
+				//createActionMenu(e,inv.get(x)); TODO: add this later
+				System.out.println("You clicked item "+ e.getX()*SIZE_DIVISOR);
+				
 			} 
 			//					
-			GraphicalUserInterface.this.repaint(); */
+			//GraphicalUserInterface.this.repaint(); */
 			
 		}
 
@@ -303,7 +319,16 @@ public class ApplicationWindow extends JFrame{
 		if(item != null) { 
 			try {
 				String name = item.getName();
-				BufferedImage image = ImageIO.read(new File("images/" + name));
+				//TODO: find coinbox asset and change hardcode here, replace with name
+				if (name.equals("Coin Box")){
+					name = "cube4";
+				}
+				if (name.equals("Key")){
+					name = "cube2";
+				}
+				name.toLowerCase();
+				System.out.println(name);
+				BufferedImage image = ImageIO.read(new File("images/" + name + ".png"));
 				if(image != null){
 	    			g.drawImage(image, x, y, this);
 	    		}
