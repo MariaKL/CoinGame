@@ -97,7 +97,7 @@ public class GameWorld implements Serializable{
 		// then player can pick up the item only if there is one
 		if (validPoint(pos)){
 			Tile tile = board.getTileAt(pos);
-			if (tile.getTileType() == TileType.TILE && tile.containsPickupItem()){
+			if ((tile.getTileType() == TileType.TILE || tile.getTileType() == TileType.TILE_CRACKED) && tile.containsPickupItem()){
 				if (player.addToBag((PickupableItem)tile.getItem())){
 					tile.removeItem();
 					return true;
@@ -118,7 +118,7 @@ public class GameWorld implements Serializable{
 		Point pos = getPointFromDirection(player, player.getfacingDirection());
 		if (validPoint(pos)){
 			Tile tile = board.getTileAt(pos);
-			if (!tile.isTileOccupied()){
+			if (!tile.isTileOccupied() && (tile.getTileType() == TileType.TILE || tile.getTileType() == TileType.TILE_CRACKED)){
 				return player.removeFromBag(index);
 			}
 		}
@@ -171,7 +171,6 @@ public class GameWorld implements Serializable{
 			return false;
 		}
 		return true;
-		//return (!this.getGameTiles()[pos.x][pos.y].isTileOccupied());
 	}
 
 	/**

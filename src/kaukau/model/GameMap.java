@@ -79,7 +79,7 @@ public class GameMap implements Serializable {
 		    						board[col+startX][row+startY] = new Tile(TileType.WALL, col+startX, row+startY);
 		    						break;
 		    					case 'D':
-		    						doorCount = addDoor(eElement, doorCount, col+startX, row+startY);
+		    						doorCount = addDoor(eElement, doorCount, col+startX, row+startY, room);
 		    						break;
 		    					case 'K':
 		    						keyCount = addKey(eElement, keyCount, col+startX, row+startY);
@@ -116,7 +116,7 @@ public class GameMap implements Serializable {
 	 *            the y point of this door
 	 * @return the next index number for next door item
 	 */
-	public int addDoor(Element element, int count, int x, int y) {
+	public int addDoor(Element element, int count, int x, int y, Room room){
 		Tile tile = new Tile(TileType.DOOR, x, y);
 		int key = Integer
 				.valueOf(element.getElementsByTagName("Door" + String.valueOf(count)).item(0).getTextContent());
@@ -124,6 +124,7 @@ public class GameMap implements Serializable {
 		doors.add(door);
 		tile.setItem(door);
 		board[x][y] = tile;
+		room.addDoor(door);
 		return ++count;
 	}
 

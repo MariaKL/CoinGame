@@ -90,6 +90,7 @@ public class Tile implements Serializable {
 		}
 	}
 
+
 	/**
 	 * Drop an item to an empty tile if the tile is not occupy.
 	 *
@@ -100,7 +101,7 @@ public class Tile implements Serializable {
 	 */
 
 	public boolean dropItem(PickupableItem dropItem){
-		if (type != TileType.TILE) return false;
+		if (type != TileType.TILE || type != TileType.TILE_CRACKED) return false;
 		else {
 			if (item == null && player == null) {
 				item = dropItem;
@@ -118,7 +119,7 @@ public class Tile implements Serializable {
 	 *         fields are NULL, otherwise false .
 	 */
 	public boolean removeItem(){
-		if (type != TileType.TILE) return false;
+		if (type != TileType.TILE || type != TileType.TILE_CRACKED) return false;
 		else {
 			if (item == null) {
 				return false;
@@ -137,7 +138,7 @@ public class Tile implements Serializable {
 	 *         false.
 	 */
 	public boolean containsPickupItem(){
-		if (type != TileType.TILE) return false;
+		if (type != TileType.TILE || type != TileType.TILE_CRACKED) return false;
 		else {
 			if (type == TileType.TILE && item instanceof PickupableItem){
 				return true;
@@ -186,10 +187,11 @@ public class Tile implements Serializable {
 	 *         player and item fields are NULL.
 	 */
 	public boolean isTileOccupied(){
-		if (type == TileType.TILE || type == TileType.TILE_CRACKED)
+		if (type == TileType.TILE || type == TileType.TILE_CRACKED){
 			if (player == null && item == null){
 				return false;
 			}
+		}
 		return true;
 	}
 
