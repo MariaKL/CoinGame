@@ -17,6 +17,7 @@ import javax.swing.KeyStroke;
 
 import kaukau.control.Client;
 import kaukau.model.GameWorld;
+import kaukau.model.Player;
 import kaukau.model.Tile;
 
 /**This class handles the rendering of the game levels
@@ -99,9 +100,9 @@ public class RenderWindow extends JPanel {
 	// Field to store the rendering canvas
 	private RenderCanvas canvas;
 
-	public RenderWindow(GameWorld game, ApplicationWindow app){
+	public RenderWindow(GameWorld game, Player user, ApplicationWindow app){
 		
-		this.canvas = new RenderCanvas(game);
+		this.canvas = new RenderCanvas(game, user);
 		this.parent = app;
 		
 		// initilising the level from 2D level data array
@@ -700,7 +701,8 @@ public class RenderWindow extends JPanel {
 		Tile[][] tiles = parent.getGame().getGameTiles();
 		for (int i=0;i<tiles.length;i++){
 			for (int j=0;j<tiles[0].length;j++){
-				if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.EMPTY){
+				if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.TILE
+					||tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.TILE_CRACKED){
 					//empty tile is 0
 					levelData[i-1][j-1] = 0; //shift over to account for walls in tile map
 				} else if (tiles[i][j].getTileType()==kaukau.model.GameMap.TileType.WALL){

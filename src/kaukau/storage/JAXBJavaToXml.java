@@ -73,7 +73,6 @@ public class JAXBJavaToXml {
 		p1.addToBag(new Key (7));
 		p2.addToBag(new Key (71));
 
-
 		return game;
 	}
 
