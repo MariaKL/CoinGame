@@ -76,6 +76,9 @@ public class ApplicationWindow extends JFrame {
 
 	//field to store the player of the game
 	private Player player;
+	
+	// testing purpose field for temp uid
+	private int tempouid;
 
 /*
 
@@ -310,13 +313,10 @@ public class ApplicationWindow extends JFrame {
 			//System.out.println(temp.toString()); //
 			//get the uid of player in hashmap
 			int tempuid = temp.iterator().next(); //
+			tempouid = tempuid;
 			//System.out.println("Using this player id: " + tempuid); //
 			//get player inventory
 			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();			
-			if (inv.size()<2){
-				//add item to player bag for testing purposes
-				players.get(tempuid).addToBag(new kaukau.model.Key(1)); //
-			}
 			for(int i=0;i<inv.size();++i) {
 				kaukau.model.PickupableItem item = null;
 				if(i < inv.size()) {
@@ -345,14 +345,14 @@ public class ApplicationWindow extends JFrame {
 			
 			
 			if(x < inv.size()) {
-				createActionMenu(e,inv.get(x));
+				createActionMenu(e,inv.get(x), x);
 				System.out.println("You clicked item "+ x);
 				
 			} 				
 			this.repaint();
 		}
 		
-		private void createActionMenu(MouseEvent e, kaukau.model.PickupableItem item) {
+		private void createActionMenu(MouseEvent e, kaukau.model.PickupableItem item, int index) {
 			JPopupMenu actionMenu = new JPopupMenu();
 			//String[] actions = item.getActions();
 							
@@ -363,29 +363,34 @@ public class ApplicationWindow extends JFrame {
 					JOptionPane.showMessageDialog(ApplicationWindow.this,item.getName());
 				}			
 			});
-			actionMenu.add(mi);	
-			/*
-			for(int i=0;i!=actions.length;++i) {
-				mi = new JMenuItem(actions[i]);
-				mi.addActionListener(createItemListener(item,actions[i]));
-				actionMenu.add(mi);
-			}			*/	
-			actionMenu.show(e.getComponent(), e.getX(), e.getY());		
-		}
-		
-		/*private ActionListener createItemListener(final Item i, final String action) {
-			return new ActionListener() {
+			
+			JMenuItem drop = new JMenuItem("Drop Item");
+			drop.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					boolean r = i.performAction(action, game.getPlayer());
-					if(!r) {
-						JOptionPane.showMessageDialog(ApplicationWindow.this,"Could not \"" + action + "\" item");
+					String msg = "Are you sure you want to drop this item?";
+					int result = JOptionPane.showConfirmDialog(ApplicationWindow.this, msg,
+					        "Alert", JOptionPane.OK_CANCEL_OPTION);
+					if(result==0){
+						game.dropAnItem(tempouid, index);
+						//update game object here and repaint
+						updateGame();
 					}
-					// Force a repain in case anything has changed
-					ApplicationWindow.this.repaint();
 				}			
-			};
-		} */
+			});
+			actionMenu.add(mi);	
+			actionMenu.add(drop);
+			
+			actionMenu.show(e.getComponent(), e.getX(), e.getY());		
+		}
+
+		/**
+		 * 
+		 */
+		protected void updateGame() {
+			this.repaint();
+			
+		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {}

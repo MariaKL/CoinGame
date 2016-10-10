@@ -117,8 +117,10 @@ public class GameWorld implements Serializable{
 		Player player = players.get(uid);
 		Point pos = getPointFromDirection(player, player.getfacingDirection());
 		if (validPoint(pos)){
+			System.out.println("Test");
 			Tile tile = board.getTileAt(pos);
 			if (!tile.isTileOccupied()){
+				System.out.println("Test 2");
 				return player.removeFromBag(index);
 			}
 		}
