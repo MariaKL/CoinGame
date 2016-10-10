@@ -175,7 +175,8 @@ public class GameWorld implements Serializable{
 				pos.x < 0 || pos.y < 0) {
 			return false;
 		}
-		return (!this.getGameTiles()[pos.x][pos.y].isTileOccupied());
+		return true;
+		//return (!this.getGameTiles()[pos.x][pos.y].isTileOccupied());
 	}
 
 	/**

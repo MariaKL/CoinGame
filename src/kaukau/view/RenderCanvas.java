@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
@@ -76,6 +77,22 @@ public class RenderCanvas extends JPanel {
 	private void setPlayers(HashMap<Integer, Player> all){
 		this.players = all;
 	}
+	/**
+	 * Sets the updated game for rendering.
+	 * @param game
+	 */
+	public void setGame(GameWorld game){
+		this.game = game;
+		setPlayers(game.getAllPlayers());
+		this.player = game.getAllPlayers().get(player.getUserId());
+	}
+	/**
+	 * Associates this canvas with a client to update player actions
+	 * @param client
+	 */
+	public void setClient(Client client){
+		this.client = client;
+	}
 
 	/**initialises the blocks (tiles & walls) which make up
 	 * the current level. The tiles are recieved from the
@@ -89,7 +106,7 @@ public class RenderCanvas extends JPanel {
 		allTiles.clear();
 		blocks.clear();
 
-		Tile loc = player.getLocation();
+		//Tile loc = player.getLocation();
 
 		Tile[][] tiles = game.getGameTiles();
 		for(int r=0; r!=levelBlocks.length; r++){
@@ -113,8 +130,12 @@ public class RenderCanvas extends JPanel {
 					if(tile.getItem()!=null){
 						((RenderTile)b).setItem(tile.getItem());
 					}
-					if(r==loc.X()&&c==loc.Y()){
-						((RenderTile)b).setPlayer(player);
+					for(Map.Entry<Integer, Player> p: players.entrySet()){
+						Player player = p.getValue();
+						Tile loc = player.getLocation();
+						if(r==loc.X()&&c==loc.Y()){
+							((RenderTile)b).setPlayer(player);
+						}
 					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
@@ -126,7 +147,7 @@ public class RenderCanvas extends JPanel {
 					// getting the x & y position of the tile
 					int x = r * tileWidth;
 					int y = c * tileHeight;
-					// converting 2d point to isometic
+					// converting 2d point to isometric
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
 					// adjusting the position of the render
 					b = new RenderTile(1, pos.x+50, pos.y+65);
@@ -134,8 +155,12 @@ public class RenderCanvas extends JPanel {
 					if(tile.getItem()!=null){
 						((RenderTile)b).setItem(tile.getItem());
 					}
-					if(r==loc.X()&&c==loc.Y()){
-						((RenderTile)b).setPlayer(player);
+					for(Map.Entry<Integer, Player> p: players.entrySet()){
+						Player player = p.getValue();
+						Tile loc = player.getLocation();
+						if(r==loc.X()&&c==loc.Y()){
+							((RenderTile)b).setPlayer(player);
+						}
 					}
 					allTiles.add((RenderTile) b);
 					// adding blocks in order for painters algorithm
@@ -287,22 +312,25 @@ public class RenderCanvas extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// getting players current location
 				Tile oloc = player.getLocation();
-				// attempt to move player
-				if(game.movePlayer(player.getUserId(), Direction.SOUTH)){
-					// getting players new location if moved
-					Tile nloc = player.getLocation();
-					// update rendering
-					Block rold = levelBlocks[oloc.Y()][oloc.X()];
-					((RenderTile)rold).setPlayer(null);
-					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
-					((RenderTile)rnew).setPlayer(player);
-					// update server
-					client.sendAction(KeyEvent.VK_DOWN);
-					System.out.println("Down int: " + KeyEvent.VK_DOWN);
-				}
+				// remove player from old tile
+				Block rold = levelBlocks[oloc.Y()][oloc.X()];
+				((RenderTile)rold).setPlayer(null);
+				// update server
+				client.sendAction(KeyEvent.VK_DOWN);
+				// wait for updates from server
+				try {
+					Thread.sleep(150);
+				} catch (InterruptedException e1) {	}
+				// add player to new tile
+				Tile nloc = player.getLocation();
+				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+				((RenderTile)rnew).setPlayer(player);
+				// update rendering
+				initBlocks(game);
 				repaint();
 			}
 		});
+
 		// player move up
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_W, 0), "moveUp");
@@ -312,19 +340,21 @@ public class RenderCanvas extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// getting players current location
 				Tile oloc = player.getLocation();
-				// attempt to move player
-				if(game.movePlayer(player.getUserId(), Direction.NORTH)){
-					// getting players new location if moved
-					Tile nloc = player.getLocation();
-					// update rendering
-					Block rold = levelBlocks[oloc.Y()][oloc.X()];
-					((RenderTile)rold).setPlayer(null);
-					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
-					((RenderTile)rnew).setPlayer(player);
-					// update server
-					client.sendAction(KeyEvent.VK_UP);
-					System.out.println("Up int: " + KeyEvent.VK_UP);
-				}
+				// remove player from old tile
+				Block rold = levelBlocks[oloc.Y()][oloc.X()];
+				((RenderTile)rold).setPlayer(null);
+				// update server
+				client.sendAction(KeyEvent.VK_UP);
+				// wait for updates from server
+				try {
+					Thread.sleep(150);
+				} catch (InterruptedException e1) {	}
+				// add player to new tile
+				Tile nloc = player.getLocation();
+				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+				((RenderTile)rnew).setPlayer(player);
+				// update rendering
+				initBlocks(game);
 				repaint();
 			}
 		});
@@ -337,19 +367,21 @@ public class RenderCanvas extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// getting players current location
 				Tile oloc = player.getLocation();
-				// attempt to move player
-				if(game.movePlayer(player.getUserId(), Direction.WEST)){
-					// getting players new location if moved
-					Tile nloc = player.getLocation();
-					// update rendering
-					Block rold = levelBlocks[oloc.Y()][oloc.X()];
-					((RenderTile)rold).setPlayer(null);
-					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
-					((RenderTile)rnew).setPlayer(player);
-					// update server
-					client.sendAction(KeyEvent.VK_LEFT);
-					System.out.println("Left int: " + KeyEvent.VK_LEFT);
-				}
+				// remove player from old tile
+				Block rold = levelBlocks[oloc.Y()][oloc.X()];
+				((RenderTile)rold).setPlayer(null);
+				// update server
+				client.sendAction(KeyEvent.VK_LEFT);
+				// wait for updates from server
+				try {
+					Thread.sleep(150);
+				} catch (InterruptedException e1) {	}
+				// add player to new tile
+				Tile nloc = player.getLocation();
+				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+				((RenderTile)rnew).setPlayer(player);
+				// update rendering
+				initBlocks(game);
 				repaint();
 			}
 		});
@@ -362,19 +394,21 @@ public class RenderCanvas extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// getting players current location
 				Tile oloc = player.getLocation();
-				// attempt to move player
-				if(game.movePlayer(player.getUserId(), Direction.EAST)){
-					// getting players new location if moved
-					Tile nloc = player.getLocation();
-					// update rendering
-					Block rold = levelBlocks[oloc.Y()][oloc.X()];
-					((RenderTile)rold).setPlayer(null);
-					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
-					((RenderTile)rnew).setPlayer(player);
-					// update server
-					client.sendAction(KeyEvent.VK_RIGHT);
-					System.out.println("Right int: " + KeyEvent.VK_RIGHT);
-				}
+				// remove player from old tile
+				Block rold = levelBlocks[oloc.Y()][oloc.X()];
+				((RenderTile)rold).setPlayer(null);
+				// update server
+				client.sendAction(KeyEvent.VK_RIGHT);
+				// wait for updates from server
+				try {
+					Thread.sleep(150);
+				} catch (InterruptedException e1) {	}
+				// add player to new tile
+				Tile nloc = player.getLocation();
+				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
+				((RenderTile)rnew).setPlayer(player);
+				// update rendering
+				initBlocks(game);
 				repaint();
 			}
 		});
@@ -466,24 +500,5 @@ public class RenderCanvas extends JPanel {
 	    for(int a=0; a<levelBlocks.length; a++)
 	    	  for(int b=0; b<levelBlocks[0].length; b++)
 	    	    levelBlocks[a][b]=ret[a][b];
-	}
-
-	/**
-	 * Sets the updated game for rendering.
-	 * @param game
-	 */
-	public void setGame(GameWorld game){
-		this.game = game;
-		System.out.println("Game players: " + game.getAllPlayers().size());
-		this.player = game.getAllPlayers().get(player.getUserId());
-		System.out.println("RC set player: " + player.getName());
-	}
-
-	/**
-	 * Associates this canvas with a client to update player actions
-	 * @param client
-	 */
-	public void setClient(Client client){
-		this.client = client;
 	}
 }
