@@ -69,6 +69,8 @@ public class RenderCanvas extends JPanel {
 		
 		initBlocks(game);
 		attachBindings();
+		//set focus
+		this.setFocusable(true);
 		repaint();
 		
 	}

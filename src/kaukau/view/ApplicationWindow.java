@@ -245,6 +245,7 @@ public class ApplicationWindow extends JFrame{
 		public Inventory() {
 			setBounds(0, 0, (WINDOW_WIDTH*NUM_ITEMS)/SIZE_DIVISOR, (INVENTORY_HEIGHT)/SIZE_DIVISOR);
 			addMouseListener(this);
+			this.setFocusable(false);
 		}
 		
 		public void paint (Graphics g){
@@ -265,13 +266,13 @@ public class ApplicationWindow extends JFrame{
 					System.out.println("hashmap is emtpty");
 			}
 			//test to get key set of players hashmap
-			Set<Integer> temp = players.keySet();
-			System.out.println(temp.toString());
+			Set<Integer> temp = players.keySet(); //
+			System.out.println(temp.toString()); //
 			//get the uid of player in hashmap
-			int tempuid = temp.iterator().next();
-			System.out.println("Using this player id: " + tempuid);
+			int tempuid = temp.iterator().next(); //
+			System.out.println("Using this player id: " + tempuid); //
 			//add item to player bag for testing purposes
-			players.get(tempuid).addToBag(new kaukau.model.Key(1));
+			players.get(tempuid).addToBag(new kaukau.model.Key(1)); //
 			//get player inventory
 			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();			
 			for(int i=0;i<inv.size();++i) {
@@ -302,7 +303,7 @@ public class ApplicationWindow extends JFrame{
 			
 			if(x < inv.size()) {
 				//createActionMenu(e,inv.get(x)); TODO: add this later
-				System.out.println("You clicked item "+ e.getX()*SIZE_DIVISOR);
+				System.out.println("You clicked item "+ e.getX()*SIZE_DIVISOR/WINDOW_WIDTH);
 				
 			} 
 			//					
