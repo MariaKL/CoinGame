@@ -78,10 +78,10 @@ public class RenderCanvas extends JPanel {
 	 * Sets the updated game for rendering.
 	 * @param game
 	 */
-	public void setGame(GameWorld game){
+	public void setGame(GameWorld game, int uid){
 		this.game = game;
 		setPlayers(game.getAllPlayers());
-		this.player = game.getAllPlayers().get(player.getUserId());
+		this.player = game.player(uid);
 	}
 	/**
 	 * Associates this canvas with a client to update player actions

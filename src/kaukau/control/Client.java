@@ -103,7 +103,7 @@ public class Client extends Thread {
 				// wait for game updates from server
 				game.fromByteArray((byte[])input.readObject());
 				// update rendering
-				aw.setGame(game);
+				aw.setGame(game, uid);
 				aw.rc.repaint();
 				System.out.println("Received game update");
 				System.out.println("Players size after update: " + game.getAllPlayers().size());
