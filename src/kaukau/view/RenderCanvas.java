@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,10 +79,10 @@ public class RenderCanvas extends JPanel {
 	 * Sets the updated game for rendering.
 	 * @param game
 	 */
-	public void setGame(GameWorld game, int uid){
+	public void setGame(GameWorld game){
 		this.game = game;
 		setPlayers(game.getAllPlayers());
-		this.player = game.player(uid);
+		this.player = game.getAllPlayers().get(player.getUserId());
 	}
 	/**
 	 * Associates this canvas with a client to update player actions
@@ -97,7 +98,7 @@ public class RenderCanvas extends JPanel {
 	 *
 	 * @param game
 	 */
-	private void initBlocks(GameWorld game) {
+	public void initBlocks(GameWorld game) {
 
 		allWalls.clear();
 		allTiles.clear();
@@ -261,7 +262,7 @@ public class RenderCanvas extends JPanel {
 		    		Player user = ((RenderTile)b).getPlayer();
 			    	if(user != null){
 			    		BufferedImage playerImg = null;
-			    		switch(player.getfacingDirection()){
+			    		switch(user.getfacingDirection()){
 				    		case NORTH:
 				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
 				    			break;
@@ -284,7 +285,7 @@ public class RenderCanvas extends JPanel {
 		    }
 		} catch(IOException e) {
 			e.printStackTrace();
-		}
+		} catch(ConcurrentModificationException e){}
 	}
 
 	/**

@@ -86,10 +86,10 @@ public class ApplicationWindow extends JFrame {
 	 * Sets the application's copy of the game world.
 	 * @param game
 	 */
-	public void setGame(GameWorld game, int uid){
+	public void setGame(GameWorld game){
 		this.game = game;
-		this.player = game.player(uid);
-		rc.setGame(game, uid);
+		this.player = game.getAllPlayers().get(player.getUserId());
+		rc.setGame(game);
 	}
 
 	/**
@@ -97,6 +97,11 @@ public class ApplicationWindow extends JFrame {
 	 */
 	public GameWorld getGame() {
 		return this.game;
+	}
+
+	public void repaint(){
+		rc.initBlocks(game);
+		rc.repaint();
 	}
 
 	/**
