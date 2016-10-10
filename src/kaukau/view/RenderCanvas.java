@@ -412,6 +412,7 @@ public class RenderCanvas extends JPanel {
 				repaint();
 			}
 		});
+		
 	}
 
 	/**Rotates the current game level by applying

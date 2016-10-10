@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class GameWorld implements Serializable{
 
 	private GameMap board;
-	
+
 	private boolean gameOver;
 
 	/**
@@ -47,10 +47,10 @@ public class GameWorld implements Serializable{
 	/**
 	 * Register a new player into the game.
 	 * @return the user id of the new player.
-	 */	
+	 */
 	public synchronized int addPlayer(){
 		Random rand = new Random();
-		Tile tile = board.getTileAt(new Point(7-(rand.nextInt(4)), 3));
+		Tile tile = board.getTileAt(new Point(7-(rand.nextInt(5)), 3));
 		Player player = new Player(++uid, "Player", tile, Direction.EAST);
 		System.out.println(player.getUserId());
 		tile.addPlayer(player);
@@ -291,7 +291,7 @@ public class GameWorld implements Serializable{
 	/**
 	 * Return the current board of the game.
 	 * @return
-	 */	
+	 */
 	public Tile[][] getGameTiles(){
 		return board.getBoard();
 	}
