@@ -432,6 +432,10 @@ public class RenderCanvas extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//pick up object if possible
 				game.pickupAnItem(player.getUserId());
+				repaint();
+				System.out.println("Attempt to pick up item");
+				//here get direction of player and item coordinates
+				//TODO: see above comment
 			}
 		});
 		

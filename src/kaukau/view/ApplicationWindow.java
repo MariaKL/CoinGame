@@ -393,6 +393,7 @@ public class ApplicationWindow extends JFrame {
 		 * 
 		 */
 		protected void updateGame() {
+			
 			this.repaint();
 			
 		}
