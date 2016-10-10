@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <GameWorld xmlns:ns2="Team_24.kaukau.model.GameWorld">
+    <gameOver>false</gameOver>
+    <uid>2</uid>
     <allPlayers>
         <entry>
             <key>1</key>
             <value>
                 <name>Player</name>
+                <facing>EAST</facing>
                 <userId>1</userId>
                 <CoinBox>
                     <getCoins>
@@ -25,15 +28,15 @@
                 <getLocation>
                     <tileType>EMPTY</tileType>
                     <xCoord>2</xCoord>
-                    <yCoord>0</yCoord>
+                    <yCoord>1</yCoord>
                 </getLocation>
-                <getFacingDirection>NORTH</getFacingDirection>
             </value>
         </entry>
         <entry>
             <key>2</key>
             <value>
                 <name>Player</name>
+                <facing>EAST</facing>
                 <userId>2</userId>
                 <CoinBox>
                     <getCoins>
@@ -50,7 +53,6 @@
                     <xCoord>2</xCoord>
                     <yCoord>2</yCoord>
                 </getLocation>
-                <getFacingDirection>EAST</getFacingDirection>
             </value>
         </entry>
     </allPlayers>

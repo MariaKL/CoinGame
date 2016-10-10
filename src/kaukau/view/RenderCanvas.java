@@ -238,7 +238,7 @@ public class RenderCanvas extends JPanel {
 		    		Player user = ((RenderTile)b).getPlayer();
 			    	if(user != null){
 			    		BufferedImage playerImg = null;
-			    		switch(user.facingDirection()){
+			    		switch(player.getfacingDirection()){
 				    		case NORTH:
 				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
 				    			break;
