@@ -4,10 +4,18 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Room implements Serializable{
 
+	@XmlElement(name="name")
 	private String name;
-	private int startX, startY;
+	@XmlElement(name="startX")
+	private int startX;
+	@XmlElement(name="startY")
+	private int startY;
 	private ArrayList<Door> doors;
 
 	public Room(String name, int x, int y){
@@ -15,6 +23,10 @@ public class Room implements Serializable{
 		this.startX = x;
 		this.startY = y;
 		doors = new ArrayList<Door>();
+	}
+	
+	public Room(){
+		this(null, -1, -1);
 	}
 
 	public Point getStartPoint(){
@@ -25,6 +37,7 @@ public class Room implements Serializable{
 		this.doors.add(door);
 	}
 	
+<<<<<<< HEAD
 	public String getName(){ 
 		return name; 
 	}
@@ -52,4 +65,14 @@ public class Room implements Serializable{
 	public ArrayList<Door> getDoors(){
 		return doors;
 	}
+=======
+*/
+	
+	public Point getStartPoint(){
+		return new Point(startX, startY);
+	}
+	
+	
+	public String getName(){ return name; }
+>>>>>>> 008f95d8520f6c81771f9109b7aa079f5c4a1371
 }

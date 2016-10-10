@@ -42,8 +42,8 @@ public class Server{
 	 * Creates the listening socket and the two threads to connect clients and handle player actions.
 	 * @param game
 	 */
-	public Server(GameWorld game){
-		this.game = game;
+	public Server(){
+		this.game = new GameWorld();
         try {
 			listener = new ServerSocket(portNumber);
 			System.out.println("Created server");
@@ -70,9 +70,6 @@ public class Server{
 	//					game.setState(Board.READY);
 //						Thread.sleep(3000);
 	//					game.setState(Board.PLAYING);
-
-						//TODO: go through each client and read input
-
 						while(!game.isOver()) {
 				    		System.out.println("Game continues");
 							Socket sock = sockets.get(player);
@@ -115,6 +112,12 @@ public class Server{
 							//OR
 	//						sendToAll(uid + " " + dir);
 //							Thread.sleep(3000);
+				    		if(player < game.getAllPlayers().size()-1){
+				    			player++;
+				    		}
+				    		else{
+				    			player = 1;
+				    		}
 						}
 			    		System.out.println("Game over");
 						// If we get here, then we're in game over mode
@@ -159,11 +162,11 @@ public class Server{
 		            	else{
 							// accept a new client
 							int uid = game.addPlayer();
+//		            		int uid = game.getAllPlayers().size();
 							sockets.put(uid, socket);
 							out.put(uid, output);
 							in.put(uid, input);
 							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
-
 //		            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 		    				output.writeBoolean(true);
 //				        	output.flush();
@@ -258,6 +261,22 @@ public class Server{
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Returns the id of a player given the socket.
+     * @param sock
+     * @return
+     */
+    private static Integer getUid(Socket sock){
+    	for(Integer i: sockets.keySet()){
+    		if(sockets.get(i) == sock)
+    			return i;
+    	}
+    	return -1;
+    }
+
+	/**
+>>>>>>> master
      * Closes all sockets.
      */
     public void closeAll(){
@@ -307,14 +326,20 @@ public class Server{
     }
 
     /**
+     * Returns the main game.
+     * @return
+     */
+    public static GameWorld getGame(){
+    	return game;
+    }
+
+    /**
      * Starts a game and associates it with a server.
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws IOException{
-		// create a new game
-    	GameWorld newGame = new GameWorld();
     	// make and run a server
-    	new Server(newGame);
+    	new Server();
 	}
 }
