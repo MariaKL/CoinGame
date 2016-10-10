@@ -61,7 +61,7 @@ public class GameWorldTests {
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
 		assertTrue(game.movePlayer(uid, Direction.SOUTH));
-		assertTrue(player.facingDirection() == Direction.SOUTH);
+		assertTrue(player.getfacingDirection() == Direction.SOUTH);
 	}
 	
 	/**
@@ -74,9 +74,9 @@ public class GameWorldTests {
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
 		assertTrue(game.movePlayer(uid, Direction.SOUTH));
-		assertTrue(player.facingDirection() == Direction.SOUTH);
+		assertTrue(player.getfacingDirection() == Direction.SOUTH);
 		assertTrue(game.movePlayer(uid, Direction.EAST));
-		assertTrue(player.facingDirection() == Direction.EAST);
+		assertTrue(player.getfacingDirection() == Direction.EAST);
 	}
 
 	/**

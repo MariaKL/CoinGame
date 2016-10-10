@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-@XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
+@XmlRootElement	//(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable {
 
 	@XmlElement(name = "roomWidth")

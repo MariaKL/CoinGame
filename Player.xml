@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<player>
+    <name>Player</name>
+    <userId>1</userId>
+    <CoinBox>
+        <getCoins>
+            <isFull>false</isFull>
+        </getCoins>
+    </CoinBox>
+    <Keys/>
+    <getLocation>
+        <tileType>EMPTY</tileType>
+        <xCoord>2</xCoord>
+        <yCoord>1</yCoord>
+    </getLocation>
+    <getFacingDirection>EAST</getFacingDirection>
+</player>

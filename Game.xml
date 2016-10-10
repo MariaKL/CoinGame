@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <GameWorld xmlns:ns2="Team_24.kaukau.model.GameWorld">
-    <gameOver>false</gameOver>
-    <uid>2</uid>
     <allPlayers>
         <entry>
             <key>1</key>
             <value>
                 <name>Player</name>
-                <facing>EAST</facing>
                 <userId>1</userId>
                 <CoinBox>
                     <getCoins>
@@ -28,15 +25,15 @@
                 <getLocation>
                     <tileType>EMPTY</tileType>
                     <xCoord>2</xCoord>
-                    <yCoord>1</yCoord>
+                    <yCoord>0</yCoord>
                 </getLocation>
+                <getFacingDirection>NORTH</getFacingDirection>
             </value>
         </entry>
         <entry>
             <key>2</key>
             <value>
                 <name>Player</name>
-                <facing>EAST</facing>
                 <userId>2</userId>
                 <CoinBox>
                     <getCoins>
@@ -53,6 +50,7 @@
                     <xCoord>2</xCoord>
                     <yCoord>2</yCoord>
                 </getLocation>
+                <getFacingDirection>EAST</getFacingDirection>
             </value>
         </entry>
     </allPlayers>
@@ -280,6 +278,9 @@
                         <key>
                             <getCode>125</getCode>
                         </key>
+                        <getKey>
+                            <getCode>125</getCode>
+                        </getKey>
                         <tileType>EMPTY</tileType>
                         <xCoord>1</xCoord>
                         <yCoord>15</yCoord>
@@ -478,6 +479,9 @@
                         <yCoord>12</yCoord>
                     </tile>
                     <tile>
+                        <getCoin>
+                            <getAmmount>30</getAmmount>
+                        </getCoin>
                         <coin>
                             <getAmmount>30</getAmmount>
                         </coin>
@@ -578,6 +582,9 @@
                         <key>
                             <getCode>124</getCode>
                         </key>
+                        <getKey>
+                            <getCode>124</getCode>
+                        </getKey>
                         <tileType>EMPTY</tileType>
                         <xCoord>4</xCoord>
                         <yCoord>11</yCoord>
@@ -635,6 +642,9 @@
                         <key>
                             <getCode>123</getCode>
                         </key>
+                        <getKey>
+                            <getCode>123</getCode>
+                        </getKey>
                         <tileType>EMPTY</tileType>
                         <xCoord>5</xCoord>
                         <yCoord>1</yCoord>
@@ -1363,6 +1373,9 @@
                         <yCoord>0</yCoord>
                     </tile>
                     <tile>
+                        <getCoin>
+                            <getAmmount>50</getAmmount>
+                        </getCoin>
                         <coin>
                             <getAmmount>50</getAmmount>
                         </coin>
@@ -1520,6 +1533,9 @@
                         <yCoord>10</yCoord>
                     </tile>
                     <tile>
+                        <getCoin>
+                            <getAmmount>40</getAmmount>
+                        </getCoin>
                         <coin>
                             <getAmmount>40</getAmmount>
                         </coin>
@@ -1751,6 +1767,9 @@
                         <yCoord>14</yCoord>
                     </tile>
                     <tile>
+                        <getCoin>
+                            <getAmmount>40</getAmmount>
+                        </getCoin>
                         <coin>
                             <getAmmount>40</getAmmount>
                         </coin>

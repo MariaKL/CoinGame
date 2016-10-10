@@ -9,15 +9,14 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(namespace = "Team_24.kaukau.model.GameWorld")
+@XmlRootElement	//(namespace = "Team_24.kaukau.model.GameWorld")
 public class Player implements Serializable{
 	@XmlElement
 	private String name;
-	//@XmlElement(name="location")
 	private Tile location;	
 	private Container inventory;	
 	private CoinBox coinbox;
-	@XmlElement
+	//@XmlElement
 	private Direction facing;
 	@XmlElement
 	private final int userId;
@@ -49,8 +48,9 @@ public class Player implements Serializable{
 	public void setFacingDirection(Direction direct){
 		this.facing = direct;
 	}
-
-	public Direction facingDirection(){
+	
+	@XmlElement(name = "getFacingDirection")
+	public Direction getfacingDirection(){
 		return facing;
 	}
 
