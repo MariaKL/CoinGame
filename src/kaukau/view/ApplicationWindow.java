@@ -39,20 +39,19 @@ import kaukau.model.Player;
 import kaukau.storage.JAXBJavaToXml;
 
 /**
- * This class is in charge of creating the application window
- * 	for the Kaukau adventure game. The application window interfaces
- * 	with the rendering window to create the game gui.
+ * This class is in charge of creating the application window for the Kaukau
+ * adventure game. The application window interfaces with the rendering window
+ * to create the game gui.
  *
  * @author Patrick and Matthias
  *
  */
 @SuppressWarnings("serial")
-public class ApplicationWindow extends JFrame{
+public class ApplicationWindow extends JFrame {
 
-	//generate XML
-	//private JAXBJavaToXml toXML = new JAXBJavaToXml();
-	//private int saveNumber = 1;
-
+	// generate XML
+	// private JAXBJavaToXml toXML = new JAXBJavaToXml();
+	// private int saveNumber = 1;
 
 	// path to the images folder
 	private static final String IMAGE_PATH = "images/";
@@ -82,6 +81,7 @@ public class ApplicationWindow extends JFrame{
 
 	public ApplicationWindow(GameWorld game){
 */
+
 	public ApplicationWindow(GameWorld gameWorld, Player user){
 		super("Kaukau");
 
@@ -118,15 +118,15 @@ public class ApplicationWindow extends JFrame{
 		// set close operation
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// pack to minimum size
-		//pack();
+		// pack();
 		// enforce minimum size
 		setMinimumSize(getSize());
 		// handles the closing of the game
 		addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent evt){
-                confirmExit();
-            }
-        });
+			public void windowClosing(WindowEvent evt) {
+				confirmExit();
+			}
+		});
 	}
 	
 
@@ -165,7 +165,7 @@ public class ApplicationWindow extends JFrame{
 	/**
 	 * @return the applications copy of the game world
 	 */
-	public GameWorld getGame(){
+	public GameWorld getGame() {
 		return this.game;
 	}
 
@@ -182,7 +182,7 @@ public class ApplicationWindow extends JFrame{
 	 * Creates the menu bar for the game
 	 */
 	private void initMenu() {
-		//Creating the menu bar
+		// Creating the menu bar
 		JMenuBar menuBar = new JMenuBar();
 
 		// Creating icons
@@ -194,23 +194,26 @@ public class ApplicationWindow extends JFrame{
 		menu.setMnemonic(KeyEvent.VK_M);
 		JMenu help = new JMenu("Help");
 		help.setMnemonic(KeyEvent.VK_H);
-		JMenu save = new JMenu("Save");
-		save.setMnemonic(KeyEvent.VK_S);
-		save.addActionListener(new ActionListener(){
+		JMenuItem save = new JMenuItem("Save");
+		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JAXBJavaToXml toXml = new JAXBJavaToXml();
-				toXml.generateXML(game);
+				confirmSave();
 			}
 		});
-		JMenu load = new JMenu("Load");
-		load.setMnemonic(KeyEvent.VK_L);
+		JMenuItem load = new JMenuItem("Load");
+		load.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				confirmLoad();
+			}
+		});
 
 		// creating the view help menu item
 		JMenuItem hMenuItem = new JMenuItem("View Help", iconHelp);
 		hMenuItem.setMnemonic(KeyEvent.VK_H);
 		hMenuItem.setToolTipText("Click for Game Help");
-		hMenuItem.addActionListener(new ActionListener(){
+		hMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// displays a help message to user
@@ -221,7 +224,7 @@ public class ApplicationWindow extends JFrame{
 		JMenuItem eMenuItem = new JMenuItem("Exit", iconExit);
 		eMenuItem.setMnemonic(KeyEvent.VK_E);
 		eMenuItem.setToolTipText("Exit App");
-		eMenuItem.addActionListener(new ActionListener(){
+		eMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Confirms user wants to exit
@@ -230,14 +233,12 @@ public class ApplicationWindow extends JFrame{
 		});
 		// adding menu and help menus
 		menu.add(eMenuItem);
-//		menu.add(save);
-//		menu.add(load);
+		menu.add(save);
+		menu.add(load);
 		help.add(hMenuItem);
 		// adding menus to menubar
 		menuBar.add(menu);
 		menuBar.add(help);
-		menuBar.add(save);
-		menuBar.add(load);
 		// set the menu bar
 		setJMenuBar(menuBar);
 	}
@@ -425,5 +426,28 @@ public class ApplicationWindow extends JFrame{
 			}
 		}
 		g.translate(-(x*width), -(y*height));
+	}
+
+	private void confirmSave() {
+		int result = JOptionPane.showConfirmDialog(this, "Save current Game State?", "Alert",
+				JOptionPane.OK_CANCEL_OPTION);
+		if (result == 0) {
+			JAXBJavaToXml toXml = new JAXBJavaToXml();
+			toXml.marshal(game.player(1), game.getGameMap());
+			dispose();
+		}
+		if (result == 1) {
+			dispose();
+		}
+	}
+
+	private void confirmLoad() {
+		int result = JOptionPane.showConfirmDialog(this, "Load last Game State?", "Alert",
+				JOptionPane.OK_CANCEL_OPTION);
+		if (result == 0) {
+			// JAXBJavaToXml toXml = new JAXBJavaToXml();
+			// toXml.marshal(game.player(1), game.getGameMap());
+			dispose();
+		}
 	}
 }

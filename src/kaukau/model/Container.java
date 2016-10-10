@@ -37,9 +37,9 @@ public class Container implements Item, Serializable{
 	/**
 	 * Protected method to set the max storage amount which is determined when the container is made.
 	 * */
-	protected void setAmmount (int ammount){
-		if(ammount > 0){
-			this.storageLimit = ammount;
+	protected void setAmount (int amount){
+		if(amount > 0){
+			this.storageLimit = amount;
 		}
 	}
 

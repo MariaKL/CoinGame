@@ -26,7 +26,7 @@ public class CoinBox extends PickupableItem implements Serializable {
 		super("Coin Box");
 		this.player = player;
 		this.storage = new Container("Coin Box", player.getLocation());
-		storage.setAmmount(20);
+		storage.setAmount(20);
 		totalCoinAmount = 0;
 	}
 

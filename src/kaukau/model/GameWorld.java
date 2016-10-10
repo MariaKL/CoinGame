@@ -22,10 +22,8 @@ import java.io.Serializable;
 //@XmlType(propOrder = { "allPlayers"})
 public class GameWorld implements Serializable{
 
-	@XmlElement
 	private GameMap board;
-
-	@XmlElement
+	
 	private boolean gameOver;
 
 	/**
@@ -33,9 +31,7 @@ public class GameWorld implements Serializable{
 	 * required in order to synchronise the movements of different players
 	 * across boards.
 	 */
-	@XmlElement
 	private static int uid;
-
 
 	/**
 	 * The current players of this game. Max number of player = 2.
@@ -51,8 +47,7 @@ public class GameWorld implements Serializable{
 	/**
 	 * Register a new player into the game.
 	 * @return the user id of the new player.
-	 */
-	//@XmlElement(name="players1")
+	 */	
 	public synchronized int addPlayer(){
 		Tile tile = board.getTileAt(new Point(9-(uid), 3));
 		Player player = new Player(++uid, "Player", tile, Direction.EAST);
@@ -96,7 +91,7 @@ public class GameWorld implements Serializable{
 	  */
 	public synchronized boolean pickupAnItem(int uid){
 		Player player = players.get(uid);
-		Point pos = getPointFromDirection(player, player.facingDirection());
+		Point pos = getPointFromDirection(player, player.getfacingDirection());
 
 		// if the tile is EmptyTile type and item is pickupable,
 		// then player can pick up the item only if there is one
@@ -120,7 +115,7 @@ public class GameWorld implements Serializable{
 	 */
 	public synchronized boolean dropAnItem(int uid, int index){
 		Player player = players.get(uid);
-		Point pos = getPointFromDirection(player, player.facingDirection());
+		Point pos = getPointFromDirection(player, player.getfacingDirection());
 		if (validPoint(pos)){
 			Tile tile = board.getTileAt(pos);
 			if (!tile.isTileOccupied()){
@@ -138,16 +133,16 @@ public class GameWorld implements Serializable{
 	public synchronized boolean openDoor(int uid){
 		Player player = players.get(uid);
 		Tile oldPos = player.getLocation();
-		Point pos = getPointFromDirection(player, player.facingDirection());
+		Point pos = getPointFromDirection(player, player.getfacingDirection());
 		if (validPoint(pos)){
 			Tile doorTile = board.getTileAt(pos);
 			if (doorTile.getTileType() == TileType.DOOR){  // if the facing direction is a door
 				Point newPos;  // get the new point after enter from door
-				if (player.facingDirection() == Direction.NORTH)
+				if (player.getfacingDirection() == Direction.NORTH)
 					newPos = new Point(oldPos.X(), oldPos.Y()-2);
-				else if (player.facingDirection() == Direction.SOUTH)
+				else if (player.getfacingDirection() == Direction.SOUTH)
 					newPos = new Point(oldPos.X(), oldPos.Y()+2);
-				else if (player.facingDirection() == Direction.EAST)
+				else if (player.getfacingDirection() == Direction.EAST)
 					newPos = new Point(oldPos.X()+2, oldPos.Y());
 				else newPos = new Point(oldPos.X()-2, oldPos.Y());
 
@@ -260,7 +255,7 @@ public class GameWorld implements Serializable{
 	 * Return the current board of the game.
 	 * @return
 	 */
-	//@XmlElement(name="map")
+	@XmlElement(name="map")
 	public GameMap getGameMap(){
 		return board;
 	}
@@ -289,8 +284,7 @@ public class GameWorld implements Serializable{
 	/**
 	 * Return the current board of the game.
 	 * @return
-	 */
-	//@XmlElement(name="board")
+	 */	
 	public Tile[][] getGameTiles(){
 		return board.getBoard();
 	}

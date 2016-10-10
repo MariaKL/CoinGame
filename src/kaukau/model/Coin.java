@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Vivienne Yapp, 300339524
  *
  */
+@XmlRootElement
 public class Coin extends PickupableItem implements Serializable{
 
 	private int amount;
