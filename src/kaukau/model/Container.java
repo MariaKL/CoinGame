@@ -130,4 +130,8 @@ public class Container implements Item, Serializable{
 		return name;
 	}
 
+	public void setStorage(ArrayList<PickupableItem> items) {
+		this.storage = items;		
+	}
+
 }
