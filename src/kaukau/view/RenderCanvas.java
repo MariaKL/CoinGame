@@ -12,15 +12,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import kaukau.control.Client;
-import kaukau.model.Direction;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
 import kaukau.model.Item;
@@ -310,6 +307,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_DOWN, 0), "moveDown");
 		this.getActionMap().put("moveDown", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				//System.out.println("DOWN");
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -326,7 +324,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				//initBlocks(game);
+				initBlocks(game);
 				repaint();
 			}
 		});
