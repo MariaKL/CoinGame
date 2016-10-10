@@ -36,7 +36,7 @@ public class Tile implements Serializable {
 	/**
 	 * Set this tile with a game item. This method mostly use to set up the game
 	 * board.
-	 * 
+	 *
 	 * @param addItem
 	 *            the item to add on this tile
 	 * @return true if it is successfully added, otherwise false;
@@ -52,51 +52,55 @@ public class Tile implements Serializable {
 
 	/**
 	 * Add a player on this empty tile.
-	 * 
+	 *
 	 * @param player
 	 *            the player that occupy this tile
 	 * @return true if the player successfully added, otherwise false.
 	 */
-	public boolean addPlayer(Player player) {
-		if (type != TileType.EMPTY)
-			return false;
-		else {
-			if (this.player == null && this.item == null) {
-				this.player = player;
-				return true;
-			}
+	public boolean addPlayer(Player player){
+		if (this.player == null && this.item == null){
+			this.player = player;
+			return true;
 		}
 		return false;
 	}
 
 	/**
 	 * Remove the player that occupy this tile.
-	 * 
+	 *
 	 * @return true if the player successfully removed, otherwise false.
 	 */
-	public boolean removePlayer() {
-		if (type != TileType.EMPTY)
-			return false;
-		else {
-			if (this.player != null) {
-				this.player = null;
-				return true;
-			}
+	public boolean removePlayer(){
+		if (this.player != null){
+			this.player = null;
+			return true;
 		}
 		return false;
 	}
 
 	/**
+	 * Returns the player currently on this tile or null if none
+	 * @return
+	 */
+	public Player getPlayer(){
+		if(this.player != null){
+			return player;
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * Drop an item to an empty tile if the tile is not occupy.
-	 * 
+	 *
 	 * @param dropItem
 	 *            the item that drop on this tile
 	 * @return true if both the player and item fields are NULL, otherwise
 	 *         false.
 	 */
-	public boolean dropItem(PickupableItem dropItem) {
-		if (type != TileType.EMPTY)
-			return false;
+
+	public boolean dropItem(PickupableItem dropItem){
+		if (type != TileType.TILE) return false;
 		else {
 			if (item == null && player == null) {
 				item = dropItem;
@@ -109,13 +113,12 @@ public class Tile implements Serializable {
 
 	/**
 	 * Remove an item from a tile when a player pick the item.
-	 * 
+	 *
 	 * @return true if the tile is TileType.Empty and both the player and item
 	 *         fields are NULL, otherwise false .
 	 */
-	public boolean removeItem() {
-		if (type != TileType.EMPTY)
-			return false;
+	public boolean removeItem(){
+		if (type != TileType.TILE) return false;
 		else {
 			if (item == null) {
 				return false;
@@ -129,16 +132,14 @@ public class Tile implements Serializable {
 
 	/**
 	 * Check if this tile contain an pickupable item.
-	 * 
+	 *
 	 * @return true if there is a pickupableItem on an empty tile, otherwise
 	 *         false.
 	 */
-	//@XmlElement(name = "containsPickupableItem")
-	public boolean containsPickupItem() {
-		if (type != TileType.EMPTY)
-			return false;
+	public boolean containsPickupItem(){
+		if (type != TileType.TILE) return false;
 		else {
-			if (type == TileType.EMPTY && item instanceof PickupableItem) {
+			if (type == TileType.TILE && item instanceof PickupableItem){
 				return true;
 			}
 		}
@@ -159,7 +160,7 @@ public class Tile implements Serializable {
 		}
 
 	}
-	
+
 	@XmlElement(name = "getKey")
 	public Key getKey(){
 		if (this.itemIsKey != null) return this.itemIsKey;
@@ -180,22 +181,21 @@ public class Tile implements Serializable {
 
 	/**
 	 * Check whether if this tile is occupy by a player or pickableItem.
-	 * 
+	 *
 	 * @return true if the tile is TileType.Empty, otherwise false if both the
 	 *         player and item fields are NULL.
 	 */
-	public boolean isTileOccupied() {
-		if (type != TileType.EMPTY)
-			return true;
-		else if (type == TileType.EMPTY && player == null && item == null)
-			return false;
-		else
-			return true;
+	public boolean isTileOccupied(){
+		if (type == TileType.TILE || type == TileType.TILE_CRACKED)
+			if (player == null && item == null){
+				return false;
+			}
+		return true;
 	}
 
 	/**
 	 * Return the type of this tile.
-	 * 
+	 *
 	 * @return the type of this tile
 	 */
 	@XmlElement(name = "tileType")
@@ -205,7 +205,7 @@ public class Tile implements Serializable {
 
 	/**
 	 * Return the item that occupy this tile.
-	 * 
+	 *
 	 * @return an item if it is pickupable item and there is one, otherwise
 	 *         returns null.
 	 */
@@ -218,10 +218,9 @@ public class Tile implements Serializable {
 
 	/**
 	 * Return the column number of this tile.
-	 * 
+	 *
 	 * @return the column number
 	 */
-	// @XmlElement(name = "xCoord")
 	public int X() {
 		return x;
 	}
@@ -233,14 +232,18 @@ public class Tile implements Serializable {
 
 	/**
 	 * Return the row number of this tile.
-	 * 
+	 *
 	 * @return the row number
 	 */
-	// @XmlElement(name = "yCoord")
 	public int Y() {
 		return y;
 	}
 
+	/**
+	 * Return the row number of this tile.
+	 *
+	 * @return the row number
+	 */
 	@XmlElement(name = "yCoord")
 	public int getY() {
 		return y;

@@ -13,8 +13,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Player implements Serializable{
 	@XmlElement
 	private String name;
-	private Tile location;	
-	private Container inventory;	
+	//@XmlElement(name="location")
+	private Tile location;
+	//@XmlElement
+	private Container inventory;
+	@XmlElement
 	private CoinBox coinbox;
 	//@XmlElement
 	private Direction facing;
@@ -27,7 +30,7 @@ public class Player implements Serializable{
 		this.location = startLocation;
 		this.facing = facing;
 		inventory = new Container("Backpack", startLocation);
-		inventory.setAmmount(8);
+		inventory.setAmount(8);
 		this.coinbox = new CoinBox(this);
 		this.inventory.addItem(this.coinbox);
 
@@ -48,7 +51,7 @@ public class Player implements Serializable{
 	public void setFacingDirection(Direction direct){
 		this.facing = direct;
 	}
-	
+
 	@XmlElement(name = "getFacingDirection")
 	public Direction getfacingDirection(){
 		return facing;
@@ -57,7 +60,7 @@ public class Player implements Serializable{
 	/**
 	 * Gets the item name
 	 * @return String name
-	 * */
+	 */
 	public String getName() {
 		return this.name;
 	}
@@ -68,6 +71,14 @@ public class Player implements Serializable{
 	@XmlElement(name="getLocation")
 	public Tile getLocation() {
 		return this.location;
+	}
+
+	/**
+	 * Return the coinbox that belong to this player.
+	 * @return a CoinBox type object, otherwise null if player drop it.
+	 */
+	public CoinBox getCoinBox() {
+		return this.coinbox;
 	}
 
 	/**
@@ -94,48 +105,13 @@ public class Player implements Serializable{
 	/**
 	 * adds item to players bag
 	 * */
+	@XmlElementWrapper(name="inventory")
+    @XmlElements({
+    @XmlElement(name="item") }
+    )
 	public ArrayList <PickupableItem> getInventory(){
 		return inventory.getStorage();
 	}
-
-	/**
-	 * Returns the list of coin boxes in the container
-	 * for JAXB serializing
-	 * @return ArrayList <Collectable>
-	 * */
-	@XmlElementWrapper(name="CoinBox")
-    @XmlElements({
-    @XmlElement(name="getCoins") }
-    )
-	public ArrayList <CoinBox> getCoinBoxes(){
-		ArrayList<CoinBox> coinboxes = new ArrayList<CoinBox>();
-		for (PickupableItem p : this.getInventory()) {
-			if(p instanceof CoinBox){
-				coinboxes.add((CoinBox) p);
-			}
-		}
-		return coinboxes;
-	}
-
-	/**
-	 * Returns the list of coin boxes in the container
-	 * for JAXB serializing
-	 * @return ArrayList <Collectable>
-	 * */
-	@XmlElementWrapper(name="Keys")
-    @XmlElements({
-    @XmlElement(name="key") }
-    )
-	public ArrayList <Key> getKeys(){
-		ArrayList<Key> keys = new ArrayList<Key>();
-		for (PickupableItem p : this.getInventory()) {
-			if(p instanceof Key){
-				keys.add((Key) p);
-			}
-		}
-		return keys;
-	}
-
 
 	/**
 	 * Return the user id of this player.
