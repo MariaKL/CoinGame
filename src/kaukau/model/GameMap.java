@@ -54,9 +54,8 @@ public class GameMap implements Serializable {
             Document doc = db.parse(xmlFile);
 			NodeList nList = doc.getElementsByTagName("room");  // get elements
 
-    		for (int temp = 0; temp < nList.getLength(); temp++) {
+			for (int temp = 0; temp < nList.getLength(); temp++) {
     			Node nNode = nList.item(temp);
-
     			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
     				Element eElement = (Element) nNode;
     				int doorCount = 0;  // use to count the doors
@@ -73,26 +72,24 @@ public class GameMap implements Serializable {
 	    				String line = eElement.getElementsByTagName("L"+String.valueOf(row)).item(0).getTextContent();
 	    				for (int col = 0; col < ROOM_WIDTH; ++col) {
 	    					char c = line.charAt(col);
-	    					int x = row+startX;
-	    					int y = col+startY;
 	    					switch (c) {
 		    					case 'W' :
-		    						board[x][y] = new Tile(TileType.WALL, x, y);
+		    						board[col+startX][row+startY] = new Tile(TileType.WALL, col+startX, row+startY);
 		    						break;
 		    					case 'D':
-		    						doorCount = addDoor(eElement, doorCount, x, y, room);
+		    						doorCount = addDoor(eElement, doorCount, col+startX, row+startY, room);
 		    						break;
 		    					case 'K':
-		    						keyCount = addKey(eElement, keyCount, x, y);
+		    						keyCount = addKey(eElement, keyCount, col+startX, row+startY);
 		    						break;
 		    					case 'X':
-		    						keyCount = addCoin(eElement, coinCount, x, y);
+		    						keyCount = addCoin(eElement, coinCount, col+startX, row+startY);
 		    						break;
 		    					case 'T':
-		    						board[x][y] = new Tile(TileType.TILE, x, y);
+		    						board[col+startX][row+startY] = new Tile(TileType.TILE, col+startX, row+startY);
 		    						break;
 		    					case 'C':
-		    						board[x][y] = new Tile(TileType.TILE_CRACKED, x, y);
+		    						board[col+startX][row+startY] = new Tile(TileType.TILE_CRACKED, col+startX, row+startY);
 		    						break;
 	    					}
 	    				}

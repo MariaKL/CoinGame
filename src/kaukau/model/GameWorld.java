@@ -139,12 +139,12 @@ public class GameWorld implements Serializable{
 			if (doorTile.getTileType() == TileType.DOOR){  // if the facing direction is a door
 				Point newPos;  // get the new point after enter from door
 				if (player.getfacingDirection() == Direction.NORTH)
-					newPos = new Point(oldPos.X()-2, oldPos.Y());
+					newPos = new Point(oldPos.X(), oldPos.Y()-2);
 				else if (player.getfacingDirection() == Direction.SOUTH)
-					newPos = new Point(oldPos.X()+2, oldPos.Y());
-				else if (player.getfacingDirection() == Direction.EAST)
 					newPos = new Point(oldPos.X(), oldPos.Y()+2);
-				else newPos = new Point(oldPos.X(), oldPos.Y()-2);
+				else if (player.getfacingDirection() == Direction.EAST)
+					newPos = new Point(oldPos.X()+2, oldPos.Y());
+				else newPos = new Point(oldPos.X()-2, oldPos.Y());
 
 				if (validPoint(newPos)){ // check if this new point is valid or not
 					Tile newTile = board.getTileAt(newPos);
@@ -182,12 +182,12 @@ public class GameWorld implements Serializable{
 	public Point getPointFromDirection(Player player, Direction direct){
 		Tile oldPos = player.getLocation();
 		if (direct == Direction.NORTH)
-			return new Point(oldPos.X()-1, oldPos.Y());
+			return new Point(oldPos.X(), oldPos.Y() - 1);
 		else if (direct == Direction.SOUTH)
-			return new Point(oldPos.X()+1, oldPos.Y());
+			return new Point(oldPos.X(), oldPos.Y() + 1);
 		else if (direct == Direction.EAST)
-			return new Point(oldPos.X(), oldPos.Y()+1);
-		else return new Point(oldPos.X(), oldPos.Y()-1);
+			return new Point(oldPos.X()+1, oldPos.Y());
+		else return new Point(oldPos.X()-1, oldPos.Y());
 	}
 
 	/**
@@ -297,9 +297,9 @@ public class GameWorld implements Serializable{
 
 		for (int x = 0; x < board.BOARD_WIDTH; x++){
 			for (int y = 0; y < board.BOARD_HEIGHT; y++){
-				Tile tile = tiles[x][y];
+				Tile tile = tiles[y][x];
 				if(tile.containsPickupItem()) System.out.print(tile.getItem().getName().charAt(0));
-				else System.out.print(tiles[x][y].getTileType().toString().charAt(0));
+				else System.out.print(tiles[y][x].getTileType().toString().charAt(0));
 			}
 			System.out.println();
 		}
