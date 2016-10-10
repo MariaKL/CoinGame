@@ -13,6 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import kaukau.control.Client;
 import kaukau.model.GameWorld;
 import kaukau.model.Player;
 import kaukau.storage.JAXBJavaToXml;
@@ -43,6 +44,7 @@ public class ApplicationWindow extends JFrame {
 
 	//field to store the player of the game
 	private Player player;
+	private Client client;
 
 
 	public ApplicationWindow(GameWorld gameWorld, Player user){
@@ -81,10 +83,29 @@ public class ApplicationWindow extends JFrame {
 	}
 
 	/**
+	 * Sets the application's copy of the game world.
+	 * @param game
+	 */
+	public void setGame(GameWorld game){
+		this.game = game;
+		this.player = game.getAllPlayers().get(player.getUserId());
+		rc.setGame(game);
+	}
+
+	/**
 	 * @return the applications copy of the game world
 	 */
 	public GameWorld getGame() {
 		return this.game;
+	}
+
+	/**
+	 * Associates this window with a client.
+	 * @param client
+	 */
+	public void setClient(Client client){
+		this.client = client;
+		rc.setClient(client);
 	}
 
 	/**

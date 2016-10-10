@@ -18,6 +18,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import kaukau.control.Client;
 import kaukau.model.Direction;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
@@ -46,11 +47,10 @@ public class RenderCanvas extends JPanel {
 	// game level blocks that are to be rendered
 	private Block[][] levelBlocks;
 
-	private HashMap<Integer, Player> players;
-
 	private GameWorld game;
-
-	private final Player player;
+	private HashMap<Integer, Player> players;
+	private Player player;
+	private Client client;
 
 	/**This class take a gameworld parameter and
 	 * creates a rendering based on the state of
@@ -296,6 +296,9 @@ public class RenderCanvas extends JPanel {
 					((RenderTile)rold).setPlayer(null);
 					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 					((RenderTile)rnew).setPlayer(player);
+					// update server
+					client.sendAction(KeyEvent.VK_DOWN);
+					System.out.println("Down int: " + KeyEvent.VK_DOWN);
 				}
 				repaint();
 			}
@@ -318,6 +321,9 @@ public class RenderCanvas extends JPanel {
 					((RenderTile)rold).setPlayer(null);
 					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 					((RenderTile)rnew).setPlayer(player);
+					// update server
+					client.sendAction(KeyEvent.VK_UP);
+					System.out.println("Up int: " + KeyEvent.VK_UP);
 				}
 				repaint();
 			}
@@ -340,6 +346,9 @@ public class RenderCanvas extends JPanel {
 					((RenderTile)rold).setPlayer(null);
 					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 					((RenderTile)rnew).setPlayer(player);
+					// update server
+					client.sendAction(KeyEvent.VK_LEFT);
+					System.out.println("Left int: " + KeyEvent.VK_LEFT);
 				}
 				repaint();
 			}
@@ -362,6 +371,9 @@ public class RenderCanvas extends JPanel {
 					((RenderTile)rold).setPlayer(null);
 					Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 					((RenderTile)rnew).setPlayer(player);
+					// update server
+					client.sendAction(KeyEvent.VK_RIGHT);
+					System.out.println("Right int: " + KeyEvent.VK_RIGHT);
 				}
 				repaint();
 			}
@@ -454,5 +466,24 @@ public class RenderCanvas extends JPanel {
 	    for(int a=0; a<levelBlocks.length; a++)
 	    	  for(int b=0; b<levelBlocks[0].length; b++)
 	    	    levelBlocks[a][b]=ret[a][b];
+	}
+
+	/**
+	 * Sets the updated game for rendering.
+	 * @param game
+	 */
+	public void setGame(GameWorld game){
+		this.game = game;
+		System.out.println("Game players: " + game.getAllPlayers().size());
+		this.player = game.getAllPlayers().get(player.getUserId());
+		System.out.println("RC set player: " + player.getName());
+	}
+
+	/**
+	 * Associates this canvas with a client to update player actions
+	 * @param client
+	 */
+	public void setClient(Client client){
+		this.client = client;
 	}
 }

@@ -49,7 +49,7 @@ public class GameWorld implements Serializable{
 	 * @return the user id of the new player.
 	 */	
 	public synchronized int addPlayer(){
-		Tile tile = board.getTileAt(new Point(9-(++uid), 3));
+		Tile tile = board.getTileAt(new Point(9-(uid), 3));
 		Player player = new Player(++uid, "Player", tile, Direction.EAST);
 		tile.addPlayer(player);
 		GameWorld.players.put(uid, player);
@@ -70,14 +70,14 @@ public class GameWorld implements Serializable{
 		// if the tile is emptyTile and not occupy, then move player to this new position
 		if (validPoint(newPos)){
 			Tile tile = board.getTileAt(newPos);
-			if (!tile.isTileOccupied() && 
-					(tile.getTileType()==GameMap.TileType.TILE
+			if (!tile.isTileOccupied() &&
+				(tile.getTileType()==GameMap.TileType.TILE
 					||tile.getTileType()==GameMap.TileType.TILE_CRACKED)){
-				oldPos.removePlayer();
-				player.setLocation(tile);
-				player.setFacingDirection(direction);
-				tile.addPlayer(player);
-				return true;
+					oldPos.removePlayer();
+					player.setLocation(tile);
+					player.setFacingDirection(direction);
+					tile.addPlayer(player);
+					return true;
 			}
 		}
 		return false;
