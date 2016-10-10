@@ -187,10 +187,11 @@ public class Tile implements Serializable {
 	 *         player and item fields are NULL.
 	 */
 	public boolean isTileOccupied(){
-		if (type == TileType.TILE || type == TileType.TILE_CRACKED)
+		if (type == TileType.TILE || type == TileType.TILE_CRACKED){
 			if (player == null && item == null){
 				return false;
 			}
+		}
 		return true;
 	}
 
