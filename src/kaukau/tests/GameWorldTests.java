@@ -164,11 +164,7 @@ public class GameWorldTests {
 		int coinAmount = ((Coin) coin.getItem()).getAmount();
 		player.setLocation(newPos);
 		player.setFacingDirection(Direction.EAST);
-<<<<<<< HEAD
 		assertTrue(coin.getTileType() == TileType.TILE || coin.getTileType() == TileType.TILE_CRACKED);
-=======
-//		assertTrue(coin.getTileType() == TileType.EMPTY);
->>>>>>> 008f95d8520f6c81771f9109b7aa079f5c4a1371
 		assertTrue(coin.getItem() instanceof Coin);
 		assertTrue(game.pickupAnItem(uid));   // player pick up the coin
 		assertTrue(!coin.isTileOccupied());   // the tile should be not occupy after player pickup coin
@@ -245,11 +241,7 @@ public class GameWorldTests {
 		Tile newPos = board.getTileAt(new Point(2,5));
 		player.setLocation(newPos);
 		player.setFacingDirection(Direction.EAST);
-<<<<<<< HEAD
 		assertTrue(coin.getTileType() == TileType.TILE || coin.getTileType() == TileType.TILE_CRACKED);
-=======
-//		assertTrue(coin.getTileType() == TileType.EMPTY);
->>>>>>> 008f95d8520f6c81771f9109b7aa079f5c4a1371
 		assertTrue(coin.getItem() instanceof Coin);
 		assertFalse(game.movePlayer(uid, Direction.EAST));
 	}

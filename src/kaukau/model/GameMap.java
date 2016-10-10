@@ -116,11 +116,7 @@ public class GameMap implements Serializable {
 	 *            the y point of this door
 	 * @return the next index number for next door item
 	 */
-<<<<<<< HEAD
 	public int addDoor(Element element, int count, int x, int y, Room room){
-=======
-	public int addDoor(Element element, int count, int x, int y) {
->>>>>>> 008f95d8520f6c81771f9109b7aa079f5c4a1371
 		Tile tile = new Tile(TileType.DOOR, x, y);
 		int key = Integer
 				.valueOf(element.getElementsByTagName("Door" + String.valueOf(count)).item(0).getTextContent());

@@ -28,18 +28,9 @@ public class Room implements Serializable{
 	public Room(){
 		this(null, -1, -1);
 	}
-
-	public Point getStartPoint(){
-		return new Point(startX, startY);
-	}
 	
 	public void addDoor(Door door){
 		this.doors.add(door);
-	}
-	
-<<<<<<< HEAD
-	public String getName(){ 
-		return name; 
 	}
 	
 	public void setStartX(int x){
@@ -65,14 +56,10 @@ public class Room implements Serializable{
 	public ArrayList<Door> getDoors(){
 		return doors;
 	}
-=======
-*/
 	
 	public Point getStartPoint(){
 		return new Point(startX, startY);
 	}
 	
-	
 	public String getName(){ return name; }
->>>>>>> 008f95d8520f6c81771f9109b7aa079f5c4a1371
 }

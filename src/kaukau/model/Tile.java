@@ -77,8 +77,6 @@ public class Tile implements Serializable {
 		}
 		return false;
 	}
-<<<<<<< HEAD
-=======
 
 	/**
 	 * Returns the player currently on this tile or null if none
@@ -91,7 +89,7 @@ public class Tile implements Serializable {
 			return null;
 		}
 	}
->>>>>>> 008f95d8520f6c81771f9109b7aa079f5c4a1371
+
 
 	/**
 	 * Drop an item to an empty tile if the tile is not occupy.
@@ -213,14 +211,9 @@ public class Tile implements Serializable {
 	 *         returns null.
 	 */
 	@XmlAnyElement
-<<<<<<< HEAD
-	public Item getItem(){
-		if (item != null) return item;
-=======
 	public Item getItem() {
 		if (item instanceof PickupableItem)
 			return item;
->>>>>>> 008f95d8520f6c81771f9109b7aa079f5c4a1371
 		return null;
 	}
 
