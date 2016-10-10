@@ -28,61 +28,38 @@ public class Room implements Serializable{
 	public Room(){
 		this(null, -1, -1);
 	}
-
-
-
-	/*private void createRoomFromFile(String filename) throws IOException {
-		FileReader fr = new FileReader(filename);
-		BufferedReader br = new BufferedReader(fr);
-		ArrayList<String> lines = new ArrayList<String>();
-		int width = -1;
-		String line;
-		while((line = br.readLine()) != null) {
-			lines.add(line);
-
-			// now sanity check
-
-			if(width == -1) {
-				width = line.length();
-			} else if(width != line.length()) {
-				throw new IllegalArgumentException("Input file \"" + filename + "\" is malformed; line " + lines.size() + " incorrect width.");
-			}
-		}
-		//this.width = width;
-		//this.height = lines.size();
-		board = new Tile[width][lines.size()];
-		for(int y=0;y!=lines.size();++y) {
-			line = lines.get(y);
-			for(int x=0;x!=width;++x) {
-				char c = line.charAt(x);
-				System.out.println(c);
-				switch (c) {
-					case 'W' :
-						addWall(x, y);
-						break;
-					case 'D':
-						addDoor(x, y);
-						break;
-					case 'C':
-						addEmptyTile(x, y);
-						break;
-					case 'N':
-						addItem(x,y);
-						break;
-				}
-		}
-
-	     }
-
+	
+	public void addDoor(Door door){
+		this.doors.add(door);
 	}
 	
+	public void setStartX(int x){
+		startX = x;
+	}
 	
-*/
+	public void setStartY(int y){
+		startY = y;
+	}
+	
+	public void setDoors(){
+		
+	}
+	
+	public int getStartX(){
+		return startX;
+	}
+	
+	public int getStartY(){
+		return startY;
+	}
+	
+	public ArrayList<Door> getDoors(){
+		return doors;
+	}
 	
 	public Point getStartPoint(){
 		return new Point(startX, startY);
 	}
-	
 	
 	public String getName(){ return name; }
 }
