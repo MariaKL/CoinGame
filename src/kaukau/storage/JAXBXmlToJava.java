@@ -19,6 +19,7 @@ import kaukau.model.Key;
 import kaukau.model.PickupableItem;
 import kaukau.model.Player;
 import kaukau.model.Row;
+import kaukau.model.Tile;
 
 public class JAXBXmlToJava {
 
@@ -52,7 +53,7 @@ public class JAXBXmlToJava {
 
 			// specify the location and name of xml file to be read
 			// File XMLfile = new File("Map"+playerID+".xml");
-			File XMLfile = new File("MapAltered.xml");
+			File XMLfile = new File("Map.xml");
 			// this will create Java object - country from the XML file
 			map = (GameMap) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {
@@ -90,24 +91,19 @@ public class JAXBXmlToJava {
 
 	public static void testUnmarshalledMap(GameMap map) {
 		if (map != null) {
-<<<<<<< HEAD
+
 			for (Row r : map.getBoardTiles()) {				
 				if (r == null) {
 					System.out.println("row is null!");
-				} else {
-					System.out.println("row unmarshalled sucessfully");
+				} else {					
+					for(Tile t : r.getRows()){
+						if(t.containsPickupItem()){
+							System.out.println("Tile location: "+t.toString());
+							System.out.println("Tile type: "+t.getTileType());						
+							System.out.println("Tile item: "+t.getItem().getName());
+						}						
+					}
 				}
-=======
-			for (Door d : map.getAllDoors()) {
-				System.out.println("Door code: " + d.getDoorCode());
-				System.out.println("Door is locked?: " + d.isLocked());
-				/*if (d.getLocation() == null) {
-					System.out.println("Door location is null!");
-				} else {
-					System.out.println("Door location: " + d.getLocation().toString());
-				}*/
-
->>>>>>> GameTesting
 			}
 		}
 	}

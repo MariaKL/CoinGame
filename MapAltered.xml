@@ -3,9 +3,17 @@
     <boardTiles>
         <getRows>
             <tile>
-                <tileType>WALL</tileType>
-                <xCoord>0</xCoord>
-                <yCoord>0</yCoord>
+                <getCoin>
+                    <name>Coin</name>
+                    <amount>40</amount>
+                </getCoin>
+                <coin>
+                    <name>Coin</name>
+                    <amount>40</amount>
+                </coin>
+                <tileType>TILE</tileType>
+                <xCoord>11</xCoord>
+                <yCoord>13</yCoord>
             </tile>
             <tile>
                 <tileType>WALL</tileType>

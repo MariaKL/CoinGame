@@ -167,10 +167,10 @@
                 <yCoord>11</yCoord>
             </tile>
             <tile>
-                <getCoin>
+                <coin>
                     <name>Coin</name>
                     <amount>50</amount>
-                </getCoin>
+                </coin>
                 <coin>
                     <name>Coin</name>
                     <amount>50</amount>
@@ -472,10 +472,10 @@
                 <yCoord>8</yCoord>
             </tile>
             <tile>
-                <getDoor>
+                <door>
                     <doorCode>0</doorCode>
                     <isLocked>false</isLocked>
-                </getDoor>
+                </door>
                 <door>
                     <doorCode>0</doorCode>
                     <isLocked>false</isLocked>
@@ -572,9 +572,9 @@
                 <key>
                     <getCode>123</getCode>
                 </key>
-                <getKey>
+                <key>
                     <getCode>123</getCode>
-                </getKey>
+                </key>
                 <tileType>TILE</tileType>
                 <xCoord>5</xCoord>
                 <yCoord>6</yCoord>
@@ -783,10 +783,10 @@
                 <yCoord>5</yCoord>
             </tile>
             <tile>
-                <getCoin>
+                <coin>
                     <name>Coin</name>
                     <amount>30</amount>
-                </getCoin>
+                </coin>
                 <coin>
                     <name>Coin</name>
                     <amount>30</amount>
@@ -1044,10 +1044,10 @@
                 <yCoord>14</yCoord>
             </tile>
             <tile>
-                <getDoor>
+                <door>
                     <doorCode>0</doorCode>
                     <isLocked>false</isLocked>
-                </getDoor>
+                </door>
                 <door>
                     <doorCode>0</doorCode>
                     <isLocked>false</isLocked>
@@ -1208,9 +1208,9 @@
                 <key>
                     <getCode>124</getCode>
                 </key>
-                <getKey>
+                <key>
                     <getCode>124</getCode>
-                </getKey>
+                </key>
                 <tileType>TILE</tileType>
                 <xCoord>11</xCoord>
                 <yCoord>4</yCoord>
@@ -1256,10 +1256,10 @@
                 <yCoord>12</yCoord>
             </tile>
             <tile>
-                <getCoin>
+                <coin>
                     <name>Coin</name>
                     <amount>40</amount>
-                </getCoin>
+                </coin>
                 <coin>
                     <name>Coin</name>
                     <amount>40</amount>
@@ -1422,10 +1422,10 @@
                 <yCoord>2</yCoord>
             </tile>
             <tile>
-                <getCoin>
+                <coin>
                     <name>Coin</name>
                     <amount>30</amount>
-                </getCoin>
+                </coin>
                 <coin>
                     <name>Coin</name>
                     <amount>30</amount>
@@ -1631,9 +1631,9 @@
                 <key>
                     <getCode>125</getCode>
                 </key>
-                <getKey>
+                <key>
                     <getCode>125</getCode>
-                </getKey>
+                </key>
                 <tileType>TILE</tileType>
                 <xCoord>15</xCoord>
                 <yCoord>1</yCoord>
@@ -1704,10 +1704,10 @@
                 <yCoord>14</yCoord>
             </tile>
             <tile>
-                <getCoin>
+                <coin>
                     <name>Coin</name>
                     <amount>40</amount>
-                </getCoin>
+                </coin>
                 <coin>
                     <name>Coin</name>
                     <amount>40</amount>

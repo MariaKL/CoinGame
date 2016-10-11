@@ -4,21 +4,23 @@
     <userId>1</userId>
     <getFacingDirection>NORTH</getFacingDirection>
     <getLocation>
-        <tileType>TILE</tileType>
-        <xCoord>4</xCoord>
+        <tileType>TILE_CRACKED</tileType>
+        <xCoord>5</xCoord>
         <yCoord>3</yCoord>
     </getLocation>
     <inventory>
         <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
-            <coins xsi:type="coin">
-                <name>Coin</name>
-                <amount>50</amount>
+            <coins>
+                <coin>
+                    <name>Coin</name>
+                    <amount>50</amount>
+                </coin>
+                <coin>
+                    <name>Coin</name>
+                    <amount>100</amount>
+                </coin>
             </coins>
-            <coins xsi:type="coin">
-                <name>Coin</name>
-                <amount>100</amount>
-            </coins>
-            <isFull>false</isFull>
+            <isFull>true</isFull>
         </item>
         <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="key">
             <getCode>7</getCode>
