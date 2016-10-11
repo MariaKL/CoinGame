@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import kaukau.control.Client;
+import kaukau.model.Direction;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
 import kaukau.model.Item;
@@ -221,6 +222,7 @@ public class RenderCanvas extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
 		// translate graphics to follow player
 		g.translate(-camY, -camX);
 		paintBlocks(g);
@@ -362,9 +364,11 @@ public class RenderCanvas extends JPanel {
 				Tile nloc = player.getLocation();
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
-				// update rendering
-				camY = camY - 65;
-				repaint();
+				// update rendering if player has moved
+				if(!rnew.equals(rold)){
+					camY = camY - 65;
+					repaint();
+				}
 			}
 		});
 
@@ -390,9 +394,12 @@ public class RenderCanvas extends JPanel {
 				Tile nloc = player.getLocation();
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
-				// update rendering
-				camY = camY + 65;
-				repaint();
+				// update rendering if player has moved
+				if(!rnew.equals(rold)){
+					camY = camY + 65;
+					repaint();
+				}
+				
 			}
 		});
 		// player move left
@@ -417,10 +424,12 @@ public class RenderCanvas extends JPanel {
 				Tile nloc = player.getLocation();
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
-				// update rendering
-				camY = camY - 65;
-				camX = camX - 65;
-				repaint();
+				// update rendering if player has moved
+				if(!rnew.equals(rold)){
+					camY = camY - 65;
+					camX = camX - 65;	
+					repaint();
+				}	
 			}
 		});
 		// player move right
@@ -445,10 +454,12 @@ public class RenderCanvas extends JPanel {
 				Tile nloc = player.getLocation();
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
-				// update rendering
-				camY = camY + 65;
-				camX = camX + 65;
-				repaint();
+				// update rendering if player has moved
+				if(!rnew.equals(rold)){
+					camY = camY + 65;
+					camX = camX + 65;
+					repaint();
+				}
 			}
 		});
 		// enter door, if not possible give message
@@ -467,11 +478,36 @@ public class RenderCanvas extends JPanel {
 		this.getActionMap().put("pickup", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				//pick up object if possible
-				game.pickupAnItem(player.getUserId());
+				client.sendAction(Client.pickUpItem);
+				// getting players current location
+				Tile oloc = player.getLocation();
+				Direction dir = player.getfacingDirection();
+				// find block player is facing
+				Block rold = null;
+				switch(dir){
+					case EAST:
+						rold = levelBlocks[oloc.Y()+1][oloc.X()];
+						break;
+					case NORTH:
+						rold = levelBlocks[oloc.Y()][oloc.X()-1];
+						break;
+					case SOUTH:
+						rold = levelBlocks[oloc.Y()][oloc.X()+1];
+						break;
+					case WEST:
+						rold = levelBlocks[oloc.Y()-1][oloc.X()];
+						break;
+				}
+				// remove item from block
+				if(rold != null){
+					((RenderTile)rold).setItem(null);
+				}
+				// wait for updates from server
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e1) {	}
+				// update rendering
 				repaint();
-				System.out.println("Attempt to pick up item");
-				//here get direction of player and item coordinates
-				//TODO: see above comment
 			}
 		});
 	}

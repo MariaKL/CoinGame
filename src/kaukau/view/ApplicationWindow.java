@@ -112,10 +112,10 @@ public class ApplicationWindow extends JFrame {
 		setTitle("Kaukau");
 		// set size
 		//setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-		setSize(1000, 800);
+		setSize(1000, 750);
 
 		// set display location
-		//setLocationRelativeTo(null);
+		setLocationRelativeTo(null);
 		add(createCenterPanel(),BorderLayout.CENTER);
 		add(createBottomPanel(),BorderLayout.SOUTH);
 		// set close operation
@@ -275,6 +275,11 @@ public class ApplicationWindow extends JFrame {
 			System.exit(0);
 			dispose();
 		}
+	}
+	
+	@Override
+	public void repaint(){
+		inventory.repaint();
 	}
 
 	public class Inventory extends Canvas implements MouseListener {

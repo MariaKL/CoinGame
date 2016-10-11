@@ -100,7 +100,7 @@ public class GameWorld implements Serializable{
 		// then player can pick up the item only if there is one
 		if (validPoint(pos)){
 			Tile tile = board.getTileAt(pos);
-			if ((tile.getTileType() == TileType.TILE || tile.getTileType() == TileType.TILE_CRACKED) && tile.containsPickupItem()){
+			if (tile.containsPickupItem()){
 				if (player.addToBag((PickupableItem)tile.getItem())){
 					tile.removeItem();
 					return true;
