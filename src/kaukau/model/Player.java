@@ -146,4 +146,15 @@ public class Player implements Serializable{
 		return "Player "+this.name+" at position "+this.location.toString();
 	}
 
+	public boolean containsKey(Door door){
+		for(PickupableItem item : inventory.getStorage()){
+			if (item instanceof Key){
+				if (((Key) item).getCode() == door.getDoorCode()){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 }
