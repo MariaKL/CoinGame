@@ -21,7 +21,7 @@ import kaukau.model.Player;
 import kaukau.model.Row;
 import kaukau.model.Tile;
 
-public class JAXBXmlToJava {
+public class JAXBXmlToJava {	
 
 	public Player unmarshalPlayer(int playerID) {
 		Player player = null;
@@ -31,8 +31,8 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
-			// File XMLfile = new File("Player"+playerID+".xml");
-			File XMLfile = new File("Player.xml");
+			File XMLfile = new File("Player"+playerID+".xml");
+			//File XMLfile = new File("Player.xml");
 			// this will create Java object - country from the XML file
 			player = (Player) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {
@@ -52,8 +52,8 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
-			// File XMLfile = new File("Map"+playerID+".xml");
-			File XMLfile = new File("Map.xml");
+			 File XMLfile = new File("Map"+playerID+".xml");
+			//File XMLfile = new File("Map.xml");
 			// this will create Java object - country from the XML file
 			map = (GameMap) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {

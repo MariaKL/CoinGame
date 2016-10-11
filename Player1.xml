@@ -2,14 +2,15 @@
 <player>
     <name>Player</name>
     <userId>1</userId>
-    <getFacingDirection>SOUTH</getFacingDirection>
+    <getFacingDirection>EAST</getFacingDirection>
     <getLocation>
         <tileType>TILE</tileType>
-        <xCoord>8</xCoord>
+        <xCoord>7</xCoord>
         <yCoord>4</yCoord>
     </getLocation>
     <inventory>
         <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
+            <coins/>
             <isFull>false</isFull>
         </item>
     </inventory>

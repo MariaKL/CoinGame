@@ -99,8 +99,8 @@ public class JAXBJavaToXml {
 
 			// specify the location and name of xml file to be created
 			// for testing at uni
-			//File XMLfile = new File("Player"+player.getUserId()+".xml");
-			File XMLfile = new File("Player.xml");
+			File XMLfile = new File("Player"+player.getUserId()+".xml");
+			//File XMLfile = new File("Player.xml");
 			// Writing to XML file
 			jaxbMarshaller.marshal(player, XMLfile);
 
@@ -129,8 +129,8 @@ public class JAXBJavaToXml {
 
 			// specify the location and name of xml file to be created
 			// for testing at uni
-			//File XMLfile = new File("Map"+id+".xml");
-			File XMLfile = new File("Map.xml");
+			File XMLfile = new File("Map"+id+".xml");
+			//File XMLfile = new File("Map.xml");
 
 			// Writing to XML file
 			jaxbMarshaller.marshal(map, XMLfile);
