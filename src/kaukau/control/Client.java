@@ -98,9 +98,9 @@ public class Client extends Thread {
 				game.fromByteArray((byte[])input.readObject());
 				// update rendering
 				aw.setGame(game);
-				try {
-					Thread.sleep(200);
-				} catch (InterruptedException e1) {	}
+				//try {
+					//Thread.sleep(200);
+				//} catch (InterruptedException e1) {	}
 				aw.repaint();
 			}
 		} catch(ConnectException e){

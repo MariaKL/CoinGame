@@ -110,7 +110,7 @@ public class RenderCanvas extends JPanel {
 	public void setGame(GameWorld game){
 		this.game = game;
 		setPlayers(game.getAllPlayers());
-		this.player = game.getAllPlayers().get(player.getUserId());
+		this.player = game.getAllPlayers().get(client.getUID());
 	}
 	/**
 	 * Associates this canvas with a client to update player actions
@@ -126,7 +126,7 @@ public class RenderCanvas extends JPanel {
 	 *
 	 * @param game
 	 */
-	private void initBlocks(GameWorld game) {
+	public void initBlocks(GameWorld game) {
 
 		allWalls.clear();
 		allTiles.clear();

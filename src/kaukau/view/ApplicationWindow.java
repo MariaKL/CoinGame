@@ -292,6 +292,7 @@ public class ApplicationWindow extends JFrame {
 	
 	@Override
 	public void repaint(){
+		
 		inventory.repaint();
 	}
 

@@ -223,46 +223,6 @@ public class GameWorldTests {
 	}
 
 	/**
-	 * Test a player to open a door. Player only open a door when
-	 * facing direction contain a door.
-	 */
-	@Test
-	public void testOpenDoor_1(){
-		GameWorld game = new GameWorld();
-		GameMap board = game.getGameMap();
-		int uid = game.addPlayer();
-		Player player = game.player(uid);
-		Tile oldPos = board.getTileAt(new Point(8, 15));
-		Tile newPos = board.getTileAt(new Point(10, 15));
-		Tile door = board.getTileAt(new Point(9,15));
-		player.setLocation(oldPos);
-		player.setfacingDirection(Direction.SOUTH);
-		assertTrue(oldPos.addPlayer(player));
-		assertTrue(oldPos.isTileOccupied());
-		assertTrue(door.getTileType() == TileType.DOOR);
-		assertTrue(game.openDoor(uid));
-		assertTrue(newPos.isTileOccupied()); 		// player's location should be updated by two tiles
-		assertTrue(player.getLocation().getX() == 10);
-		assertTrue(player.getLocation().getY() == 15);
-		assertFalse(oldPos.isTileOccupied());   // should be remove from previous tile
-	}
-
-	/**
-	 * Test invalid open door action while the player facing other direction.
-	 */
-	@Test
-	public void testInvalidOpenDoor_1(){
-		GameWorld game = new GameWorld();
-		GameMap board = game.getGameMap();
-		int uid = game.addPlayer();
-		Player player = game.player(uid);
-		player.setLocation(board.getTileAt(new Point(8,15)));
-		player.setfacingDirection(Direction.WEST);
-		assertTrue(board.getTileAt(new Point(9,15)).getTileType() == TileType.DOOR);
-		assertFalse(game.openDoor(uid));
-	}
-
-	/**
 	 * Test invalid move when player try to move into a door,
 	 * player use enter commands to interact with door.
 	 */
