@@ -1,9 +1,5 @@
 package kaukau.model;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,7 +11,6 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Vivienne Yapp, 300339524
  *
  */
-
 @XmlRootElement
 @XmlSeeAlso({CoinBox.class, Coin.class, Key.class})
 @XmlTransient
@@ -23,10 +18,17 @@ public abstract class PickupableItem implements Item, Serializable{
 
 	protected String name;
 
+	/**
+	 * Create a pickupable item for the game.
+	 * @param name
+	 */
 	public PickupableItem(String name){
 		this.name = name;
 	}
 
+	/**
+	 * Constructor for load and save to XML file purpose.
+	 */
 	@SuppressWarnings("unused")
 	public PickupableItem(){
 		this(null);
