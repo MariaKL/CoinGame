@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -24,7 +23,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -294,7 +292,7 @@ public class ApplicationWindow extends JFrame {
 	
 	@Override
 	public void repaint(){
-		
+		rc.initBlocks(game);
 		inventory.repaint();
 	}
 
