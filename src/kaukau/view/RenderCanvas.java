@@ -68,6 +68,8 @@ public class RenderCanvas extends JPanel {
 
 		initBlocks(game);
 		attachBindings();
+		//set focus
+		this.setFocusable(true);
 		repaint();
 
 	}
@@ -326,7 +328,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -354,7 +356,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -381,7 +383,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -408,11 +410,38 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
 		
+<<<<<<< HEAD
+=======
+		// enter door, if not possible give message
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_E, 0), "enter");
+		this.getActionMap().put("enter", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				//enter door
+				game.openDoor(player.getUserId());
+			}
+		});
+		
+		//pick up object in front if possible
+		this.getInputMap().put(KeyStroke.getKeyStroke(
+                KeyEvent.VK_P, 0), "pickup");
+		this.getActionMap().put("pickup", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				//pick up object if possible
+				game.pickupAnItem(player.getUserId());
+				repaint();
+				System.out.println("Attempt to pick up item");
+				//here get direction of player and item coordinates
+				//TODO: see above comment
+			}
+		});
+		
+>>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
 	}
 
 	/**Rotates the current game level by applying

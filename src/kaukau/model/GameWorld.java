@@ -78,12 +78,12 @@ public class GameWorld implements Serializable{
 					||tile.getTileType()==GameMap.TileType.TILE_CRACKED)){
 					oldPos.removePlayer();
 					player.setLocation(tile);
-					player.setFacingDirection(direction);
+					player.setfacingDirection(direction);
 					tile.addPlayer(player);
 					return true;
 			}
 		}
-		player.setFacingDirection(direction);
+		player.setfacingDirection(direction);
 		return false;
 	}
 
@@ -121,6 +121,7 @@ public class GameWorld implements Serializable{
 		Player player = players.get(uid);
 		Point pos = getPointFromDirection(player, player.getfacingDirection());
 		if (validPoint(pos)){
+			System.out.println("Test");
 			Tile tile = board.getTileAt(pos);
 			if (!tile.isTileOccupied() && (tile.getTileType() == TileType.TILE || tile.getTileType() == TileType.TILE_CRACKED)){
 				return player.removeFromBag(index);
