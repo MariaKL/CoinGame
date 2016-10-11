@@ -2,6 +2,7 @@ package kaukau.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,9 +11,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import kaukau.model.GameMap.TileType;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class Tile implements Serializable {
 
-	private Item item;
+	// private Item item;
 	private Key itemIsKey;
 	private CoinBox itemIsCoinBox;
 	private Coin itemIsCoin;
@@ -23,15 +25,19 @@ public class Tile implements Serializable {
 
 	/**
 	 * Create a tile object for GameWorld.
-	 * @param type the type of this tile
-	 * @param x the x coordinate of this tile
-	 * @param y the y coordinate of this tile
+	 * 
+	 * @param type
+	 *            the type of this tile
+	 * @param x
+	 *            the x coordinate of this tile
+	 * @param y
+	 *            the y coordinate of this tile
 	 */
 	public Tile(TileType type, int x, int y) {
 		this.type = type;
 		this.x = x;
 		this.y = y;
-		item = null;
+		// item = null;
 		player = null;
 	}
 
@@ -43,29 +49,51 @@ public class Tile implements Serializable {
 	}
 
 	/**
-	 * Set this tile with a game item.
-	 * This method mostly use to set up the game board.
+	 * Set this tile with a game item. This method mostly use to set up the game
+	 * board.
 	 *
-	 * @param addItem the item to add on this tile
+	 * @param addItem
+	 *            the item to add on this tile
 	 * @return true if it is successfully added, otherwise false;
 	 */
 	public boolean setItem(Item addItem) {
-		if (item == null && player == null) {
-			this.item = addItem;
-			//checkType();
+		// if (item == null && player == null) {
+		// this.item = addItem;
+		// return true;
+		// }
+		// return false;
+		if (addItem instanceof Key && addItem != null) {
+			this.itemIsKey = (Key) addItem;
+			return true;
+		} else if (addItem instanceof CoinBox && addItem != null) {
+			this.itemIsCoinBox = (CoinBox) addItem;
+			return true;
+		} else if (addItem instanceof Coin && addItem != null) {
+			this.itemIsCoin = (Coin) addItem;
+			return true;
+		} else if (addItem instanceof Door && addItem != null) {
+			this.itemIsDoor = (Door) addItem;
 			return true;
 		}
+		// else if (addItem == null) {
+		// this.itemIsKey = null;
+		// this.itemIsCoinBox = null;
+		// this.itemIsCoin = null;
+		// this.itemIsDoor = null;
 		return false;
+		// }
 	}
 
 	/**
 	 * Add a player on this empty tile.
 	 *
-	 * @param player the player that occupy this tile
+	 * @param player
+	 *            the player that occupy this tile
 	 * @return true if the player successfully added, otherwise false.
 	 */
-	public boolean addPlayer(Player player){
-		if (this.player == null && this.item == null){
+	public boolean addPlayer(Player player) {
+		// if (this.player == null && this.item == null) {
+		if (this.player == null) {
 			this.player = player;
 			return true;
 		}
@@ -77,8 +105,8 @@ public class Tile implements Serializable {
 	 *
 	 * @return true if the player successfully removed, otherwise false.
 	 */
-	public boolean removePlayer(){
-		if (this.player != null){
+	public boolean removePlayer() {
+		if (this.player != null) {
 			this.player = null;
 			return true;
 		}
@@ -87,28 +115,33 @@ public class Tile implements Serializable {
 
 	/**
 	 * Returns the player currently on this tile or null if none
+	 * 
 	 * @return the player that occupy this tile
 	 */
-	public Player getPlayer(){
-		if(this.player != null){
+	public Player getPlayer() {
+		if (this.player != null) {
 			return player;
 		} else {
 			return null;
 		}
 	}
 
-
 	/**
 	 * Drop an item to an empty tile if the tile is not occupy.
 	 *
-	 * @param dropItem the item that drop on this tile
-	 * @return true if both the player and item fields are NULL, otherwise false.
+	 * @param dropItem
+	 *            the item that drop on this tile
+	 * @return true if both the player and item fields are NULL, otherwise
+	 *         false.
 	 */
-	public boolean dropItem(PickupableItem dropItem){
-		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) &&
-			item == null && player == null && dropItem instanceof PickupableItem){
-			this.item = dropItem;
-			//checkType();
+	public boolean dropItem(PickupableItem dropItem) {
+		// if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item
+		// == null && player == null
+		// && dropItem instanceof PickupableItem) {
+		// this.item = dropItem;
+		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && player == null
+				&& dropItem instanceof PickupableItem) {
+			setItem(dropItem);
 			return true;
 		}
 		return false;
@@ -120,11 +153,28 @@ public class Tile implements Serializable {
 	 * @return true if the tile is TileType.Empty and both the player and item
 	 *         fields are NULL, otherwise false .
 	 */
-	public boolean removeItem(){
-		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item != null){
-			item = null;
-			checkType();
-			return true;
+	public boolean removeItem() {
+		// if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item
+		// != null) {
+		// item = null;
+		// checkType();
+		// return true;
+		// }
+		// return false;
+		if ((type == TileType.TILE || type == TileType.TILE_CRACKED)) {
+			if (itemIsKey != null) {
+				itemIsKey = null;
+				return true;
+			} else if (itemIsCoinBox != null) {
+				itemIsCoinBox = null;
+				return true;
+			} else if (itemIsCoin != null) {
+				itemIsCoin = null;
+				return true;
+			} else if (itemIsDoor != null) {
+				itemIsDoor = null;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -132,82 +182,132 @@ public class Tile implements Serializable {
 	/**
 	 * Check if this tile contain an pickupable item.
 	 *
-	 * @return true if there is a pickupableItem on an empty tile, otherwise false.
+	 * @return true if there is a pickupableItem on an empty tile, otherwise
+	 *         false.
 	 */
-	public boolean containsPickupItem(){
-		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) &&
-				item != null && item instanceof PickupableItem){
-			return true;
+	public boolean containsPickupItem() {
+		// if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item
+		// != null
+		// && item instanceof PickupableItem) {
+		// return true;
+		// }
+		// return false;
+		if ((type == TileType.TILE || type == TileType.TILE_CRACKED)) {
+			if (itemIsDoor == null && (itemIsKey != null || itemIsCoinBox != null || itemIsCoin != null)) {
+				itemIsDoor = null;
+				return true;
+			}
 		}
 		return false;
 	}
 
-	/**
-	 * Separate the item into key, coinbox and coin objects.
-	 * This method is uses for load and save XML file.
-	 */
-	private void checkType() {
-		if (this.item instanceof Key && this.item != null) {
-			this.itemIsKey = (Key) this.item;
-		} else if (this.item instanceof CoinBox && this.item != null) {
-			this.itemIsCoinBox = (CoinBox) this.item;
-		} else if (this.item instanceof Coin && this.item != null) {
-			this.itemIsCoin = (Coin) this.item;
-		} else if (this.item instanceof Door && this.item != null) {
-			this.itemIsDoor = (Door) this.item;
-		} else if (this.item == null) {
-			this.itemIsKey = null;
-			this.itemIsCoinBox = null;
-			this.itemIsCoin = null;
-			this.itemIsDoor = null;
-		}
+	// /**
+	// * Separate the item into key, coinbox and coin objects. This method is
+	// uses
+	// * for load and save XML file.
+	// */
+	// private void checkType(Item item) {
+	// if (item instanceof Key && item != null) {
+	// this.itemIsKey = (Key) item;
+	// } else if (item instanceof CoinBox && item != null) {
+	// this.itemIsCoinBox = (CoinBox) item;
+	// } else if (item instanceof Coin && item != null) {
+	// this.itemIsCoin = (Coin) item;
+	// } else if (item instanceof Door && item != null) {
+	// this.itemIsDoor = (Door) item;
+	// } else if (item == null) {
+	// this.itemIsKey = null;
+	// this.itemIsCoinBox = null;
+	// this.itemIsCoin = null;
+	// this.itemIsDoor = null;
+	// }
+	//
+	// }
 
-	}
-
 	/**
-	 * Return the key item on this tile. This method is uses for load and save XML file.
+	 * Return the key item on this tile. This method is uses for load and save
+	 * XML file.
+	 * 
 	 * @return a Key object
 	 */
-	@XmlElement(name = "getKey")
-	public Key getKey(){
-		if (this.itemIsKey != null) return this.itemIsKey;
+	//@XmlElement(name = "getKey")
+	public Key getKey() {
+		if (this.itemIsKey != null)
+			return this.itemIsKey;
 		return null;
 	}
 
+	public void setKey(Key key) {
+		if (!isTileOccupied()) {
+			//this.item = key;
+			this.itemIsKey = key;
+		}
+	}
+
 	/**
-	 * Return the coinbox object on this tile. This method is uses for load and save XML file.
+	 * Return the coinbox object on this tile. This method is uses for load and
+	 * save XML file.
+	 * 
 	 * @return a CoinBox object
 	 */
-	@XmlElement(name = "getCoinBox")
-	public CoinBox getCoinBox(){
-		if (this.itemIsCoinBox != null) return this.itemIsCoinBox;
+	//@XmlElement(name = "getCoinBox")
+	public CoinBox getCoinBox() {
+		if (this.itemIsCoinBox != null)
+			return this.itemIsCoinBox;
 		return null;
 	}
 
+	public void setCoinBox(CoinBox coinbox) {
+		if (!isTileOccupied()) {
+			//this.item = coinbox;
+			this.itemIsCoinBox = coinbox;
+		}
+	}
+
 	/**
-	 * Return the coin object on this tile. This method is uses for load and save XML file.
+	 * Return the coin object on this tile. This method is uses for load and
+	 * save XML file.
+	 * 
 	 * @return a Coin object
 	 */
-	@XmlElement(name = "getCoin")
-	public Coin getCoin(){
-		if (this.itemIsCoin != null) return this.itemIsCoin;
+	//@XmlElement(name = "getCoin")
+	public Coin getCoin() {
+		if (this.itemIsCoin != null)
+			return this.itemIsCoin;
 		return null;
 	}
-	
-	@XmlElement(name = "getDoor")
-	public Door getDoor(){
-		if (this.itemIsDoor != null) return this.itemIsDoor;
+
+	public void setCoin(Coin coin) {
+		if (!isTileOccupied()) {
+			//this.item = coin;
+			this.itemIsCoin = coin;
+		}
+	}
+
+	//@XmlElement(name = "getDoor")
+	public Door getDoor() {
+		if (this.itemIsDoor != null)
+			return this.itemIsDoor;
 		return null;
+	}
+
+	public void setDoor(Door door) {
+		if (!isTileOccupied()) {
+			//this.item = door;
+			this.itemIsDoor = door;
+		}
 	}
 
 	/**
 	 * Check whether if this tile is occupy by a player or pickableItem.
+	 * 
 	 * @return true if the tile is TileType.Empty, otherwise false if both the
 	 *         player and item fields are NULL.
 	 */
-	public boolean isTileOccupied(){
-		if (type == TileType.TILE || type == TileType.TILE_CRACKED){
-			if (player == null && item == null){
+	public boolean isTileOccupied() {
+		if (type == TileType.TILE || type == TileType.TILE_CRACKED) {
+			//if (player == null && item == null) {
+			if (itemIsDoor == null  && !containsPickupItem() && player == null) {
 				return false;
 			}
 		}
@@ -219,14 +319,16 @@ public class Tile implements Serializable {
 	 *
 	 * @return the type of this tile
 	 */
-	@XmlElement(name = "tileType")
+	//@XmlElement(name = "tileType")
 	public TileType getTileType() {
 		return type;
 	}
 
 	/**
 	 * Set the tile type of this tile.
-	 * @param type the TileType of this tile
+	 * 
+	 * @param type
+	 *            the TileType of this tile
 	 */
 	public void setTileType(TileType type) {
 		this.type = type;
@@ -240,7 +342,16 @@ public class Tile implements Serializable {
 	 */
 	@XmlAnyElement
 	public Item getItem() {
-		return item;
+		//return item;
+		if (itemIsKey != null) {			
+			return itemIsKey;
+		} else if (itemIsCoinBox != null) {
+			return itemIsCoinBox;
+		} else if (itemIsCoin != null) {
+			return itemIsCoin;
+		} else if (itemIsDoor != null) {
+			return itemIsDoor;
+		}return null;
 	}
 
 	/**
@@ -277,23 +388,30 @@ public class Tile implements Serializable {
 	}
 
 	/**
-	 * Set the x position for this tile. This method is uses for load and save XML file.
-	 * @param x the x position of the tile
+	 * Set the x position for this tile. This method is uses for load and save
+	 * XML file.
+	 * 
+	 * @param x
+	 *            the x position of the tile
 	 */
-	public void setX(int x){
+	public void setX(int x) {
 		this.x = x;
 	}
 
 	/**
-	 * Set the y position for this tile. This method is uses for load and save XML file.
-	 * @param y the y position of the tile
+	 * Set the y position for this tile. This method is uses for load and save
+	 * XML file.
+	 * 
+	 * @param y
+	 *            the y position of the tile
 	 */
-	public void setY(int y){
+	public void setY(int y) {
 		this.y = y;
 	}
 
 	/**
 	 * Return the row and col of this tile.
+	 * 
 	 * @return the row and col of this tile.
 	 */
 	public String toString() {
