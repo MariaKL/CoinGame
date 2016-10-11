@@ -1,4 +1,3 @@
-//@XmlSchema(namespace = "https://something.com/", elementFormDefault = XmlNsForm.QUALIFIED)
 package kaukau.model;
 
 import java.io.Serializable;
@@ -8,7 +7,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
-
 
 /**
  * A CoinBox is a pickupable item which can be carry by player. This CoinBox
@@ -53,6 +51,7 @@ public class CoinBox extends PickupableItem implements Serializable {
 	 * @return true if the item is a coin and the coinBox is not full, otherwise false
 	 */
 	public boolean addCoin(Item item) {
+
 		if (item instanceof Coin) {
 			Coin coin = (Coin) item;
 			if (storage.addItem(item) && !storage.isStorageFull()) {
@@ -94,7 +93,12 @@ public class CoinBox extends PickupableItem implements Serializable {
 	 * @return the total coins of this coinbox.
 	 */
 	public int totalCoins() {
-		return totalCoinAmount;
+		int total = 0;
+		for (PickupableItem p : getStorage()) {
+			Coin c = (Coin) p;
+			total += c.getAmount();
+		}
+		return total;
 	}
 
 	/**

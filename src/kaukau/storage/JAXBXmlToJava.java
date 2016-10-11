@@ -12,6 +12,7 @@ import javax.xml.bind.Unmarshaller;
 
 import kaukau.model.Coin;
 import kaukau.model.CoinBox;
+import kaukau.model.Door;
 import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
 import kaukau.model.Key;
@@ -20,7 +21,7 @@ import kaukau.model.Player;
 
 public class JAXBXmlToJava {
 
-	public Player unmarshalPlayer() {
+	public Player unmarshalPlayer(int playerID) {
 		Player player = null;
 		try {
 			// create JAXB context and initializing Marshaller
@@ -28,7 +29,7 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
-			File XMLfile = new File("Player.xml");
+			File XMLfile = new File("Player"+playerID+".xml");
 			// this will create Java object - country from the XML file
 			player = (Player) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {
@@ -37,46 +38,6 @@ public class JAXBXmlToJava {
 		}
 
 		return player;
-
-	}
-	
-	public CoinBox unmarshalCoinBox() {
-		CoinBox cb = null;
-		try {
-			// create JAXB context and initializing Marshaller
-			JAXBContext jaxbContext = JAXBContext.newInstance(CoinBox.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-			// specify the location and name of xml file to be read
-			File XMLfile = new File("CoinBox.xml");
-			// this will create Java object - country from the XML file
-			cb = (CoinBox) jaxbUnmarshaller.unmarshal(XMLfile);
-		} catch (JAXBException e) {
-			// some exception occured
-			e.printStackTrace();
-		}
-
-		return cb;
-
-	}
-	
-	public Coin unmarshalCoin() {
-		Coin c = null;
-		try {
-			// create JAXB context and initializing Marshaller
-			JAXBContext jaxbContext = JAXBContext.newInstance(Coin.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-			// specify the location and name of xml file to be read
-			File XMLfile = new File("Coin.xml");
-			// this will create Java object - country from the XML file
-			c = (Coin) jaxbUnmarshaller.unmarshal(XMLfile);
-		} catch (JAXBException e) {
-			// some exception occured
-			e.printStackTrace();
-		}
-
-		return c;
 
 	}
 
@@ -99,22 +60,22 @@ public class JAXBXmlToJava {
 
 	}
 
-	public static void main(String[] args) {
-		JAXBXmlToJava unmarshaling = new JAXBXmlToJava();
-		Player player = unmarshaling.unmarshalPlayer();
+	public static void testUnmarshalledPlayer(Player player) {
 		if (player != null) {
 			System.out.println("Player name: " + player.getName());
 			System.out.println("Player id: " + player.getUserId());
 			System.out.println("Player direction: " + player.getfacingDirection());
 			System.out.println("Player location: " + player.getLocation().toString() + " with tile type: "
 					+ player.getLocation().getTileType());
+			System.out.println("Player inventory limit: " + player.getStorageSize());
 			for (PickupableItem p : player.getInventory()) {
 				if (p instanceof Key) {
 					Key k = (Key) p;
 					System.out.println("Player inventory key code: " + k.getCode());
 				} else if (p instanceof CoinBox) {
 					CoinBox cb = (CoinBox) p;
-					for (Coin c : cb.getStorage()) {
+					for (PickupableItem pi : cb.getStorage()) {
+						Coin c = (Coin) pi;
 						System.out.println("Coin : " + c.getAmount());
 					}
 					System.out.println("Player coinbox ammount: " + cb.totalCoins());
@@ -122,10 +83,29 @@ public class JAXBXmlToJava {
 				}
 			}
 		}
-		//GameMap map = unmarshaling.unmarshalMap();		
-		
-		Coin coin = unmarshaling.unmarshalCoin();
-		System.out.println("coin ammount: " + coin.getAmount());
+	}
+
+	public static void testUnmarshalledMap(GameMap map) {
+		if (map != null) {
+			for (Door d : map.getAllDoors()) {
+				System.out.println("Door code: " + d.getDoorCode());
+				System.out.println("Door is locked?: " + d.isLocked());
+				if (d.getLocation() == null) {
+					System.out.println("Door location is null!");
+				} else {
+					System.out.println("Door location: " + d.getLocation().toString());
+				}
+
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		JAXBXmlToJava unmarshaling = new JAXBXmlToJava();
+		Player player = unmarshaling.unmarshalPlayer(1);
+		// testUnmarshalledPlayer(player);
+		GameMap map = unmarshaling.unmarshalMap();
+		testUnmarshalledMap(map);
 	}
 
 }

@@ -1,19 +1,17 @@
 package kaukau.control;
 
+/**
+ * Client thread to communicate between server and players.
+ * @author Maria Legaspi, 30030499
+ */
+
 import kaukau.model.*;
 import kaukau.view.*;
 
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
-
-
-/**
- * Based off http://stackoverflow.com/questions/29545597/multiplayer-game-in-java-connect-client-player-to-game-that-was-created-by-ot
- * @author Maria Legaspi, 30030499
- *
- */
-
+import java.net.SocketException;
 
 /**
  * A client to connects
@@ -35,6 +33,7 @@ public class Client extends Thread {
 	// action commands
 	public static final int pickUpItem = 1;
 	public static final int dropItem = 2;
+	public static final int leaveGame = 3;
 
 
 	/**
@@ -49,7 +48,7 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Connects the socket to the server.
+	 * Sets the socket and streams to communicate with server.
 	 */
 	private void setupSocket(){
 		try{
@@ -58,14 +57,10 @@ public class Client extends Thread {
 	        output = new ObjectOutputStream(sock.getOutputStream());
 	        input = new ObjectInputStream(sock.getInputStream());
 	        connected = true;
-	        System.out.println("Made socket");
 	    } catch(EOFException e){
-			System.out.println("Server not running.");
-			System.out.println("Single player game");
+			// server not running so in single player mode
 		} catch(ConnectException e){
-			connected = false;
-			System.out.println("Server unavailable.");
-			System.out.println("Single player game");
+			// could not connect to server so running single player mode
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -76,6 +71,7 @@ public class Client extends Thread {
 		try {
 			// single player game
 			if(!connected){
+				// keep trying to connect to server
 				setupSocket();
 				return;
 			}
@@ -85,43 +81,36 @@ public class Client extends Thread {
 				boolean accepted = false;
 				if(input!= null)
 					accepted = input.readBoolean();
-				else
-					System.out.println("Client: no input stream");
-				// if there were too many players then close the socket
+				// if there were too many players
 				if(!accepted){
-					System.out.println("Not accepted into server");
+					setupSocket();
 					return;
 				}
 				uid = input.readInt();
-				System.out.println("New client uid: " + uid);
 				initialRun = false;
 			}
 			// play game
-			System.out.println("Waiting for game updates");
 			boolean closed = false;
 			while(!closed){
-				System.out.println("Players size before update: " + game.getAllPlayers().size());
 				// wait for game updates from server
+				if(sock.isClosed())
+					break;
 				game.fromByteArray((byte[])input.readObject());
 				// update rendering
 				aw.setGame(game);
-//				aw.rc.repaint();
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e1) {	}
 				aw.repaint();
-				System.out.println("Received game update");
-				System.out.println("Players size after update: " + game.getAllPlayers().size());
 			}
-		} catch(EOFException e){
-			e.printStackTrace();
-			System.out.println("Input not read");
 		} catch(ConnectException e){
-			System.out.println("Server not running");
+			// not connected to server
+		} catch(SocketException e){
+			// socket closed
 		} catch(IOException e) {
-			e.printStackTrace();
+			// server message not received
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			// in case of casting issue
 		}
 	}
 
@@ -136,7 +125,6 @@ public class Client extends Thread {
 		}
 		catch(IOException e){
 			e.printStackTrace();
-			System.out.println("Cannot close socket.");
 		}
 	}
 
@@ -150,7 +138,6 @@ public class Client extends Thread {
 				output.writeInt(uid); // uid of player doing action
 				output.writeInt(code); // action
 				output.flush();
-				System.out.println("Wrote command to server");
 			}
 		} catch (IOException e) {
 			// problem with sending to the server
@@ -169,7 +156,6 @@ public class Client extends Thread {
 				output.writeInt(code); // action with item
 				output.writeInt(index); // index of item in inventory
 				output.flush();
-				System.out.println("Wrote command to server");
 			}
 		} catch (IOException e) {
 			// problem with sending to the server

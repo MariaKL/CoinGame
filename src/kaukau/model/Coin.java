@@ -3,6 +3,7 @@ package kaukau.model;
 import java.awt.Graphics;
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -11,19 +12,24 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This class represents a Coin object which can be pickup or drop by the player.
- * A coin can be stored in the player's inventory or in a CoinBox object.
+ * This class represents a Coin object which can be pickup or drop by the
+ * player. A coin can be stored in the player's inventory or in a CoinBox
+ * object.
+ *
  * @author Vivienne Yapp, 300339524
  *
  */
 @XmlRootElement
-public class Coin extends PickupableItem implements Serializable{
-
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Coin extends PickupableItem implements Serializable {
+	@XmlElement
 	private int amount;
 
 	/**
 	 * Create a Coin object.
-	 * @param amount the amount of this coin
+	 *
+	 * @param amount
+	 *            the amount of this coin
 	 */
 	public Coin(int amount) {
 		super("Coin");
@@ -34,16 +40,16 @@ public class Coin extends PickupableItem implements Serializable{
 	 * Constructor for load and save to XML file purpose.
 	 */
 	@SuppressWarnings("unused")
-	public Coin(){
+	public Coin() {
 		this(-1);
 	}
 
 	/**
 	 * Get the amount of this coin.
+	 *
 	 * @return the amount of this coin
 	 */
-    @XmlElement(name="getAmmount")
-	public int getAmount(){
+	public int getAmount() {
 		return amount;
 	}
 
@@ -54,5 +60,4 @@ public class Coin extends PickupableItem implements Serializable{
     public void setAmount(int amount){
     	this.amount = amount;
     }
-
 }

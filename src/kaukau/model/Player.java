@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -115,10 +117,11 @@ public class Player implements Serializable {
 	 * @return true if the item successfully added to the inventory, otherwise false.
 	 */
 	public boolean addToBag(Item item) {
-		if (item instanceof Coin && !coinbox.isStorageFull())
+		if (item instanceof Coin && !coinbox.isStorageFull()) {
 			return coinbox.addCoin(item);
-		else if (item instanceof CoinBox && coinbox != null) // player only allow one coinbox
+		} else if (item instanceof CoinBox && coinbox != null) { // player only allow one coinbox
 			return false;
+		}
 		return inventory.addItem(item);
 	}
 
@@ -139,7 +142,7 @@ public class Player implements Serializable {
 	 * @return the list of items in the player's inventory
 	 */
 	@XmlElementWrapper(name = "inventory")
-	@XmlElements({ @XmlElement(name = "item") })
+	@XmlElement(name = "item")
 	public ArrayList<PickupableItem> getInventory() {
 		return inventory.getStorage();
 	}
