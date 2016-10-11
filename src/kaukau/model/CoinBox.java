@@ -1,6 +1,7 @@
 //@XmlSchema(namespace = "https://something.com/", elementFormDefault = XmlNsForm.QUALIFIED)
 package kaukau.model;
 
+import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.ArrayList;
 

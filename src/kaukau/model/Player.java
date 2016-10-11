@@ -25,7 +25,7 @@ public class Player implements Serializable {
 	public Player(int uid, String name, Tile startLocation, Direction facing) {
 		this.userId = uid;
 		this.name = name;
-		this.location = startLocation;
+		location = startLocation;
 		this.facing = facing;
 		// inventory = new Container("Backpack", startLocation);
 		inventory = new Container("Backpack");

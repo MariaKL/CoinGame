@@ -107,17 +107,18 @@ public class Server{
 									break;
 							}
 							System.out.println("Updated game");
-							// send back to clients
-							updateAll();
-							//OR
-	//						sendToAll(uid + " " + dir);
-//							Thread.sleep(3000);
-				    		if(player < game.getAllPlayers().size()-1){
+				    		if(player < game.getAllPlayers().size()){
 				    			player++;
 				    		}
 				    		else{
 				    			player = 1;
 				    		}
+				    		System.out.println("Server = " + player);
+							// send back to clients
+							updateAll();
+							//OR
+	//						sendToAll(uid + " " + dir);
+//							Thread.sleep(3000);
 						}
 			    		System.out.println("Game over");
 						// If we get here, then we're in game over mode
@@ -167,7 +168,6 @@ public class Server{
 							out.put(uid, output);
 							in.put(uid, input);
 							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
-
 //		            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 		    				output.writeBoolean(true);
 //				        	output.flush();
@@ -177,11 +177,11 @@ public class Server{
 				        	// send new game to all clients
 							System.out.println("Server: number of players: " + game.getAllPlayers().size());
 							System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
-				        	// send new game to all players
-				        	updateAll();
 							// starts listening for commands when a player is connected
 							if(!commandThread.isAlive())
 								commandThread.start();
+				        	// send new game to all players
+				        	updateAll();
 		            	}
 		            }
 		        } catch(IOException e){
@@ -262,6 +262,22 @@ public class Server{
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Returns the id of a player given the socket.
+     * @param sock
+     * @return
+     */
+    private static Integer getUid(Socket sock){
+    	for(Integer i: sockets.keySet()){
+    		if(sockets.get(i) == sock)
+    			return i;
+    	}
+    	return -1;
+    }
+
+	/**
+>>>>>>> master
      * Closes all sockets.
      */
     public void closeAll(){
