@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +98,7 @@ public class RenderCanvas extends JPanel {
 	 *
 	 * @param game
 	 */
-	private void initBlocks(GameWorld game) {
+	public void initBlocks(GameWorld game) {
 
 		allWalls.clear();
 		allTiles.clear();
@@ -109,7 +110,8 @@ public class RenderCanvas extends JPanel {
 		for(int r=0; r!=levelBlocks.length; r++){
 			for(int c=0; c!=levelBlocks[0].length; c++){
 				// getting the gameworld model tile
-				Tile tile = tiles[c][r];
+				//Tile tile = tiles[c][r];
+				Tile tile = tiles[r][c];
 				// the block to be created
 				Block b = null;
 
@@ -117,8 +119,8 @@ public class RenderCanvas extends JPanel {
 				if(tile.getTileType() == GameMap.TileType.TILE){
 
 					// getting the x & y position of the tile
-					int x = r * tileWidth;
-					int y = c * tileHeight;
+					int x = c * tileWidth;
+					int y = r * tileHeight;
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
 					// adjusting the position of the render
@@ -142,8 +144,8 @@ public class RenderCanvas extends JPanel {
 				// creating a cracked tile block for rendering
 				} else if (tile.getTileType() == GameMap.TileType.TILE_CRACKED){
 					// getting the x & y position of the tile
-					int x = r * tileWidth;
-					int y = c * tileHeight;
+					int x = c * tileWidth;
+					int y = r * tileHeight;
 					// converting 2d point to isometric
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
 					// adjusting the position of the render
@@ -167,8 +169,8 @@ public class RenderCanvas extends JPanel {
 				// Creating a Wall block for rendering
 				} else if(tile.getTileType() == GameMap.TileType.WALL){
 					// getting the x & y position of the tile
-					int x = r * tileWidth;
-					int y = c * tileHeight;
+					int x = c * tileWidth;
+					int y = r * tileHeight;
 					// converting 2d point to isometic
 					Point pos = RenderWindow.twoDToIso(new Point(x, y));
 					// setting the wall direction in the level data
@@ -260,7 +262,7 @@ public class RenderCanvas extends JPanel {
 		    		Player user = ((RenderTile)b).getPlayer();
 			    	if(user != null){
 			    		BufferedImage playerImg = null;
-			    		switch(player.getfacingDirection()){
+			    		switch(user.getfacingDirection()){
 				    		case NORTH:
 				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
 				    			break;
@@ -283,7 +285,7 @@ public class RenderCanvas extends JPanel {
 		    }
 		} catch(IOException e) {
 			e.printStackTrace();
-		}
+		} catch(ConcurrentModificationException e){}
 	}
 
 	/**
@@ -410,6 +412,7 @@ public class RenderCanvas extends JPanel {
 				repaint();
 			}
 		});
+		
 	}
 
 	/**Rotates the current game level by applying

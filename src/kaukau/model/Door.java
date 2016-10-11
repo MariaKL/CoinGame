@@ -29,7 +29,7 @@ public class Door implements Item, Serializable{
 		if (keyCode > 0) this.locked = true;
 		else this.locked = false;
 	}
-	
+
 	public Door(){
 		this(-1, null);
 	}
@@ -40,7 +40,7 @@ public class Door implements Item, Serializable{
 	 */
 	@XmlElement(name="isLocked")
 	public boolean isLocked(){
-		return this.locked;
+		return locked;
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class Door implements Item, Serializable{
 	public String getName() {
 		return "Door";
 	}
-	
+
 	@XmlElement(name="getLocation")
 	public Tile getLocation(){
 		return this.location;
