@@ -16,6 +16,11 @@ import kaukau.model.Key;
 import kaukau.model.Player;
 import kaukau.model.Tile;
 
+/**
+ * Tests for GameWorld's logic and state.
+ * @author Vivienne Yapp, 300339524
+ *
+ */
 public class GameWorldTests {
 
 	/**
@@ -178,7 +183,6 @@ public class GameWorldTests {
 		assertTrue(player.getCoinBox().isStorageFull());
 		Tile coin = board.getTileAt(new Point(7,6));
 		Tile newPos = board.getTileAt(new Point(7,5));
-		int coinAmount = ((Coin) coin.getItem()).getAmount();
 		player.setLocation(newPos);
 		player.setfacingDirection(Direction.EAST);
 		assertTrue(coin.getTileType() == TileType.TILE || coin.getTileType() == TileType.TILE_CRACKED);

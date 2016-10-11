@@ -120,7 +120,7 @@ public class Tile implements Serializable {
 	 *         fields are NULL, otherwise false .
 	 */
 	public boolean removeItem(){
-		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item != null){
+		if ((type == TileType.TILE || type == TileType.TILE_CRACKED)){
 			item = null;
 			checkType();
 			return true;

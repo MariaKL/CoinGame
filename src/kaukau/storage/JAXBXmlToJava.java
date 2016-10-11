@@ -90,11 +90,11 @@ public class JAXBXmlToJava {
 			for (Door d : map.getAllDoors()) {
 				System.out.println("Door code: " + d.getDoorCode());
 				System.out.println("Door is locked?: " + d.isLocked());
-				if (d.getLocation() == null) {
+				/*if (d.getLocation() == null) {
 					System.out.println("Door location is null!");
 				} else {
 					System.out.println("Door location: " + d.getLocation().toString());
-				}
+				}*/
 
 			}
 		}
