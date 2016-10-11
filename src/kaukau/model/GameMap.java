@@ -4,8 +4,6 @@ import java.awt.Point;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -17,8 +15,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import kaukau.model.GameMap.TileType;
 
 @XmlRootElement	//(namespace = "Team_24.kaukau.model.GameWorld")
 public class GameMap implements Serializable {

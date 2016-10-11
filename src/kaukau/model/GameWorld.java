@@ -50,7 +50,7 @@ public class GameWorld implements Serializable{
 	 */
 	public synchronized int addPlayer(){
 		Random rand = new Random();
-		Tile tile = board.getTileAt(new Point(7-(rand.nextInt(4)), 3));
+		Tile tile = board.getTileAt(new Point(7-(rand.nextInt(5)), 3));
 		Player player = new Player(++uid, "Player", tile, Direction.EAST);
 		System.out.println(player.getUserId());
 		tile.addPlayer(player);

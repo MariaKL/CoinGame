@@ -117,6 +117,11 @@ public class RenderCanvas extends JPanel {
 				// the block to be created
 				Block b = null;
 
+				if(tile==null){
+					System.out.println(r + " " + c);
+					continue;
+				}
+				
 				// Creating a Tile block for rendering
 				if(tile.getTileType() == GameMap.TileType.TILE){
 
@@ -438,7 +443,6 @@ public class RenderCanvas extends JPanel {
 				//TODO: see above comment
 			}
 		});
-		
 	}
 
 	/**Rotates the current game level by applying
