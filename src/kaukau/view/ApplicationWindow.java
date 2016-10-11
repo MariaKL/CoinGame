@@ -173,7 +173,7 @@ public class ApplicationWindow extends JFrame {
 	}
 
 	public void repaint(){
-		rc.initBlocks(game);
+		//rc.initBlocks(game);
 		rc.repaint();
 	}
 
@@ -394,12 +394,12 @@ public class ApplicationWindow extends JFrame {
 		}
 
 		/**
-		 *
+		 * updates inventory and informs client of dropped item
 		 */
 		protected void updateGame() {
-
+			// TODO Auto-generated method stub
 			this.repaint();
-
+			client.sendAction(client.dropItem);
 		}
 
 		@Override
