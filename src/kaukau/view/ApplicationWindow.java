@@ -389,8 +389,10 @@ public class ApplicationWindow extends JFrame {
 					}
 				}
 			});
+			if (!item.getName().equals("Coin Box")){
+				actionMenu.add(drop);
+			}
 			actionMenu.add(mi);
-			actionMenu.add(drop);
 
 			actionMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
