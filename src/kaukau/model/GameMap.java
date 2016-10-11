@@ -185,7 +185,12 @@ public class GameMap implements Serializable {
 		return board;
 	}
 
-
+	/**
+	 * returns the Tile[][] as an ArrayList of Row objects (see Row class).
+	 * For XML marshaling
+	 * 
+	 * @return  ArrayList<Row> boardTiles
+	 * */
 	@XmlElement(name = "boardTiles")
 	public ArrayList<Row> getBoardTiles() {
 		ArrayList<Row> board = new ArrayList<Row>();
@@ -202,6 +207,12 @@ public class GameMap implements Serializable {
 		return board;
 	}
 
+	/**
+	 * sets the Tiles in Tile[][] from the Tiles in parameter.
+	 * For XML unmarshaling
+	 * 
+	 * @param  ArrayList<Row> rows
+	 * */
 	public void setBoardTiles(ArrayList<Row> rows) {
 		for (int i = 0; i < getBoard().length; i++) {
 			Row row = rows.get(i);
@@ -212,13 +223,19 @@ public class GameMap implements Serializable {
 	}
 
 	/**
-	 * Return a list of Row object of all the Rooms in the map.
-	 * @return a lit of Row objects of Rooms
-	 */
+	 * returns the list of rooms in the game.
+	 * 
+	 * @return  ArrayList<Room> rooms
+	 * */
 	public ArrayList<Room> getAllRooms() {
 		return rooms;
 	}
 
+	/**
+	 * returns the list of doors in the game.
+	 * 
+	 * @return  ArrayList<Door> doors
+	 * */
 	public ArrayList<Door> getAllDoors() {
 		return doors;
 	}
