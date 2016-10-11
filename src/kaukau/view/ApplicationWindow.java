@@ -381,7 +381,8 @@ public class ApplicationWindow extends JFrame {
 					int result = JOptionPane.showConfirmDialog(ApplicationWindow.this, msg,
 					        "Alert", JOptionPane.OK_CANCEL_OPTION);
 					if(result==0){
-						game.dropAnItem(tempouid, index);
+						//game.dropAnItem(tempouid, index);
+						//client.sendAction(Client.dropItem);
 						//update game object here and repaint
 						updateGame();
 					}

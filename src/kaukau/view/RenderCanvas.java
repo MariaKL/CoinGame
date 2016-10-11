@@ -58,8 +58,10 @@ public class RenderCanvas extends JPanel {
 	private Client client;
 
 	// fields for the camera offset for rendering
-	int camX = 0;
-	int camY = 0;
+	private int camX = 0;
+	private int camY = 0;
+	
+	private char gameDir = 'E';
 
 	/**This class take a gameworld parameter and
 	 * creates a rendering based on the state of
@@ -145,7 +147,7 @@ public class RenderCanvas extends JPanel {
 					int x = c * tileWidth;
 					int y = r * tileHeight;
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// adjusting the position of the render
 					b = new RenderTile(0, pos.x+50, pos.y+65);
 					// setting the tile item if one
@@ -170,7 +172,7 @@ public class RenderCanvas extends JPanel {
 					int x = c * tileWidth;
 					int y = r * tileHeight;
 					// converting 2d point to isometric
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// adjusting the position of the render
 					b = new RenderTile(1, pos.x+50, pos.y+65);
 					// setting the tile item if one
@@ -195,7 +197,7 @@ public class RenderCanvas extends JPanel {
 					int x = c * tileWidth;
 					int y = r * tileHeight;
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// setting the wall direction in the level data
 					if(r==levelBlocks.length-1){
 						// west wall
@@ -568,6 +570,31 @@ public class RenderCanvas extends JPanel {
 		final int M = levelBlocks.length;
 	    final int N = levelBlocks[0].length;
 
+	    // switching the game direction
+	    // & camera position
+	    switch(gameDir){
+		    case 'S':
+		    	camX = 0;
+		    	camY = 0;
+		    	gameDir = 'E';
+		    	break;
+		    case 'N':
+		    	camY = 0;
+		    	camX = 350;
+		    	gameDir = 'W';
+		    	break;
+		    case 'E':
+		    	camY = -350;
+		    	camX = 175;
+		    	gameDir = 'N';
+		    	break;
+		    case 'W':
+		    	camY = 350;
+		    	camX = 175;
+		    	gameDir = 'S';
+		    	break;
+	    }
+	    
 	    // rotate the array data
 	    Block[][] ret = new Block[M][N];
 	    for (int r = 0; r < M; r++) {
@@ -585,11 +612,11 @@ public class RenderCanvas extends JPanel {
 				// getting the x & y position of the tile
 				int x = j * tileWidth;
 				int y = i * tileHeight;
-				Block b = ret[i][j];
+				Block b = ret[j][i];
 				// block is a wall
 				if(b instanceof Wall){
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// getting the new direction of the wall
 					if(i==ret.length-1){
 						// west wall
@@ -611,11 +638,13 @@ public class RenderCanvas extends JPanel {
 				// block is a tile
 				} else {
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// getting the tiles item if there is one
 					Item item = null;
+					Player player = null;
 					int type = 0;
 					try{
+						player = ((RenderTile)b).getPlayer();
 						item = ((RenderTile)b).getItem();
 						type = ((RenderTile)b).getTileType();
 					} catch (NullPointerException e){ }
@@ -633,6 +662,24 @@ public class RenderCanvas extends JPanel {
 					// setting the tiles item if there is one
 					if(item != null){
 						((RenderTile)b).setItem(item);
+					}
+					if(player != null){
+						Direction playerDir = player.getfacingDirection();
+						switch(playerDir){
+						case EAST:
+							player.setfacingDirection(Direction.NORTH);
+							break;
+						case NORTH:
+							player.setfacingDirection(Direction.WEST);
+							break;
+						case SOUTH:
+							player.setfacingDirection(Direction.EAST);
+							break;
+						case WEST:
+							player.setfacingDirection(Direction.SOUTH);
+							break;			
+						}
+						((RenderTile)b).setPlayer(player);
 					}
 					// adding tile to a list of all tiles
 					allTiles.add((RenderTile) b);
