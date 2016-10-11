@@ -29,8 +29,7 @@ public class Tile implements Serializable {
 	}
 
 	public Tile() {
-		item = null;
-		player = null;
+		this(null, -1, -1);
 	}
 
 	/**

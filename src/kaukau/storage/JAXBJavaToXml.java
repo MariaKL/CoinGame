@@ -79,11 +79,7 @@ public class JAXBJavaToXml {
 		// marshal player
 		marshalPlayer(player);
 		// marshal gameMap
-		//marshalMap(map);
-		
-		//test
-		marshalCoin(new Coin(7));
-		
+		marshalMap(map);		
 	}
 
 	/**
@@ -114,34 +110,7 @@ public class JAXBJavaToXml {
 			// some exception occured
 			e.printStackTrace();
 		}
-	}
-	
-	private void marshalCoin(Coin coin) {
-		try {
-			// create JAXB context and initializing Marshaller
-			JAXBContext jaxbContext = JAXBContext.newInstance(Coin.class);
-
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-
-			// for getting nice formatted output
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-			// specify the location and name of xml file to be created
-			// for testing at uni
-			File XMLfile = new File("Coin.xml");
-
-			// Writing to XML file
-			jaxbMarshaller.marshal(coin, XMLfile);
-
-			// Writing to console
-			//jaxbMarshaller.marshal(player, System.out);
-
-		} catch (JAXBException e) {
-			// some exception occured
-			e.printStackTrace();
-		}
-	}
-	
+	}	
 
 	/**
 	 * Marshal's the GameMap passed in the argument to xml format

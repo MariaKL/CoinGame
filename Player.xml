@@ -2,26 +2,15 @@
 <player>
     <name>Player</name>
     <userId>1</userId>
-    <getFacingDirection>NORTH</getFacingDirection>
+    <getFacingDirection>EAST</getFacingDirection>
     <getLocation>
-        <tileType>TILE_CRACKED</tileType>
-        <xCoord>5</xCoord>
-        <yCoord>3</yCoord>
+        <tileType>TILE</tileType>
+        <xCoord>1</xCoord>
+        <yCoord>7</yCoord>
     </getLocation>
     <inventory>
         <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">
-            <coins xsi:type="coin">
-                <name>Coin</name>
-                <amount>50</amount>
-            </coins>
-            <coins xsi:type="coin">
-                <name>Coin</name>
-                <amount>100</amount>
-            </coins>
             <isFull>false</isFull>
-        </item>
-        <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="key">
-            <getCode>7</getCode>
         </item>
     </inventory>
 </player>

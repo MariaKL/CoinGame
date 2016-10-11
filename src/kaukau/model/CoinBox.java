@@ -1,4 +1,3 @@
-//@XmlSchema(namespace = "https://something.com/", elementFormDefault = XmlNsForm.QUALIFIED)
 package kaukau.model;
 
 import java.awt.Graphics;
@@ -77,7 +76,6 @@ public class CoinBox extends PickupableItem implements Serializable {
 	public int totalCoins() {
 		int total = 0;
 		for (PickupableItem p : getStorage()) {
-			System.out.println("IN");
 			Coin c = (Coin) p;
 			total += c.getAmount();
 		}

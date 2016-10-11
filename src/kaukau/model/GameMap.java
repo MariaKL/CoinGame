@@ -6,10 +6,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -20,16 +23,13 @@ import org.w3c.dom.NodeList;
 
 import kaukau.model.GameMap.TileType;
 
-@XmlRootElement	//(namespace = "Team_24.kaukau.model.GameWorld")
+@XmlRootElement
+@XmlType(propOrder = {"allDoors", "boardTiles"})
 public class GameMap implements Serializable {
 
-	@XmlElement(name = "roomWidth")
 	public static final int ROOM_WIDTH = 10;
-	@XmlElement(name = "roomHeight")
 	public static final int ROOM_HEIGHT = 10;
-	@XmlElement(name = "boardWidth")
 	public static final int BOARD_WIDTH = 20;
-	@XmlElement(name = "boardHeight")
 	public static final int BOARD_HEIGHT = 20;
 
 	private Tile[][] board;
@@ -104,62 +104,7 @@ public class GameMap implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
-	/*public void createRoomsFromFile() {
-		try {
-			// Document doc = new ReadXMLFile().createDocument("Rooms.xml");
-			File xmlFile = new File("Rooms.xml");
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(xmlFile);
-			NodeList nList = doc.getElementsByTagName("room");  // get elements
 
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-    			Node nNode = nList.item(temp);
-    			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-    				Element eElement = (Element) nNode;
-    				int doorCount = 0;  // use to count the doors
-    				int keyCount = 0;   // use to count the keys
-    				int coinCount = 0;   // use to count the coin
-    				// get the name of the room, the start point of x and y
-    				String name = eElement.getAttribute("name");
-    				int startX =  Integer.valueOf(eElement.getElementsByTagName("startX").item(0).getTextContent());
-    				int startY =  Integer.valueOf(eElement.getElementsByTagName("startY").item(0).getTextContent());
-    				Room room = new Room(name, startX, startY);
-    				rooms.add(room);
-    				for (int row = 0; row < ROOM_HEIGHT; row++){
-    					// get the value line by line from XML file e.g. a line is <L0></L0>
-	    				String line = eElement.getElementsByTagName("L"+String.valueOf(row)).item(0).getTextContent();
-	    				for (int col = 0; col < ROOM_WIDTH; ++col) {
-	    					char c = line.charAt(col);
-	    					switch (c) {
-		    					case 'W' :
-		    						board[col+startX][row+startY] = new Tile(TileType.WALL, col+startX, row+startY);
-		    						break;
-		    					case 'D':
-		    						doorCount = addDoor(eElement, doorCount, col+startX, row+startY, room);
-		    						break;
-		    					case 'K':
-		    						keyCount = addKey(eElement, keyCount, col+startX, row+startY);
-		    						break;
-		    					case 'X':
-		    						keyCount = addCoin(eElement, coinCount, col+startX, row+startY);
-		    						break;
-		    					case 'T':
-		    						board[col+startX][row+startY] = new Tile(TileType.TILE, col+startX, row+startY);
-		    						break;
-		    					case 'C':
-		    						board[col+startX][row+startY] = new Tile(TileType.TILE_CRACKED, col+startX, row+startY);
-		    						break;
-	    					}
-	    				}
-	    			}
-    			}
-    		}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}*/
 
 	/**
 	 * Add the door to the board.
@@ -248,60 +193,52 @@ public class GameMap implements Serializable {
 		return board;
 	}
 
-	// @XmlElementWrapper(name="boardTiles")
-	// @XmlElements({
-	// @XmlElement(name="rowOfTiles") }
-	// )
-	// public ArrayList<ArrayList<Tile>> getBoardTiles() {
-	// ArrayList<ArrayList<Tile>> board = new ArrayList<ArrayList<Tile>>();
-	// ArrayList<Tile> row = new ArrayList<Tile>();
-	// for (int i = 0; i < getBoard().length; i++) {
-	// row = new ArrayList<Tile>();
-	// for (int j = 0; j < getBoard()[0].length; j++) {
-	// row.add(getBoard()[i][j]);
-	// }
-	// board.add(row);
-	// }
-	// return board;
-	// }
 
-	@XmlElementWrapper(name = "boardTiles")
-	@XmlElements({ @XmlElement(name = "rowOfTiles") })
+	@XmlElement(name = "boardTiles")	
 	public ArrayList<Row> getBoardTiles() {
 		ArrayList<Row> board = new ArrayList<Row>();
-		ArrayList<Tile> row = new ArrayList<Tile>();
+		ArrayList<Tile> row;
 		for (int i = 0; i < getBoard().length; i++) {
 			row = new ArrayList<Tile>();
 			for (int j = 0; j < getBoard()[0].length; j++) {
 				row.add(getBoard()[i][j]);
 			}
-			Row r = new Row(row);
+			Row r = new Row();
+			r.setRow(row);
 			board.add(r);
 		}
 		return board;
 	}
-
-	@XmlRootElement
-	 private static class Row {
-		private ArrayList<Tile> row = new ArrayList<Tile>();
-
-		public Row(ArrayList<Tile> row2) {
-			this.row = row2;
-		}
-
-		public Row() {
-			this(null);
-		}
-
-		@XmlElementWrapper(name = "getRow")
-		@XmlElements({ @XmlElement(name = "tile") })
-		public ArrayList<Tile> getRow() {
-			return this.row;
+	
+	public void setBoardTiles(ArrayList<Row> rows) {		
+		for (int i = 0; i < getBoard().length; i++) {
+			Row row = rows.get(i);
+			for (int j = 0; j < getBoard()[0].length; j++) {
+				this.board[i][j] = row.getRows().get(j);
+			}
 		}
 	}
 
-	@XmlElementWrapper(name = "getAllRooms")
-	@XmlElements({ @XmlElement(name = "Room") })
+//	@XmlRootElement
+//	@XmlAccessorType(XmlAccessType.FIELD)
+//	 private static class Row {
+//		private ArrayList<Tile> row = new ArrayList<Tile>();
+//
+//		public Row(ArrayList<Tile> row2) {
+//			this.row = row2;
+//		}
+//
+//		public Row() {
+//			this(null);
+//		}
+//
+//		@XmlElementWrapper(name = "getRows")
+//		@XmlElements({ @XmlElement(name = "tile") })
+//		public ArrayList<Tile> getRows() {
+//			return this.row;
+//		}
+//	}
+
 	public ArrayList<Room> getAllRooms() {
 		return rooms;
 	}
