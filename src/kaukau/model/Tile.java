@@ -43,7 +43,7 @@ public class Tile implements Serializable {
 	 */
 	public boolean setItem(Item addItem) {
 		if (item == null && player == null) {
-			item = addItem;
+			this.item = addItem;
 			checkType();
 			return true;
 		}
@@ -196,6 +196,10 @@ public class Tile implements Serializable {
 	public TileType getTileType() {
 		return type;
 	}
+	
+	public void setTileType(TileType type) {
+		this.type = type;
+	}
 
 	/**
 	 * Return the item that occupy this tile.
@@ -241,6 +245,14 @@ public class Tile implements Serializable {
 	@XmlElement(name = "yCoord")
 	public int getY() {
 		return y;
+	}
+	
+	public void setX(int x){
+		this.x = x;
+	}
+	
+	public void setY(int y){
+		this.y = y;
 	}
 
 	public String toString() {

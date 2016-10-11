@@ -350,7 +350,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -378,7 +378,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -405,7 +405,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -432,11 +432,13 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
 		
+<<<<<<< HEAD
+=======
 		// enter door, if not possible give message
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_E, 0), "enter");
@@ -461,6 +463,7 @@ public class RenderCanvas extends JPanel {
 			}
 		});
 		
+>>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
 	}
 
 	/**

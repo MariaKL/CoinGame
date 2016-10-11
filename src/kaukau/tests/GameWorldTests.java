@@ -25,10 +25,8 @@ public class GameWorldTests {
 	@Test
 	public void testAddPlayer_1() {
 		GameWorld game = new GameWorld();
-		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
-		Player player = game.player(uid);
-		assertTrue(uid == 1);
+		assertTrue(uid == game.getAllPlayers().size());
 	}
 
 	/**
@@ -39,7 +37,6 @@ public class GameWorldTests {
 	@Test
 	public void testAddPlayer_2() {
 		GameWorld game = new GameWorld();
-		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
 		int size = player.getInventory().size();
@@ -52,25 +49,17 @@ public class GameWorldTests {
 
 	/**
 	 * This test construct a game then add two player to the game.
-	 * Check if the players is not start on the same tiles.
+	 * Check if the player's id is increment correctly by 1.
 	 */
 	@Test
 	public void testAddPlayer_3() {
 		GameWorld game = new GameWorld();
 		GameMap board = game.getGameMap();
 		int uid1 = game.addPlayer();
-		Player player1 = game.player(uid1);
-		assertTrue(uid1 == 1);
-		assertTrue(player1.getLocation().equals(board.getTileAt(new Point(9, 3))));
+		assertTrue(uid1 == game.getAllPlayers().size());
 
 		int uid2 = game.addPlayer();
-		Player player2 = game.player(uid2);
-		assertTrue(uid2 == 2);
-		assertTrue(player2.getLocation() != player1.getLocation());
-		assertTrue(player2.getLocation().equals(board.getTileAt(new Point(8, 3))));
-		assertTrue(board.getTileAt(new Point(9, 3)).isTileOccupied());
-		assertTrue(board.getTileAt(new Point(8, 3)).isTileOccupied());
-		assertTrue(board.getTileAt(new Point(8, 3)).getPlayer().equals(player2));
+		assertTrue(uid2 == game.getAllPlayers().size());
 	}
 
 	/**
@@ -118,7 +107,7 @@ public class GameWorldTests {
 		Point oldPos = new Point(tile.X(), tile.Y());
 		assertTrue(board.getTileAt(oldPos).isTileOccupied());
 		assertTrue(game.movePlayer(uid, Direction.SOUTH));
-		assertTrue(board.getTileAt(new Point(oldPos.x, oldPos.y+1)).isTileOccupied());
+		assertTrue(board.getTileAt(new Point(oldPos.x+1, oldPos.y)).isTileOccupied());
 		assertTrue(player.getfacingDirection() == Direction.SOUTH);
 		assertTrue(game.movePlayer(uid, Direction.EAST));
 		assertTrue(player.getfacingDirection() == Direction.EAST);
@@ -136,12 +125,11 @@ public class GameWorldTests {
 		Player player = game.player(uid);
 		assertTrue(game.movePlayer(uid, Direction.EAST));
 		assertTrue(game.movePlayer(uid, Direction.EAST));
-		Tile tile = player.getLocation();
-		Point pos = new Point(tile.X()+1, tile.Y());
+		Tile item = board.getTileAt(new Point(5, 6));
 		assertTrue(player.getInventory().size() == 1);
-		assertFalse(game.movePlayer(uid, Direction.EAST));
-		assertTrue(board.getTileAt(pos).isTileOccupied());
-//		assertTrue(board.getTileAt(pos).getTileType() == TileType.EMPTY);
+		player.setLocation(board.getTileAt(new Point(5, 5)));
+		player.setFacingDirection(Direction.EAST);
+		assertTrue(item.containsPickupItem());
 		assertTrue(game.pickupAnItem(uid));
 		assertTrue(player.getInventory().size() == 2);
 		assertTrue(player.getInventory().get(1) instanceof Key);
@@ -157,15 +145,15 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-		Tile coin = board.getTileAt(new Point(3,5));
-		Tile newPos = board.getTileAt(new Point(2,5));
+		Tile coin = board.getTileAt(new Point(7,6));
+		Tile newPos = board.getTileAt(new Point(7,5));
 		int coinAmount = ((Coin) coin.getItem()).getAmount();
 		player.setLocation(newPos);
-		player.setFacingDirection(Direction.EAST);
+		player.setfacingDirection(Direction.EAST);
 		assertTrue(coin.getTileType() == TileType.TILE || coin.getTileType() == TileType.TILE_CRACKED);
 		assertTrue(coin.getItem() instanceof Coin);
 		assertTrue(game.pickupAnItem(uid));   // player pick up the coin
-		assertTrue(!coin.isTileOccupied());   // the tile should be not occupy after player pickup coin
+		assertFalse(coin.isTileOccupied());   // the tile should be not occupy after player pickup coin
 		int size = player.getInventory().size();
 		assertEquals("Player's inventory size is " + size + " players but should have 1 after pick up a coin."
 				+ "Coin should be stored in the Coinbox that inside the inventory.", 1, size);
@@ -184,14 +172,25 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-		player.setLocation(board.getTileAt(new Point(15,8)));
+<<<<<<< HEAD
+		Tile oldPos = board.getTileAt(new Point(8, 15));
+		Tile newPos = board.getTileAt(new Point(10, 15));
+		Tile door = board.getTileAt(new Point(9,15));
+		player.setLocation(oldPos);
 		player.setFacingDirection(Direction.SOUTH);
+		assertTrue(oldPos.addPlayer(player));
+		assertTrue(oldPos.isTileOccupied());
+		assertTrue(door.getTileType() == TileType.DOOR);
+=======
+		player.setLocation(board.getTileAt(new Point(15,8)));
+		player.setfacingDirection(Direction.SOUTH);
 		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
+>>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
 		assertTrue(game.openDoor(uid));
-		assertFalse(board.getTileAt(new Point(15,8)).isTileOccupied());
-		assertTrue(board.getTileAt(new Point(15,10)).isTileOccupied());
-		// player's location should be updated by two tiles
-		assertTrue(player.getLocation().equals(board.getTileAt(new Point(15,10))));
+		assertTrue(newPos.isTileOccupied()); 		// player's location should be updated by two tiles
+		assertTrue(player.getLocation().getX() == 10);
+		assertTrue(player.getLocation().getY() == 15);
+		assertFalse(oldPos.isTileOccupied());   // should be remove from previous tile
 	}
 
 	/**
@@ -203,9 +202,15 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-		player.setLocation(board.getTileAt(new Point(15,8)));
+<<<<<<< HEAD
+		player.setLocation(board.getTileAt(new Point(8,15)));
 		player.setFacingDirection(Direction.WEST);
+		assertTrue(board.getTileAt(new Point(9,15)).getTileType() == TileType.DOOR);
+=======
+		player.setLocation(board.getTileAt(new Point(15,8)));
+		player.setfacingDirection(Direction.WEST);
 		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
+>>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
 		assertFalse(game.openDoor(uid));
 	}
 
@@ -219,11 +224,15 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-		assertTrue(game.movePlayer(uid, Direction.WEST));
-		Tile pos = player.getLocation();
-		Tile wall = board.getTileAt(new Point(pos.X()-1, pos.Y()));
+		Tile oldPos = player.getLocation();
+		Tile newPos = board.getTileAt(new Point(3, 8));
+		Tile wall = board.getTileAt(new Point(3, 9));
+		player.setLocation(newPos);
+		player.setFacingDirection(Direction.EAST);
 		assertTrue(wall.getTileType() == TileType.WALL);
-		assertFalse(game.movePlayer(uid, Direction.WEST));
+		assertFalse(game.movePlayer(uid, Direction.EAST));
+		assertTrue(player.getLocation().X() == newPos.X());
+		assertTrue(player.getLocation().Y() == newPos.Y());
 	}
 
 	/**
@@ -235,10 +244,10 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-		Tile coin = board.getTileAt(new Point(3,5));
-		Tile newPos = board.getTileAt(new Point(2,5));
+		Tile coin = board.getTileAt(new Point(7,6));
+		Tile newPos = board.getTileAt(new Point(7,5));
 		player.setLocation(newPos);
-		player.setFacingDirection(Direction.EAST);
+		player.setfacingDirection(Direction.EAST);
 		assertTrue(coin.getTileType() == TileType.TILE || coin.getTileType() == TileType.TILE_CRACKED);
 		assertTrue(coin.getItem() instanceof Coin);
 		assertFalse(game.movePlayer(uid, Direction.EAST));
