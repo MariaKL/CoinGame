@@ -12,9 +12,9 @@ public class Room implements Serializable{
 
 	@XmlElement(name="name")
 	private String name;
-	@XmlElement(name="startX")
+	
 	private int startX;
-	@XmlElement(name="startY")
+	
 	private int startY;
 	private ArrayList<Door> doors;
 
@@ -45,10 +45,12 @@ public class Room implements Serializable{
 		
 	}
 	
+	@XmlElement(name="startX")
 	public int getStartX(){
 		return startX;
 	}
 	
+	@XmlElement(name="startY")
 	public int getStartY(){
 		return startY;
 	}

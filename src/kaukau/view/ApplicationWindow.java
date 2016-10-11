@@ -60,23 +60,23 @@ public class ApplicationWindow extends JFrame {
 	public RenderCanvas rc;
 
 	// Field to store application window's copy of the game
-	
+
 	// Field to store the inventory frame
 	public Inventory inventory;
-	
+
 	// Private instance variable for Client
 	private Client client;
-	
+
 	// Final Variables to avoid magic numbers
 	public final int WINDOW_WIDTH = 765;
 	public final int WINDOW_HEIGHT = 525;
 	public final int INVENTORY_HEIGHT = 250;
-	
+
 	private GameWorld game;
 
 	//field to store the player of the game
 	private Player player;
-	
+
 	// testing purpose field for temp uid
 	private int tempouid;
 
@@ -93,10 +93,10 @@ public class ApplicationWindow extends JFrame {
 
 		// creating a menu
 		initMenu();
-		
+
 		// make inventory
 		inventory = new Inventory();
-		
+
 		// initialize client private instance variable
 
 /*
@@ -116,7 +116,7 @@ public class ApplicationWindow extends JFrame {
 
 		// set display location
 		//setLocationRelativeTo(null);
-		add(createCenterPanel(),BorderLayout.CENTER);		
+		add(createCenterPanel(),BorderLayout.CENTER);
 		add(createBottomPanel(),BorderLayout.SOUTH);
 		// set close operation
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -131,11 +131,11 @@ public class ApplicationWindow extends JFrame {
 			}
 		});
 	}
-	
+
 
 	private JPanel createCenterPanel() {
 		//MainDisplay display = new MainDisplay();
-		
+
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BorderLayout());
 		Border cb = BorderFactory.createCompoundBorder(BorderFactory
@@ -145,12 +145,12 @@ public class ApplicationWindow extends JFrame {
 		centerPanel.add(rc, BorderLayout.CENTER);
 		return centerPanel;
 	}
-	
+
 	private JPanel createBottomPanel() {
 		JPanel bottomPanel = new JPanel();
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		bottomPanel.setBorder(BorderFactory.createTitledBorder(blackline, "Inventory"));
-		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));				
+		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 		bottomPanel.add(inventory);
 		return bottomPanel;
 	}
@@ -252,10 +252,10 @@ public class ApplicationWindow extends JFrame {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	protected void displayHelp() {
-		
+
 		JOptionPane.showMessageDialog(this, "Using the keyboard: \nUse W, S, A, D or the arrow keys \n"
 				+ "to move up, down, left, and right respectively.\n\n "
 				+ "Use the R key to rotate the board.\n\n Use the "
@@ -263,7 +263,7 @@ public class ApplicationWindow extends JFrame {
 				+ "the door is locked and you don't have the key,\n "
 				+ "you will not be able to enter.\n\n Press the "
 				+ "P key to pick-up an item you are facing.");
-		
+
 	}
 
 
@@ -275,34 +275,34 @@ public class ApplicationWindow extends JFrame {
 		int result = JOptionPane.showConfirmDialog(this, msg,
 		        "Alert", JOptionPane.OK_CANCEL_OPTION);
 		if(result==0){
-			//client.closeClientSock();  //client 
+			//client.closeClientSock();  //client
 			//TODO: remove from gameworld hashmap
 			System.exit(0);
 			dispose();
 		}
 	}
-	
+
 	public class Inventory extends Canvas implements MouseListener {
 
-		
+
 		private final int SIZE_DIVISOR = 6;
 		private final int NUM_ITEMS = 8;
-		
+
 		public Inventory() {
 			setBounds(0, 0, (WINDOW_WIDTH*NUM_ITEMS)/SIZE_DIVISOR, (INVENTORY_HEIGHT)/SIZE_DIVISOR);
 			addMouseListener(this);
 			// makes the inventory unfocusable so key bindings can work for render canvas
 			this.setFocusable(false);
 		}
-		
+
 		public void paint (Graphics g){
 			//get Player and his inventory
 			//paint
-			
+
 			//client = rw.getClient();
 			//client = rc.getClient();
 			int uid = player.getUserId();
-			//temp instance of player in temp instance of 
+			//temp instance of player in temp instance of
 			//game.addPlayer();
 			//System.out.println("");
 			//System.out.println("Got player id through app window: "+ uid); //test see player uid
@@ -321,19 +321,19 @@ public class ApplicationWindow extends JFrame {
 			tempouid = tempuid;
 			//System.out.println("Using this player id: " + tempuid); //
 			//get player inventory
-			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();			
+			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();
 			for(int i=0;i<inv.size();++i) {
 				kaukau.model.PickupableItem item = null;
 				if(i < inv.size()) {
 					//System.out.println("inventory size: "+inv.size());
 					//System.out.println("This is the inventory: "+inv.toString());
 					item = inv.get(i);
-				}				
+				}
 				drawLocation(i,0,WINDOW_WIDTH/SIZE_DIVISOR,INVENTORY_HEIGHT/SIZE_DIVISOR,item,g);
 			}
-			 
+
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 		 */
@@ -347,20 +347,20 @@ public class ApplicationWindow extends JFrame {
 			int tempuid = temp.iterator().next();
 			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();
 			System.out.println("Inventory size: "+inv.size());
-			
-			
+
+
 			if(x < inv.size()) {
 				createActionMenu(e,inv.get(x), x);
 				System.out.println("You clicked item "+ x);
-				
-			} 				
+
+			}
 			this.repaint();
 		}
-		
+
 		private void createActionMenu(MouseEvent e, kaukau.model.PickupableItem item, int index) {
 			JPopupMenu actionMenu = new JPopupMenu();
 			//String[] actions = item.getActions();
-							
+
 			JMenuItem mi = new JMenuItem("Description");
 			mi.addActionListener(new ActionListener() {
 				@Override
@@ -370,9 +370,9 @@ public class ApplicationWindow extends JFrame {
 						msg = msg + "\nYou currently have "+ player.getCoinBox().totalCoins() +" coins.";
 					}
 					JOptionPane.showMessageDialog(ApplicationWindow.this,msg);
-				}			
+				}
 			});
-			
+
 			JMenuItem drop = new JMenuItem("Drop Item");
 			drop.addActionListener(new ActionListener() {
 				@Override
@@ -385,21 +385,21 @@ public class ApplicationWindow extends JFrame {
 						//update game object here and repaint
 						updateGame();
 					}
-				}			
+				}
 			});
-			actionMenu.add(mi);	
+			actionMenu.add(mi);
 			actionMenu.add(drop);
-			
-			actionMenu.show(e.getComponent(), e.getX(), e.getY());		
+
+			actionMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		protected void updateGame() {
-			
+
 			this.repaint();
-			
+
 		}
 
 		@Override
@@ -413,14 +413,14 @@ public class ApplicationWindow extends JFrame {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}
-		
+
 	} //end of inventory window class
-	
+
 	//TODO: fix the image file read and get files for item icons
 	private void drawLocation(int x, int y, int width, int height, kaukau.model.PickupableItem item, Graphics g) {
 		g.translate(x*width,y*height);
 		g.setClip(0,0,width,height);
-		if(item != null) { 
+		if(item != null) {
 			try {
 				String name = item.getName();
 				//TODO: find coinbox asset and change hardcode here, replace with name
@@ -448,11 +448,11 @@ public class ApplicationWindow extends JFrame {
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == 0) {
 			JAXBJavaToXml toXml = new JAXBJavaToXml();
-			toXml.marshal(game.player(1), game.getGameMap());
-			dispose();
+			toXml.marshal(player, game.getGameMap());
+			//dispose();
 		}
 		if (result == 1) {
-			dispose();
+			//dispose();
 		}
 	}
 

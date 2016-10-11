@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gameMap>
+   <getAllDoors>
+        <Door>
+            <doorCode>0</doorCode>
+            <getLocation>
+                <tileType>DOOR</tileType>
+                <xCoord>9</xCoord>
+                <yCoord>15</yCoord>
+            </getLocation>
+            <isLocked>false</isLocked>
+        </Door>
+   </getAllDoors>
+</gameMap>

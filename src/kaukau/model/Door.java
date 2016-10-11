@@ -85,6 +85,10 @@ public class Door implements Item, Serializable{
 	public Tile getLocation(){
 		return this.location;
 	}
+	
+	public void setLocation(Tile t){
+		this.location = t;
+	}
 
 
 }
