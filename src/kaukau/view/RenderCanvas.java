@@ -328,7 +328,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -356,7 +356,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -383,7 +383,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
@@ -410,7 +410,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
 				repaint();
 			}
 		});
