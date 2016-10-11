@@ -89,8 +89,11 @@ public class RenderCanvas extends JPanel {
 		attachBindings();
 		//set focus
 		this.setFocusable(true);
+		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {	}
 		repaint();
-
 	}
 
 	private void setPlayers(HashMap<Integer, Player> all){
