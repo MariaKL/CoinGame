@@ -211,26 +211,10 @@ public class GameMap implements Serializable {
 		}
 	}
 
-//	@XmlRootElement
-//	@XmlAccessorType(XmlAccessType.FIELD)
-//	 private static class Row {
-//		private ArrayList<Tile> row = new ArrayList<Tile>();
-//
-//		public Row(ArrayList<Tile> row2) {
-//			this.row = row2;
-//		}
-//
-//		public Row() {
-//			this(null);
-//		}
-//
-//		@XmlElementWrapper(name = "getRows")
-//		@XmlElements({ @XmlElement(name = "tile") })
-//		public ArrayList<Tile> getRows() {
-//			return this.row;
-//		}
-//	}
-
+	/**
+	 * Return a list of Row object of all the Rooms in the map.
+	 * @return a lit of Row objects of Rooms
+	 */
 	public ArrayList<Room> getAllRooms() {
 		return rooms;
 	}
