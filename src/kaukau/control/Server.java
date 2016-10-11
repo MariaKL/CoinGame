@@ -41,6 +41,7 @@ public class Server{
 			listener = new ServerSocket(portNumber);
 			listeningThread = makeListeningThread();
 			listeningThread.start();
+			System.out.println("Listening");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,6 +63,7 @@ public class Server{
 							// reads in commands
 							int uid = input.readInt();
 							int act = input.readInt();
+							System.out.println("Player: " + uid + ", action: " + act);
 							// update game with player action
 							switch(act) {
 								// move right
@@ -92,12 +94,16 @@ public class Server{
 								case Client.dropItem:
 									int index = input.readInt();
 									game.dropAnItem(uid, index);
+									break;
+								// remove this player from the game and server
 								case Client.leaveGame:
 									sockets.remove(uid);
 									in.remove(uid);
 									out.remove(uid);
-//									game.removePlayer(uid);
-									break;
+									game.removePlayer(uid);
+									this.stop();
+									System.out.println("Player " + uid + " has left the game.");
+									return;
 							}
 							// send back to clients
 							updateAll();
@@ -137,15 +143,10 @@ public class Server{
 		            		sockets.put(uid, socket);
 							out.put(uid, output);
 							in.put(uid, input);
-//							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
+							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
 							// send the client's uid to the client
 							output.writeInt(uid);
 				        	// send new game to all clients
-//							System.out.println("Server: number of players: " + game.getAllPlayers().size());
-//							System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
-							// starts listening for commands when a player is connected
-//							if(!commandThread.isAlive())
-//								commandThread.start();
 							Thread commandThread = makeCommandThread(uid);
 							commandThread.start();
 				        	// send new game to all players
@@ -183,9 +184,8 @@ public class Server{
         	  ObjectOutputStream output = getOutputStream(sock);
         	  output.writeObject(game.toByteArray());
         	  output.flush();
-//        	  System.out.println("Sent updated game to player " + getUID(sock));
+        	  System.out.println("Updated sent updated game to player");
           }
-//    	  System.out.println("Sent updated game to players");
     	}
     	catch(IOException e){
     		e.printStackTrace();
@@ -239,7 +239,7 @@ public class Server{
     		try {
 				sock.close();
 			} catch (IOException e) {
-				System.out.println("Unable to close socket");
+				// error closing socket
 			}
     	}
     }

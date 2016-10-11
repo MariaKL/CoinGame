@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <player>
     <name>Player</name>
-    <userId>1</userId>
-    <getFacingDirection>SOUTH</getFacingDirection>
+    <userId>2</userId>
+    <getFacingDirection>NORTH</getFacingDirection>
     <getLocation>
         <tileType>TILE</tileType>
-        <xCoord>8</xCoord>
-        <yCoord>4</yCoord>
+        <xCoord>4</xCoord>
+        <yCoord>3</yCoord>
     </getLocation>
     <inventory>
         <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">

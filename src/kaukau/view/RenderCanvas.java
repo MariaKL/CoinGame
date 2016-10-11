@@ -58,8 +58,11 @@ public class RenderCanvas extends JPanel {
 	private Client client;
 
 	// fields for the camera offset for rendering
-	int camX = 0;
-	int camY = 0;
+	private int camX = 0;
+	private int camY = 0;
+	
+	// field to store the current board direction for rotation
+	private char gameDir = 'E';
 
 	/**This class take a gameworld parameter and
 	 * creates a rendering based on the state of
@@ -86,10 +89,17 @@ public class RenderCanvas extends JPanel {
 		attachBindings();
 		//set focus
 		this.setFocusable(true);
+		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {	}
 		repaint();
-
 	}
 
+	/**
+	 * Sets the map of all current players in the game
+	 * @param map of all players
+	 */
 	private void setPlayers(HashMap<Integer, Player> all){
 		this.players = all;
 	}
@@ -122,8 +132,6 @@ public class RenderCanvas extends JPanel {
 		allTiles.clear();
 		blocks.clear();
 
-		//Tile loc = player.getLocation();
-
 		Tile[][] tiles = game.getGameTiles();
 		for(int r=0; r!=levelBlocks.length; r++){
 			for(int c=0; c!=levelBlocks[0].length; c++){
@@ -145,7 +153,7 @@ public class RenderCanvas extends JPanel {
 					int x = c * tileWidth;
 					int y = r * tileHeight;
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// adjusting the position of the render
 					b = new RenderTile(0, pos.x+50, pos.y+65);
 					// setting the tile item if one
@@ -170,7 +178,7 @@ public class RenderCanvas extends JPanel {
 					int x = c * tileWidth;
 					int y = r * tileHeight;
 					// converting 2d point to isometric
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// adjusting the position of the render
 					b = new RenderTile(1, pos.x+50, pos.y+65);
 					// setting the tile item if one
@@ -195,7 +203,7 @@ public class RenderCanvas extends JPanel {
 					int x = c * tileWidth;
 					int y = r * tileHeight;
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// setting the wall direction in the level data
 					if(r==levelBlocks.length-1){
 						// west wall
@@ -247,9 +255,6 @@ public class RenderCanvas extends JPanel {
 		try{
 	    	BufferedImage image = null;
 		    for(Block b: blocks){
-		    	
-		    	//if((b.X()+(TILE_MARGIN) < -130 + camY || b.X()+(TILE_MARGIN) > 1130 - camY)
-		    	//||(b.Y()+(TILE_MARGIN/8) < -130 - camX || b.Y()+(TILE_MARGIN/8) > 930 + camX)) continue;
 		    	
 		    	// the level block is a wall tile
 		    	if(b instanceof Wall){
@@ -348,7 +353,8 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_DOWN, 0), "moveDown");
 		this.getActionMap().put("moveDown", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				//System.out.println("DOWN");
+				initBlocks(game);
+				player.setfacingDirection(Direction.SOUTH);
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -367,8 +373,8 @@ public class RenderCanvas extends JPanel {
 				// update rendering if player has moved
 				if(!rnew.equals(rold)){
 					camY = camY - 65;
-					repaint();
 				}
+				repaint();
 			}
 		});
 
@@ -379,6 +385,8 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_UP, 0), "moveUp");
 		this.getActionMap().put("moveUp", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				initBlocks(game);
+				player.setfacingDirection(Direction.NORTH);
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -397,9 +405,8 @@ public class RenderCanvas extends JPanel {
 				// update rendering if player has moved
 				if(!rnew.equals(rold)){
 					camY = camY + 65;
-					repaint();
 				}
-				
+				repaint();
 			}
 		});
 		// player move left
@@ -409,6 +416,8 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_LEFT, 0), "moveLeft");
 		this.getActionMap().put("moveLeft", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				initBlocks(game);
+				player.setfacingDirection(Direction.WEST);
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -428,8 +437,8 @@ public class RenderCanvas extends JPanel {
 				if(!rnew.equals(rold)){
 					camY = camY - 65;
 					camX = camX - 65;	
-					repaint();
 				}	
+				repaint();
 			}
 		});
 		// player move right
@@ -439,6 +448,8 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_RIGHT, 0), "moveRight");
 		this.getActionMap().put("moveRight", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				initBlocks(game);
+				player.setfacingDirection(Direction.EAST);
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -458,8 +469,8 @@ public class RenderCanvas extends JPanel {
 				if(!rnew.equals(rold)){
 					camY = camY + 65;
 					camX = camX + 65;
-					repaint();
 				}
+				repaint();
 			}
 		});
 		// enter door, if not possible give message
@@ -499,7 +510,7 @@ public class RenderCanvas extends JPanel {
 						break;
 				}
 				// remove item from block
-				if(rold != null){
+				if(rold != null && rold instanceof RenderTile){
 					((RenderTile)rold).setItem(null);
 				}
 				// wait for updates from server
@@ -522,7 +533,7 @@ public class RenderCanvas extends JPanel {
 		} else {
 			compassCount++;
 		}
-		System.out.println("Compass Count: "+compassCount);
+		//System.out.println("Compass Count: "+compassCount);
 
 
 		//update image
@@ -536,8 +547,8 @@ public class RenderCanvas extends JPanel {
 			}
 		} else if (compassCount == 1) {
 			try {
-				compass = ImageIO.read(new File("images/compassEAST.png"));
-				compassString = "images/compassE";
+				compass = ImageIO.read(new File("images/compassWEST.png"));
+				compassString = "images/compassW";
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -550,13 +561,48 @@ public class RenderCanvas extends JPanel {
 			}
 		} else if (compassCount == 3) {
 			try {
-				compass = ImageIO.read(new File("images/compassWEST.png"));
-				compassString = "images/compassW";
+				compass = ImageIO.read(new File("images/compassEAST.png"));
+				compassString = "images/compassE";
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Compass image: "+compassString);
+		//System.out.println("Compass image: "+compassString);
+	}
+	
+	/**
+	 * Drops an item from the players inventory onto the map
+	 * @param item
+	 */
+	public void dropItem(kaukau.model.PickupableItem item) {
+		Tile oloc = player.getLocation();
+		Direction dir = player.getfacingDirection();
+		// find block player is facing
+		Block rold = null;
+		switch(dir){
+			case EAST:
+				rold = levelBlocks[oloc.Y()+1][oloc.X()];
+				break;
+			case NORTH:
+				rold = levelBlocks[oloc.Y()][oloc.X()-1];
+				break;
+			case SOUTH:
+				rold = levelBlocks[oloc.Y()][oloc.X()+1];
+				break;
+			case WEST:
+				rold = levelBlocks[oloc.Y()-1][oloc.X()];
+				break;
+		}
+		// add item to block
+		if(rold != null){
+			((RenderTile)rold).setItem(item);
+		}
+		// wait for updates from server
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {	}
+		// update rendering
+		repaint();
 	}
 
 	/**Rotates the current game level by applying
@@ -568,6 +614,31 @@ public class RenderCanvas extends JPanel {
 		final int M = levelBlocks.length;
 	    final int N = levelBlocks[0].length;
 
+	    // switching the game direction
+	    // & camera position
+	    switch(gameDir){
+		    case 'S':
+		    	camX = 0;
+		    	camY = 0;
+		    	gameDir = 'E';
+		    	break;
+		    case 'N':
+		    	camY = 0;
+		    	camX = 350;
+		    	gameDir = 'W';
+		    	break;
+		    case 'E':
+		    	camY = -350;
+		    	camX = 175;
+		    	gameDir = 'N';
+		    	break;
+		    case 'W':
+		    	camY = 350;
+		    	camX = 175;
+		    	gameDir = 'S';
+		    	break;
+	    }
+	    
 	    // rotate the array data
 	    Block[][] ret = new Block[M][N];
 	    for (int r = 0; r < M; r++) {
@@ -585,11 +656,11 @@ public class RenderCanvas extends JPanel {
 				// getting the x & y position of the tile
 				int x = j * tileWidth;
 				int y = i * tileHeight;
-				Block b = ret[i][j];
+				Block b = ret[j][i];
 				// block is a wall
 				if(b instanceof Wall){
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// getting the new direction of the wall
 					if(i==ret.length-1){
 						// west wall
@@ -611,11 +682,13 @@ public class RenderCanvas extends JPanel {
 				// block is a tile
 				} else {
 					// converting 2d point to isometic
-					Point pos = RenderWindow.twoDToIso(new Point(x, y));
+					Point pos = twoDToIso(new Point(x, y));
 					// getting the tiles item if there is one
 					Item item = null;
+					Player player = null;
 					int type = 0;
 					try{
+						player = ((RenderTile)b).getPlayer();
 						item = ((RenderTile)b).getItem();
 						type = ((RenderTile)b).getTileType();
 					} catch (NullPointerException e){ }
@@ -633,6 +706,24 @@ public class RenderCanvas extends JPanel {
 					// setting the tiles item if there is one
 					if(item != null){
 						((RenderTile)b).setItem(item);
+					}
+					if(player != null){
+						Direction playerDir = player.getfacingDirection();
+						switch(playerDir){
+						case EAST:
+							player.setfacingDirection(Direction.NORTH);
+							break;
+						case NORTH:
+							player.setfacingDirection(Direction.WEST);
+							break;
+						case SOUTH:
+							player.setfacingDirection(Direction.EAST);
+							break;
+						case WEST:
+							player.setfacingDirection(Direction.SOUTH);
+							break;			
+						}
+						((RenderTile)b).setPlayer(player);
 					}
 					// adding tile to a list of all tiles
 					allTiles.add((RenderTile) b);
