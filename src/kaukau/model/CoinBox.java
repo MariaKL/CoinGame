@@ -1,7 +1,6 @@
 //@XmlSchema(namespace = "https://something.com/", elementFormDefault = XmlNsForm.QUALIFIED)
 package kaukau.model;
 
-import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -26,15 +25,22 @@ public class CoinBox extends PickupableItem implements Serializable {
 	private Player player;
 	private int totalCoinAmount;
 
+	/**
+	 * Create a coinbox for the given player.
+	 * @param player the coinbox that belongs to this player
+	 */
 	public CoinBox(Player player) {
 		super("Coin Box");
 		this.player = player;
 		// this.storage = new Container("Coin Box", player.getLocation());
 		this.storage = new Container("Coin Box");
-		storage.setAmount(20);
+		storage.setAmount(2);
 		totalCoinAmount = 0;
 	}
 
+	/**
+	 * Constructor for load and save to XML file purpose.
+	 */
 	@SuppressWarnings("unused")
 	public CoinBox() {
 		this(null);
@@ -43,10 +49,8 @@ public class CoinBox extends PickupableItem implements Serializable {
 	/**
 	 * Add coin to the coinbox.
 	 *
-	 * @param item
-	 *            the item to add
-	 * @return true if the item is a coin and the coinBox is not full, otherwise
-	 *         false
+	 * @param item the item to add
+	 * @return true if the item is a coin and the coinBox is not full, otherwise false
 	 */
 	public boolean addCoin(Item item) {
 		if (item instanceof Coin) {
@@ -74,8 +78,11 @@ public class CoinBox extends PickupableItem implements Serializable {
 		return coins;
 	}
 
+	/**
+	 * Set this coinbox with a set of coins object.
+	 * @param coins the set of coins.
+	 */
 	public void setStorage(ArrayList<Coin> coins) {
-		System.out.println("setStorage list");
 		for (Coin c : coins) {
 			addCoin(c);
 		}
@@ -84,7 +91,7 @@ public class CoinBox extends PickupableItem implements Serializable {
 	/**
 	 * Return the total coins in this coinBox.
 	 *
-	 * @return
+	 * @return the total coins of this coinbox.
 	 */
 	public int totalCoins() {
 		return totalCoinAmount;
@@ -93,13 +100,17 @@ public class CoinBox extends PickupableItem implements Serializable {
 	/**
 	 * Check if this coin box is full or not.
 	 *
-	 * @return
+	 * @return true if the coinbox is full, otherwise false.
 	 */
 	@XmlElement(name = "isFull")
 	public boolean isStorageFull() {
 		return storage.isStorageFull();
 	}
 
+	/**
+	 * Set the owner of this coinbox.
+	 * @param player the owner of this coinbox
+	 */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}

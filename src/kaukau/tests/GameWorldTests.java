@@ -163,6 +163,62 @@ public class GameWorldTests {
 	}
 
 	/**
+	 * Test a player to pick up a coin on the board but the coinbox is full so the coin should be added
+	 * to the player's inventory. Player only allow to pick up an item in front of them and
+	 * the pickup item must be pickupable type.
+	 */
+	@Test
+	public void testPickupItem_3() {
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		int uid = game.addPlayer();
+		Player player = game.player(uid);
+		player.addToBag(new Coin(120));
+		player.addToBag(new Coin(130));
+		assertTrue(player.getCoinBox().isStorageFull());
+		Tile coin = board.getTileAt(new Point(7,6));
+		Tile newPos = board.getTileAt(new Point(7,5));
+		int coinAmount = ((Coin) coin.getItem()).getAmount();
+		player.setLocation(newPos);
+		player.setfacingDirection(Direction.EAST);
+		assertTrue(coin.getTileType() == TileType.TILE || coin.getTileType() == TileType.TILE_CRACKED);
+		assertTrue(coin.getItem() instanceof Coin);
+		assertTrue(coin.containsPickupItem());  // the tile should contain the key
+		assertTrue(game.pickupAnItem(uid));   // player pick up the coin
+		assertFalse(coin.isTileOccupied());   // the tile should be not occupy after player pickup coin
+		assertTrue(game.dropAnItem(uid, 1));
+		assertTrue(coin.containsPickupItem());
+		assertTrue(coin.getItem() instanceof Coin);
+		int size = player.getInventory().size();
+		assertEquals("Player's inventory size is " + size + " players but should have 1 after pick up the three coin.", 1, size);
+	}
+
+	/**
+	 * Test a player to pick up a coin on the board but the coinbox is full so the coin should be added
+	 * to the player's inventory. Player only allow to pick up an item in front of them and
+	 * the pickup item must be pickupable type.
+	 */
+	@Test
+	public void testDropItem_1() {
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		int uid = game.addPlayer();
+		Player player = game.player(uid);
+		player.addToBag(new Coin(120));
+		player.addToBag(new Coin(130));
+		assertTrue(player.getCoinBox().isStorageFull());
+		Tile key = board.getTileAt(new Point(5,6));
+		Tile newPos = board.getTileAt(new Point(6,6));
+		player.setfacingDirection(Direction.NORTH);
+		player.setLocation(newPos);
+		assertTrue(game.pickupAnItem(uid));
+		assertFalse(key.containsPickupItem());
+		assertTrue(game.dropAnItem(uid, 1));
+		int size = player.getInventory().size();
+		assertEquals("Player's inventory size is " + size + " players but should have 1 after pick up the three coin.", 1, size);
+	}
+
+	/**
 	 * Test a player to open a door. Player only open a door when
 	 * facing direction contain a door.
 	 */
@@ -172,20 +228,14 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-<<<<<<< HEAD
 		Tile oldPos = board.getTileAt(new Point(8, 15));
 		Tile newPos = board.getTileAt(new Point(10, 15));
 		Tile door = board.getTileAt(new Point(9,15));
 		player.setLocation(oldPos);
-		player.setFacingDirection(Direction.SOUTH);
+		player.setfacingDirection(Direction.SOUTH);
 		assertTrue(oldPos.addPlayer(player));
 		assertTrue(oldPos.isTileOccupied());
 		assertTrue(door.getTileType() == TileType.DOOR);
-=======
-		player.setLocation(board.getTileAt(new Point(15,8)));
-		player.setfacingDirection(Direction.SOUTH);
-		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
->>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
 		assertTrue(game.openDoor(uid));
 		assertTrue(newPos.isTileOccupied()); 		// player's location should be updated by two tiles
 		assertTrue(player.getLocation().getX() == 10);
@@ -202,15 +252,9 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-<<<<<<< HEAD
 		player.setLocation(board.getTileAt(new Point(8,15)));
-		player.setFacingDirection(Direction.WEST);
-		assertTrue(board.getTileAt(new Point(9,15)).getTileType() == TileType.DOOR);
-=======
-		player.setLocation(board.getTileAt(new Point(15,8)));
 		player.setfacingDirection(Direction.WEST);
-		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
->>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
+		assertTrue(board.getTileAt(new Point(9,15)).getTileType() == TileType.DOOR);
 		assertFalse(game.openDoor(uid));
 	}
 

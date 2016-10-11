@@ -33,7 +33,7 @@ public class Server{
 	// game
 	private static GameWorld game;
 	// current player to listen to
-	private static int player = 1;
+//	private static int player = 1;
 
 
 	/**
@@ -46,7 +46,7 @@ public class Server{
 			// start connecting and listening to clients
 			listener = new ServerSocket(portNumber);
 			listeningThread = makeListeningThread();
-			commandThread = makeCommandThread();
+//			commandThread = makeCommandThread();
 			listeningThread.start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -57,7 +57,7 @@ public class Server{
 	 * Constructs a thread to handle player commands.
 	 * @return
 	 */
-    public Thread makeCommandThread(){
+    public Thread makeCommandThread(int player){
 		Thread commandThread = new Thread() {
 		    public void run() {
 		    	try{
@@ -110,12 +110,12 @@ public class Server{
 							}
 							System.out.println("Updated game");
 							// listen to other players
-				    		if(player < game.getAllPlayers().size()){
-				    			player++;
-				    		}
-				    		else{
-				    			player = 1;
-				    		}
+//				    		if(player < game.getAllPlayers().size()){
+//				    			player++;
+//				    		}
+//				    		else{
+//				    			player = 1;
+//				    		}
 				    		System.out.println("Server = " + player);
 							// send back to clients
 							updateAll();
@@ -165,8 +165,10 @@ public class Server{
 							System.out.println("Server: number of players: " + game.getAllPlayers().size());
 							System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 							// starts listening for commands when a player is connected
-							if(!commandThread.isAlive())
-								commandThread.start();
+//							if(!commandThread.isAlive())
+//								commandThread.start();
+							Thread commandThread = makeCommandThread(uid);
+							commandThread.start();
 				        	// send new game to all players
 				        	updateAll();
 		            	}

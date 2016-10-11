@@ -12,10 +12,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * /**
  * A container is an item able hold pickupable type items.
  * Containers are storage for a coinbox, player's inventory...etc.
- * @author
+ * @author Vivienne Yapp
  *
  */
-
 @XmlRootElement
 public class Container implements Item, Serializable{
 
@@ -24,14 +23,12 @@ public class Container implements Item, Serializable{
 	private ArrayList <PickupableItem> storage =  new ArrayList <PickupableItem>( );
 
 	public Container (String name){
-//		if (name != null && loc != null){
-//			this.name = name;
-//		}
-		if (name != null){
-			this.name = name;
-		}
+		this.name = name;
 	}
 
+	/**
+	 * Constructor for load and save to XML file purpose.
+	 */
 	@SuppressWarnings("unused")
 	public Container(){
 		this(null);
@@ -39,7 +36,8 @@ public class Container implements Item, Serializable{
 
 	/**
 	 * Protected method to set the max storage amount which is determined when the container is made.
-	 * */
+	 * @param amount the limit size of this container
+	 */
 	protected void setAmount (int amount){
 		if(amount > 0){
 			this.storageLimit = amount;
@@ -47,9 +45,10 @@ public class Container implements Item, Serializable{
 	}
 
 	/**
-	 * Adds a pickupable item to a container
-	 * @throws NullPointer Exception
-	 * */
+	 * Adds a pickupable item to the container.
+	 * @param item the item to add to container.
+	 * @return true if the item is successfully added to the container, otherwise false.
+	 */
 	public boolean addItem(Item item){
 		if (item != null && item instanceof PickupableItem){
 			if (this.storage.size() < this.storageLimit){
@@ -73,9 +72,11 @@ public class Container implements Item, Serializable{
 	}
 
 	/**
-	 * Removes a pickupable item from this container using index number of ArrayList
-	 * @throws NullPointer Exception
-	 * */
+	 * Removes a pickupable item from this container using index number of ArrayList.
+	 * @param index the index number of item in the inventory.
+	 * @return true if the item is successfully added, otherwise false if the index
+	 * is negative value or equals and larger than the size of the container.
+	 */
 	public boolean removeItem(int index){
 		if (index < this.storage.size() && index >= 0){
 			storage.remove(index);
@@ -85,53 +86,63 @@ public class Container implements Item, Serializable{
 	}
 
 	/**
-	 * Returns the list of items in the container
-	 * @return ArrayList <Collectable>
-	 * */
+	 * Get the list of items of this container.
+	 * @return the list of items of this container.
+	 */
 	public ArrayList <PickupableItem> getStorage(){
 		return this.storage;
 	}
 
 	/**
-	 * Returns the item at this index.
+	 * Returns the item at this index number in the storage.
+	 * @param index the index number of the item in the storage
 	 * @return an item if index is within storage size, otherwise null
-	 * */
+	 */
 	public Item getItem(int index){
 		if (index >= storageLimit && index >= storage.size()) return null;
 		return this.storage.get(index);
 	}
 
 	/**
-	 * Returns the size of this container that occupy by this container.
-	 * @return ArrayList <Collectable>
-	 * */
+	 * Get the size that used in this container.
+	 * @return
+	 */
 	public int getStorageUsed(){
 		return this.storage.size();
 	}
 
 	/**
-	 * Returns the limit size of this container
-	 * @return ArrayList <Collectable>
-	 * */
+	 * Returns the limit size of this container.
+	 * @return the maximum size of this container.
+	 */
 	public int getStorageLimit(){
 		return this.storageLimit;
 	}
 
 	/**
 	 * Check if this container is full or not.
-	 * @return
-	 * */
+	 * @return true if the container is full, otherwise false.
+	 */
 	public boolean isStorageFull(){
 		return storage.size() >= storageLimit;
 	}
 
+	/**
+	 * Return the name of this item.
+	 * @return the name of this item
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Set a list of items to this container.
+	 * This method uses for load from XML file.
+	 * @param items all the pickupableItem to add
+	 */
 	public void setStorage(ArrayList<PickupableItem> items) {
-		this.storage = items;		
+		this.storage = items;
 	}
 
 }

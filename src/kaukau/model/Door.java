@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Door implements Item, Serializable{
 
-	private Tile location;
 	private final int keyCode;
 	private boolean locked;
 
@@ -23,15 +22,14 @@ public class Door implements Item, Serializable{
 	 * @param key code to match with a key if it is locked
 	 * @param location the location of this door
 	 */
-	public Door(int key, Tile location){
-		this.location = location;
+	public Door(int key){
 		this.keyCode = key;
 		if (keyCode > 0) this.locked = true;
 		else this.locked = false;
 	}
 
 	public Door(){
-		this(-1, null);
+		this(-1);
 	}
 
 	/**
@@ -68,8 +66,11 @@ public class Door implements Item, Serializable{
 		return keyCode;
 	}
 
+	/**
+	 * Return
+	 */
 	public String toString(){
-		return "Door at "+this.location.toString();
+		return "Door";
 	}
 
 	/**
@@ -80,11 +81,5 @@ public class Door implements Item, Serializable{
 	public String getName() {
 		return "Door";
 	}
-
-	@XmlElement(name="getLocation")
-	public Tile getLocation(){
-		return this.location;
-	}
-
 
 }

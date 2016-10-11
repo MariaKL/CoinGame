@@ -30,6 +30,9 @@ public class Coin extends PickupableItem implements Serializable{
 		this.amount = amount;
 	}
 
+	/**
+	 * Constructor for load and save to XML file purpose.
+	 */
 	@SuppressWarnings("unused")
 	public Coin(){
 		this(-1);
@@ -43,7 +46,11 @@ public class Coin extends PickupableItem implements Serializable{
 	public int getAmount(){
 		return amount;
 	}
-    
+
+    /**
+     * Set amount of this coin.
+     * @param amount the amount of the coin
+     */
     public void setAmount(int amount){
     	this.amount = amount;
     }
