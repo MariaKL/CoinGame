@@ -180,6 +180,9 @@ public class GameWorldTests {
 		assertTrue(oldPos.addPlayer(player));
 		assertTrue(oldPos.isTileOccupied());
 		assertTrue(door.getTileType() == TileType.DOOR);
+		player.setLocation(board.getTileAt(new Point(15,8)));
+		player.setfacingDirection(Direction.SOUTH);
+		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
 		assertTrue(game.openDoor(uid));
 		assertTrue(newPos.isTileOccupied()); 		// player's location should be updated by two tiles
 		assertTrue(player.getLocation().getX() == 10);
@@ -199,6 +202,7 @@ public class GameWorldTests {
 		player.setLocation(board.getTileAt(new Point(8,15)));
 		player.setfacingDirection(Direction.WEST);
 		assertTrue(board.getTileAt(new Point(9,15)).getTileType() == TileType.DOOR);
+		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
 		assertFalse(game.openDoor(uid));
 	}
 

@@ -15,12 +15,11 @@ import java.util.Queue;
 
 /**
  * Based off http://stackoverflow.com/questions/29545597/multiplayer-game-in-java-connect-client-player-to-game-that-was-created-by-ot
- * @author Maria Legaspi and Vivienne Yapp
+ * @author Maria Legaspi, 30030499
  *
  */
 
 public class Server{
-	private String address = "127.0.0.1";
 	// port as all clients should be able to access this port
 	public static int portNumber = 4000;
 	// server sockets
@@ -31,12 +30,11 @@ public class Server{
 	private static HashMap<Integer, Socket> sockets = new HashMap<Integer, Socket>();
 	private static HashMap<Integer, ObjectInputStream> in = new HashMap<Integer, ObjectInputStream>();
 	private static HashMap<Integer, ObjectOutputStream> out = new HashMap<Integer, ObjectOutputStream>();
-	// commands received from clients
-	private Queue<String> commands = new LinkedList<String>();
 	// game
 	private static GameWorld game;
 	// current player to listen to
 	private static int player = 1;
+
 
 	/**
 	 * Creates the listening socket and the two threads to connect clients and handle player actions.
@@ -46,7 +44,6 @@ public class Server{
 		this.game = new GameWorld();
         try {
 			listener = new ServerSocket(portNumber);
-			System.out.println("Created server");
 			// start connecting and listening to clients
 			listeningThread = makeListeningThread();
 			commandThread = makeCommandThread();
@@ -64,49 +61,55 @@ public class Server{
 		Thread commandThread = new Thread() {
 		    public void run() {
 		    	try{
-		    		System.out.println("Waiting for commands");
 			    	while(atleastOneConnection()) {
-			    		System.out.println("At least one connection");
-	//					game.setState(Board.READY);
-//						Thread.sleep(3000);
-	//					game.setState(Board.PLAYING);
 						while(!game.isOver()) {
-				    		System.out.println("Game continues");
 							Socket sock = sockets.get(player);
 							if(sock == null) System.out.println("No sock");
 							// read input from player
-//							ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 							ObjectInputStream input = getInputStream(sock);
 							if(input==null)
 								System.out.println("No inputstream for the sock");
 							// reads in commands
 							int uid = input.readInt();
-							int dir = input.readInt();
-							System.out.println("Read command from player " + uid + ", direction = " + dir);
-							// update game with player movement
-							switch(dir) {
+							int act = input.readInt();
+							System.out.println("Read command from player " + uid + ", action = " + act);
+							// update game with player action
+							switch(act) {
+								// move right
 								case KeyEvent.VK_RIGHT:
 								case KeyEvent.VK_KP_RIGHT:
 									game.movePlayer(uid, Direction.EAST);
 									System.out.println(uid + ": Moved right");
 									break;
+								// move left
 								case KeyEvent.VK_LEFT:
 								case KeyEvent.VK_KP_LEFT:
 									game.movePlayer(uid, Direction.WEST);
 									System.out.println(uid + ": Moved left");
 									break;
+								// move up
 								case KeyEvent.VK_UP:
 								case KeyEvent.VK_KP_UP:
 									game.movePlayer(uid, Direction.NORTH);
 									System.out.println(uid + ": Moved up");
 									break;
+								// move down
 								case KeyEvent.VK_DOWN:
 								case KeyEvent.VK_KP_DOWN:
 									game.movePlayer(uid, Direction.SOUTH);
 									System.out.println(uid + ": Moved down");
 									break;
+								// pick up item
+								case Client.pickUpItem:
+									game.pickupAnItem(uid);
+									break;
+								// drop item
+								case Client.dropItem:
+									int index = input.readInt();
+									game.dropAnItem(uid, index);
 							}
 							System.out.println("Updated game");
+							// listen to other players
 				    		if(player < game.getAllPlayers().size()){
 				    			player++;
 				    		}
@@ -116,24 +119,13 @@ public class Server{
 				    		System.out.println("Server = " + player);
 							// send back to clients
 							updateAll();
-							//OR
-	//						sendToAll(uid + " " + dir);
-//							Thread.sleep(3000);
 						}
 			    		System.out.println("Game over");
-						// If we get here, then we're in game over mode
-//						Thread.sleep(3000);
-	//					// Reset board state
-	//					game.setState(Board.WAITING);
-	//					game.fromByteArray(state);
 					}
 		    		System.out.println("No connections");
 		    	} catch(IOException e){
 		    		e.printStackTrace();
 		    	}
-//		    	catch(InterruptedException e){
-//		    		e.printStackTrace();
-//		    	}
 		    }
 		};
 		return commandThread;
@@ -163,17 +155,12 @@ public class Server{
 		            	else{
 							// accept a new client
 							int uid = game.addPlayer();
-//		            		int uid = game.getAllPlayers().size();
-							sockets.put(uid, socket);
+//		            		sockets.put(uid, socket);
 							out.put(uid, output);
 							in.put(uid, input);
 							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
-//		            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-		    				output.writeBoolean(true);
-//				        	output.flush();
 							// send the client's uid to the client
 							output.writeInt(uid);
-//				        	output.flush();
 				        	// send new game to all clients
 							System.out.println("Server: number of players: " + game.getAllPlayers().size());
 							System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
@@ -225,7 +212,6 @@ public class Server{
         	  if(sock.isClosed())
         		  continue;
         	  // sends game to byte array to each client
-//        	  ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
         	  ObjectOutputStream output = getOutputStream(sock);
         	  if(out==null){
         		  System.out.println("No output stream initialised for this sock " + getUID(sock));
@@ -250,7 +236,6 @@ public class Server{
     	try{
           for(Socket sock: sockets.values()){
         	  // sends game to byte array to each client
-//        	  ObjectOutputStream output = new ObjectOutputStream(sock.getOutputStream());
         	  ObjectOutputStream output = getOutputStream(sock);
         	  output.writeUTF(message);
         	  output.flush();
@@ -261,23 +246,7 @@ public class Server{
     	}
     }
 
-    /**
-<<<<<<< HEAD
-=======
-     * Returns the id of a player given the socket.
-     * @param sock
-     * @return
-     */
-    private static Integer getUid(Socket sock){
-    	for(Integer i: sockets.keySet()){
-    		if(sockets.get(i) == sock)
-    			return i;
-    	}
-    	return -1;
-    }
-
 	/**
->>>>>>> master
      * Closes all sockets.
      */
     public void closeAll(){

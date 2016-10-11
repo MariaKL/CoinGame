@@ -35,6 +35,11 @@ public class RenderCanvas extends JPanel {
 	private final int tileWidth = 50;
 	private final int tileHeight = 50;
 
+	// compass image
+	private BufferedImage compass;
+	// compass counter
+	private int compassCount=0;
+
 	// Field to store all the walls & tiles in the current level
 	private List<RenderTile> allTiles = new ArrayList<RenderTile>();
 	private List<Wall> allWalls = new ArrayList<Wall>();
@@ -65,6 +70,12 @@ public class RenderCanvas extends JPanel {
 		this.player = user;
 
 		this.setBackground(new Color(79,100,90));
+
+		try {
+			this.compass = ImageIO.read(new File("images/compassNORTH.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		initBlocks(game);
 		attachBindings();
@@ -208,6 +219,16 @@ public class RenderCanvas extends JPanel {
 		super.paintComponent(g);
 
 		paintBlocks(g);
+		paintCompass(g);
+
+	}
+
+	/**
+	 * @param g
+	 * paints compass onto render canvas
+	 */
+	private void paintCompass(Graphics g) {
+		g.drawImage(compass,0,0,this);
 
 	}
 
@@ -305,6 +326,7 @@ public class RenderCanvas extends JPanel {
 		this.getActionMap().put("rotate", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				rotateWorld();
+				rotateCompass();
 				repaint();
 			}
 		});
@@ -333,7 +355,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				//initBlocks(game);
+				initBlocks(game);
 				repaint();
 			}
 		});
@@ -419,7 +441,6 @@ public class RenderCanvas extends JPanel {
 				repaint();
 			}
 		});
-		
 		// enter door, if not possible give message
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_E, 0), "enter");
@@ -429,7 +450,7 @@ public class RenderCanvas extends JPanel {
 				game.openDoor(player.getUserId());
 			}
 		});
-		
+
 		//pick up object in front if possible
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_P, 0), "pickup");
@@ -443,6 +464,57 @@ public class RenderCanvas extends JPanel {
 				//TODO: see above comment
 			}
 		});
+	}
+
+	/**
+	 * rotate compass image
+	 */
+	protected void rotateCompass() {
+		//update compass counter for compass image to choose
+		if (compassCount>=3){
+			compassCount = 0;
+		} else {
+			compassCount++;
+		}
+		System.out.println("Compass Count: "+compassCount);
+
+
+		//update image
+		String compassString = "";
+		if (compassCount == 0) {
+			try {
+				compass = ImageIO.read(new File("images/compassNORTH.png"));
+				compassString = "images/compassN";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (compassCount == 1) {
+			try {
+				compass = ImageIO.read(new File("images/compassEAST.png"));
+				compassString = "images/compassE";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (compassCount == 2) {
+			try {
+				compass = ImageIO.read(new File("images/compassSOUTH.png"));
+				compassString = "images/compassS";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (compassCount == 3) {
+			try {
+				compass = ImageIO.read(new File("images/compassWEST.png"));
+				compassString = "images/compassW";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Compass image: "+compassString);
 	}
 
 	/**Rotates the current game level by applying
