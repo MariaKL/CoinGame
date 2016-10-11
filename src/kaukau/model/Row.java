@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+//@XmlAccessorType(XmlAccessType.FIELD)
  public class Row {
 	private ArrayList<Tile> row;
 
@@ -21,10 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 	public void setRow(ArrayList<Tile> row2) {
 		this.row = row2;
 	}
-
-//	public Row() {
-//		this(null);
-//	}
 
 	@XmlElementWrapper(name = "getRows")
 	@XmlElements({ @XmlElement(name = "tile") })
