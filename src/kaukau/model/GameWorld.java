@@ -141,6 +141,44 @@ public class GameWorld implements Serializable{
 		if (validPoint(pos)){
 			Tile doorTile = board.getTileAt(pos);
 			if (doorTile.getTileType() == TileType.DOOR){  // if the facing direction is a door
+				Door door = (Door) doorTile.getItem();
+				if (!door.isLocked()){
+					Point newPos;  // get the new point after enter from door
+					if (player.getfacingDirection() == Direction.NORTH)
+						newPos = new Point(oldPos.X()-2, oldPos.Y());
+					else if (player.getfacingDirection() == Direction.SOUTH)
+						newPos = new Point(oldPos.X()+2, oldPos.Y());
+					else if (player.getfacingDirection() == Direction.EAST)
+						newPos = new Point(oldPos.X(), oldPos.Y()+2);
+					else newPos = new Point(oldPos.X(), oldPos.Y()-2);
+
+					if (validPoint(newPos)){ // check if this new point is valid or not
+						Tile newTile = board.getTileAt(newPos);
+						if (!newTile.isTileOccupied()){
+							oldPos.removePlayer();        // remove player from a tile
+							player.setLocation(newTile);
+							newTile.addPlayer(player);    // add player to this new location
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Performs door open by a given Player.
+	 * @param uid user id belongs to this player
+	 * @return true if the player successfully open door and enter the room, otherwise false.
+	 */
+	public synchronized boolean unlockDoor(int uid){
+		Player player = players.get(uid);
+		Tile oldPos = player.getLocation();
+		Point pos = getPointFromDirection(player, player.getfacingDirection());
+		if (validPoint(pos)){
+			Tile doorTile = board.getTileAt(pos);
+			if (doorTile.getTileType() == TileType.DOOR){  // if the facing direction is a door
 				Point newPos;  // get the new point after enter from door
 				if (player.getfacingDirection() == Direction.NORTH)
 					newPos = new Point(oldPos.X()-2, oldPos.Y());
@@ -298,7 +336,7 @@ public class GameWorld implements Serializable{
 
 	// testing
 	public static void main (String[] args) throws IOException{
-		GameWorld game = new GameWorld();
+		/*GameWorld game = new GameWorld();
 		GameMap board = game.getGameMap();
 		Tile[][] tiles = board.getBoard();
 
@@ -315,7 +353,7 @@ public class GameWorld implements Serializable{
 		ArrayList<Room> rooms = board.getAllRooms();
 		for (Room r: rooms){
 			System.out.println(r.getName());
-		}
+		}*/
 
 	}
 

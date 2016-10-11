@@ -43,7 +43,7 @@ public class Tile implements Serializable {
 	 */
 	public boolean setItem(Item addItem) {
 		if (item == null && player == null) {
-			item = addItem;
+			this.item = addItem;
 			checkType();
 			return true;
 		}
