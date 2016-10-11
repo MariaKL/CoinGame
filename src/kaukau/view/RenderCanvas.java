@@ -56,6 +56,13 @@ public class RenderCanvas extends JPanel {
 	private Player player;
 	private Client client;
 
+	// fields for the viewport of the rendering
+	private int VIEWPORT_SIZE_Y = 400;
+	private int VIEWPORT_SIZE_X = 500;
+	// fields for the camera position for rendering
+	int camX;
+	int camY;
+
 	/**This class take a gameworld parameter and
 	 * creates a rendering based on the state of
 	 * the game.
@@ -68,7 +75,9 @@ public class RenderCanvas extends JPanel {
 		this.game = gameWorld;
 		this.setPlayers(game.getAllPlayers());
 		this.player = user;
-
+		
+		this.setCamera();
+		
 		this.setBackground(new Color(79,100,90));
 
 		try {
@@ -83,6 +92,17 @@ public class RenderCanvas extends JPanel {
 		this.setFocusable(true);
 		repaint();
 
+	}
+
+	private void setCamera() {
+		// getting player location
+		Tile loc = player.getLocation();
+		Point p = new Point(loc.X(), loc.Y());
+		// get player 2d position
+		Point play = RenderWindow.get2dFromTileCoordinates(p, 50);
+		// adjust camera
+		camX = play.x - VIEWPORT_SIZE_X / 2;
+		camY = play.y - VIEWPORT_SIZE_Y / 2;
 	}
 
 	private void setPlayers(HashMap<Integer, Player> all){
@@ -217,10 +237,10 @@ public class RenderCanvas extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
+		// translate graphics to follow player
+		g.translate(-camY+300, -camX+65);
 		paintBlocks(g);
 		paintCompass(g);
-
 	}
 
 	/**
@@ -355,7 +375,8 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
+				setCamera();
 				repaint();
 			}
 		});
@@ -384,6 +405,7 @@ public class RenderCanvas extends JPanel {
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
 				//initBlocks(game);
+				setCamera();
 				repaint();
 			}
 		});
@@ -411,6 +433,7 @@ public class RenderCanvas extends JPanel {
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
 				//initBlocks(game);
+				setCamera();
 				repaint();
 			}
 		});
@@ -438,6 +461,7 @@ public class RenderCanvas extends JPanel {
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
 				//initBlocks(game);
+				setCamera();
 				repaint();
 			}
 		});
@@ -486,7 +510,6 @@ public class RenderCanvas extends JPanel {
 				compass = ImageIO.read(new File("images/compassNORTH.png"));
 				compassString = "images/compassN";
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (compassCount == 1) {
@@ -494,7 +517,6 @@ public class RenderCanvas extends JPanel {
 				compass = ImageIO.read(new File("images/compassEAST.png"));
 				compassString = "images/compassE";
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (compassCount == 2) {
@@ -502,7 +524,6 @@ public class RenderCanvas extends JPanel {
 				compass = ImageIO.read(new File("images/compassSOUTH.png"));
 				compassString = "images/compassS";
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (compassCount == 3) {
@@ -510,7 +531,6 @@ public class RenderCanvas extends JPanel {
 				compass = ImageIO.read(new File("images/compassWEST.png"));
 				compassString = "images/compassW";
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

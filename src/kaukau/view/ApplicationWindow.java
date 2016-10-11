@@ -112,7 +112,7 @@ public class ApplicationWindow extends JFrame {
 		setTitle("Kaukau");
 		// set size
 		//setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-		setSize(1020, 620);
+		setSize(1000, 800);
 
 		// set display location
 		//setLocationRelativeTo(null);
