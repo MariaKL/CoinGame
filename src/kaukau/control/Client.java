@@ -81,14 +81,14 @@ public class Client extends Thread {
 			}
 			// multiplayer game
 			if(initialRun){
-//		        ObjectInputStream input = new ObjectInputStream(sock.getInputStream());
 				// checks if client is connected to the server
 				boolean accepted = false;
-				if(input!=null)
+				if(input!= null)
 					accepted = input.readBoolean();
+				else
+					System.out.println("Client: no input stream");
 				// if there were too many players then close the socket
 				if(!accepted){
-					sock.close();
 					System.out.println("Not accepted into server");
 					return;
 				}
