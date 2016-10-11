@@ -39,7 +39,7 @@
   <room name="Hallway 1">
     <startX>10</startX>
     <startY>0</startY>
-    <L0>WWCCCCCCCC</L0>
+    <L0>WWCCTCCCTT</L0>
     <L1>WCCCKCCCCC</L1>
     <L2>WCCTCCCCCC</L2>
     <L3>WCTXTCCCCC</L3>

@@ -1,11 +1,15 @@
+//@XmlSchema(namespace = "https://something.com/", elementFormDefault = XmlNsForm.QUALIFIED)
 package kaukau.model;
 
+import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * A CoinBox is a pickupable item which can be carry by player. This CoinBox
@@ -15,6 +19,7 @@ import javax.xml.bind.annotation.XmlElements;
  * @author Vivienne Yapp, 300339524
  *
  */
+@XmlRootElement
 public class CoinBox extends PickupableItem implements Serializable {
 
 	private Container storage;
@@ -24,7 +29,8 @@ public class CoinBox extends PickupableItem implements Serializable {
 	public CoinBox(Player player) {
 		super("Coin Box");
 		this.player = player;
-		this.storage = new Container("Coin Box", player.getLocation());
+		// this.storage = new Container("Coin Box", player.getLocation());
+		this.storage = new Container("Coin Box");
 		storage.setAmount(20);
 		totalCoinAmount = 0;
 	}
@@ -45,7 +51,7 @@ public class CoinBox extends PickupableItem implements Serializable {
 	public boolean addCoin(Item item) {
 		if (item instanceof Coin) {
 			Coin coin = (Coin) item;
-			if (storage.addItem(item) && !storage.isStorageFull()){
+			if (storage.addItem(item) && !storage.isStorageFull()) {
 				totalCoinAmount += coin.getAmount();
 				return true;
 			}
@@ -58,16 +64,21 @@ public class CoinBox extends PickupableItem implements Serializable {
 	 *
 	 * @return return all the coin objects
 	 */
-//	@XmlElementWrapper(name = "getStorage")
-//	@XmlElements({ @XmlElement(name = "coin") })
-	@XmlElement(name = "coin")
+	@XmlElementWrapper(name = "coins")
+	@XmlElements({ @XmlElement(name = "coin") })
 	public ArrayList<Coin> getStorage() {
 		ArrayList<Coin> coins = new ArrayList<Coin>();
 		for (PickupableItem p : this.storage.getStorage()) {
 			coins.add((Coin) p);
 		}
 		return coins;
-		// return this.storage.getStorage();
+	}
+
+	public void setStorage(ArrayList<Coin> coins) {
+		System.out.println("setStorage list");
+		for (Coin c : coins) {
+			addCoin(c);
+		}
 	}
 
 	/**
@@ -88,4 +99,9 @@ public class CoinBox extends PickupableItem implements Serializable {
 	public boolean isStorageFull() {
 		return storage.isStorageFull();
 	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
 }
