@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * This class represent a Player for GameWorld.
- * @author Vivienne Yapp, 300339524 (Getter & setter methods for DataStorage, added by Shaika Khan)
+ * @author Vivienne Yapp, 300339524 (Getter and setter methods added by Shaika Khan)
  *
  */
 @XmlRootElement // (namespace = "Team_24.kaukau.model.GameWorld")
@@ -209,6 +209,11 @@ public class Player implements Serializable {
 		return false;
 	}
 
+	/**
+	 * Check if the player's inventory contain item at this index number
+	 * @param index the index number
+	 * @return true if the index within the size of the inventory
+	 */
 	public boolean containItemAtIndex(int index){
 		if (index < inventory.getStorage().size() && index >= 0){
 			return true;

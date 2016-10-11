@@ -21,6 +21,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import kaukau.model.GameMap.TileType;
 
+/**
+ * This class represents the board of the game.
+ * @author Vivienne Yapp, 300339524
+ *
+ */
 @XmlRootElement
 @XmlType(propOrder = {"boardTiles"})
 public class GameMap implements Serializable {
@@ -45,6 +50,9 @@ public class GameMap implements Serializable {
 		createRoomsFromFile();
 	}
 
+	/**
+	 * Parse the new create board with Tile object.
+	 */
 	public void createRoomsFromFile() {
 		try {
 			// Document doc = new ReadXMLFile().createDocument("Rooms.xml");
@@ -110,6 +118,7 @@ public class GameMap implements Serializable {
 	 * @param count the number index of the door from XML file
 	 * @param x the x point of this door
 	 * @param y the y point of this door
+	 * @param room the room that has this door
 	 * @return the next index number for next door item
 	 */
 	public int addDoor(Element element, int count, int x, int y, Room room){
@@ -124,15 +133,11 @@ public class GameMap implements Serializable {
 	}
 
 	/**
-	 *
-	 * @param element
-	 *            room element from XML file
-	 * @param count
-	 *            the number index of the key from XML file
-	 * @param x
-	 *            the x point of this key
-	 * @param y
-	 *            the y point of this key
+	 * Add a key object to a tile.
+	 * @param element room element from XML file
+	 * @param count the number index of the key from XML file
+	 * @param x the x point of this key
+	 * @param y the y point of this key
 	 * @return the next index number for next key item
 	 */
 	public int addKey(Element element, int count, int x, int y){
@@ -145,15 +150,11 @@ public class GameMap implements Serializable {
 	}
 
 	/**
-	 *
-	 * @param element
-	 *            room element from XML file
-	 * @param count
-	 *            the number index of the key from XML file
-	 * @param x
-	 *            the x point of this key
-	 * @param y
-	 *            the y point of this key
+	 * Add a Coin object to a tile.
+	 * @param element room element from XML file
+	 * @param count the number index of the key from XML file
+	 * @param x the x point of this key
+	 * @param y the y point of this key
 	 * @return the next index number for next key item
 	 */
 	public int addCoin(Element element, int count, int x, int y){
@@ -168,8 +169,7 @@ public class GameMap implements Serializable {
 	/**
 	 * Return the tile at the given point.
 	 *
-	 * @param p
-	 *            the point of a tile
+	 * @param p the point of a tile
 	 * @return a tile of the board
 	 */
 	public Tile getTileAt(Point p) {

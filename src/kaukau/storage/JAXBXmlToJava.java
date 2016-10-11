@@ -91,6 +91,7 @@ public class JAXBXmlToJava {
 
 	public static void testUnmarshalledMap(GameMap map) {
 		if (map != null) {
+
 			for (Row r : map.getBoardTiles()) {				
 				if (r == null) {
 					System.out.println("row is null!");

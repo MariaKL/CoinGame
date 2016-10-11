@@ -76,8 +76,8 @@ public class GameWorld implements Serializable{
 
 	/**
 	 * Move player to the new position if the tile of the new position is not occupy. Otherwise, it returns False.
-	 * @param name Player's name
-	 * @param p The new position
+	 * @param uid Player's name
+	 * @param direction The direction to move
 	 * @return True if the player is move to the new position, otherwise False.
 	 */
 	public synchronized boolean movePlayer(int uid, Direction direction){
@@ -105,7 +105,6 @@ public class GameWorld implements Serializable{
 	 /** Performs a pickup item for a given Player.
 	  *
 	  * @param uid user id belongs to this player
-	  * @param index the number index of the inventory
 	  * @return true if the player successfully pick up an item, otherwise false.
 	  */
 	public synchronized boolean pickupAnItem(int uid){
@@ -118,7 +117,6 @@ public class GameWorld implements Serializable{
 			Tile tile = board.getTileAt(pos);
 			if (tile.containsPickupItem()){
 				if (player.addToBag((PickupableItem)tile.getItem())){
-					System.out.println("TEST");
 					tile.removeItem();
 					return true;
 				}
@@ -230,7 +228,8 @@ public class GameWorld implements Serializable{
 	 * array, such that it can be shipped across a connection to an awaiting client.
 	 *
 	 * @return the byte array of the current state of the game
-	 * @throws IOException
+	 * @throws IOException Signals that an I/O exception of some sort has occurred.
+	 * This class is the general class of exceptions produced by failed or interrupted I/O operations.
 	 */
 	public synchronized byte[] toByteArray() throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -269,7 +268,6 @@ public class GameWorld implements Serializable{
 	 * Returns the player of the game that matched with the userId.
 	 * @param uid UserId uses by the client
 	 * @return the player with the matching userId
-	 * @IllegalArgumentException if the userId does not contain in the game list
 	 */
 	public synchronized Player player(int uid){
 		if (players.containsKey(uid)){

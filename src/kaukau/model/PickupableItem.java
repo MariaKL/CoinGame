@@ -20,7 +20,7 @@ public abstract class PickupableItem implements Item, Serializable{
 
 	/**
 	 * Create a pickupable item for the game.
-	 * @param name
+	 * @param name the name of the pick up item
 	 */
 	public PickupableItem(String name){
 		this.name = name;

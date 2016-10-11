@@ -175,6 +175,7 @@ public class Tile implements Serializable {
 				itemIsDoor = null;
 				return true;
 			}
+
 		}
 		return false;
 	}

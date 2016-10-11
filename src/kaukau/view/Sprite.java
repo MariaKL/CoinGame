@@ -22,13 +22,13 @@ public class Sprite {
 	public int X() { return x; }
 	public int Y() { return y; }
 	public Point getTilePos(){
-		Point p = RenderWindow.isoTo2D(new Point(this.x, this.y));
-		Point result = RenderWindow.getTileCoordinates(p, 50);
+		Point p = RenderCanvas.isoTo2D(new Point(this.x, this.y));
+		Point result = RenderCanvas.getTileCoordinates(p, 50);
 		return result;
 	}
 	public void setPosFromTilePos(Point p) {
-		Point twoD = RenderWindow.get2dFromTileCoordinates(p, 50);
-		Point pos = RenderWindow.twoDToIso(twoD);
+		Point twoD = RenderCanvas.get2dFromTileCoordinates(p, 50);
+		Point pos = RenderCanvas.twoDToIso(twoD);
 		this.x = pos.x;
 		this.y = pos.y;
 	}

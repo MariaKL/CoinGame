@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * /**
  * A container is an item able hold pickupable type items.
  * Containers are storage for a coinbox, player's inventory...etc.
- * @author Vivienne Yapp
+ * @author Vivienne Yapp, 300339524
  *
  */
 @XmlRootElement
@@ -60,9 +60,10 @@ public class Container implements Item, Serializable{
 	}
 
 	/**
-	 * Removes a pickupable item from a container
-	 * @throws NullPointer Exception
-	 * */
+	 * Removes a pickupable item from a container.
+	 * @param item the item to be removed
+	 * @return true if successfully remove from the container, otherwise false.
+	 */
 	public boolean removeItem(Item item){
 		if (item != null && storage.contains(item)){
 			storage.remove((PickupableItem) item);
@@ -105,7 +106,7 @@ public class Container implements Item, Serializable{
 
 	/**
 	 * Get the size that used in this container.
-	 * @return
+	 * @return the size of this container
 	 */
 	public int getStorageUsed(){
 		return this.storage.size();
