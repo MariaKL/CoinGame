@@ -105,29 +105,23 @@ public class GameMap implements Serializable {
 		}
 	}
 
-
 	/**
 	 * Add the door to the board.
 	 *
-	 * @param element
-	 *            room element from XML file
-	 * @param count
-	 *            the number index of the door from XML file
-	 * @param x
-	 *            the x point of this door
-	 * @param y
-	 *            the y point of this door
+	 * @param element room element from XML file
+	 * @param count the number index of the door from XML file
+	 * @param x the x point of this door
+	 * @param y the y point of this door
 	 * @return the next index number for next door item
 	 */
 	public int addDoor(Element element, int count, int x, int y, Room room){
 		Tile tile = new Tile(TileType.DOOR, x, y);
-		int key = Integer
-				.valueOf(element.getElementsByTagName("Door" + String.valueOf(count)).item(0).getTextContent());
+		int key = Integer.valueOf(element.getElementsByTagName("Door" + String.valueOf(count)).item(0).getTextContent());
 		Door door = new Door(key, tile);
 		doors.add(door);
 		tile.setItem(door);
-		board[x][y] = tile;
 		room.addDoor(door);
+		board[x][y] = tile;
 		return ++count;
 	}
 
@@ -194,7 +188,7 @@ public class GameMap implements Serializable {
 	}
 
 
-	@XmlElement(name = "boardTiles")	
+	@XmlElement(name = "boardTiles")
 	public ArrayList<Row> getBoardTiles() {
 		ArrayList<Row> board = new ArrayList<Row>();
 		ArrayList<Tile> row;
@@ -209,8 +203,8 @@ public class GameMap implements Serializable {
 		}
 		return board;
 	}
-	
-	public void setBoardTiles(ArrayList<Row> rows) {		
+
+	public void setBoardTiles(ArrayList<Row> rows) {
 		for (int i = 0; i < getBoard().length; i++) {
 			Row row = rows.get(i);
 			for (int j = 0; j < getBoard()[0].length; j++) {

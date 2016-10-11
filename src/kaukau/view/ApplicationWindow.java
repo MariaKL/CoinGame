@@ -112,7 +112,7 @@ public class ApplicationWindow extends JFrame {
 		setTitle("Kaukau");
 		// set size
 		//setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-		setSize(1020, 620);
+		setSize(1000, 800);
 
 		// set display location
 		//setLocationRelativeTo(null);
@@ -365,7 +365,11 @@ public class ApplicationWindow extends JFrame {
 			mi.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(ApplicationWindow.this,item.getName());
+					String msg = item.getName();
+					if (msg.equals("Coin Box")){
+						msg = msg + "\nYou currently have "+ player.getCoinBox().totalCoins() +" coins.";
+					}
+					JOptionPane.showMessageDialog(ApplicationWindow.this,msg);
 				}
 			});
 

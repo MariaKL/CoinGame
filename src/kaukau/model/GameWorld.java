@@ -50,9 +50,8 @@ public class GameWorld implements Serializable{
 	 */
 	public synchronized int addPlayer(){
 		Random rand = new Random();
-		Tile tile = board.getTileAt(new Point(7-(rand.nextInt(4)), 3));
+		Tile tile = board.getTileAt(new Point(7-(rand.nextInt(5)), 3));
 		Player player = new Player(++uid, "Player", tile, Direction.EAST);
-		//System.out.println(player.getUserId());
 		tile.addPlayer(player);
 		player.setLocation(tile);
 		GameWorld.players.put(uid, player);
@@ -142,22 +141,17 @@ public class GameWorld implements Serializable{
 		if (validPoint(pos)){
 			Tile doorTile = board.getTileAt(pos);
 			if (doorTile.getTileType() == TileType.DOOR){  // if the facing direction is a door
-				Point newPos;  // get the new point after enter from door
-				if (player.getfacingDirection() == Direction.NORTH)
-					newPos = new Point(oldPos.X()-2, oldPos.Y());
-				else if (player.getfacingDirection() == Direction.SOUTH)
-					newPos = new Point(oldPos.X()+2, oldPos.Y());
-				else if (player.getfacingDirection() == Direction.EAST)
-					newPos = new Point(oldPos.X(), oldPos.Y()+2);
-				else newPos = new Point(oldPos.X(), oldPos.Y()-2);
-
-				if (validPoint(newPos)){ // check if this new point is valid or not
-					Tile newTile = board.getTileAt(newPos);
-					if (!newTile.isTileOccupied()){
-						oldPos.removePlayer();        // remove player from a tile
-						player.setLocation(newTile);
-						newTile.addPlayer(player);    // add player to this new location
-						return true;
+				Door door = (Door) doorTile.getItem();
+				if (!door.isLocked()){
+					Point newPos = getDoorPoint(player, player.getfacingDirection());
+					if (validPoint(newPos)){ // check if this new point is valid or not
+						Tile newTile = board.getTileAt(newPos);
+						if (!newTile.isTileOccupied()){
+							oldPos.removePlayer();        // remove player from a tile
+							player.setLocation(newTile);
+							newTile.addPlayer(player);    // add player to this new location
+							return true;
+						}
 					}
 				}
 			}
@@ -166,11 +160,29 @@ public class GameWorld implements Serializable{
 	}
 
 	/**
+	 * Get the point of a door from the player's facing direction
+	 * @param player the current player
+	 * @param direction the facing direction of the player
+	 * @return the new point of the door
+	 */
+	private Point getDoorPoint(Player player, Direction direction){
+		Tile oldPos = player.getLocation();
+		if (player.getfacingDirection() == Direction.NORTH)
+			return new Point(oldPos.X()-2, oldPos.Y());
+		else if (player.getfacingDirection() == Direction.SOUTH)
+			return new Point(oldPos.X()+2, oldPos.Y());
+		else if (player.getfacingDirection() == Direction.EAST)
+			return new Point(oldPos.X(), oldPos.Y()+2);
+		else return new Point(oldPos.X(), oldPos.Y()-2);
+
+	}
+
+	/**
 	 * Check if this given point is valid or not.
 	 * @param pos the given point
 	 * @return true if the x and y is within the board's size, otherwise false
 	 */
-	public boolean validPoint(Point pos){
+	private boolean validPoint(Point pos){
 		if (board.width() <= pos.x || board.height() <= pos.y ||
 				pos.x < 0 || pos.y < 0) {
 			return false;
@@ -184,7 +196,7 @@ public class GameWorld implements Serializable{
 	 * @param direct facing direction of the player
 	 * @return new point from the facing direction of the player
 	 */
-	public Point getPointFromDirection(Player player, Direction direct){
+	private Point getPointFromDirection(Player player, Direction direct){
 		Tile oldPos = player.getLocation();
 		if (direct == Direction.NORTH)
 			return new Point(oldPos.X()-1, oldPos.Y());
@@ -299,7 +311,7 @@ public class GameWorld implements Serializable{
 
 	// testing
 	public static void main (String[] args) throws IOException{
-		GameWorld game = new GameWorld();
+		/*GameWorld game = new GameWorld();
 		GameMap board = game.getGameMap();
 		Tile[][] tiles = board.getBoard();
 
@@ -316,7 +328,7 @@ public class GameWorld implements Serializable{
 		ArrayList<Room> rooms = board.getAllRooms();
 		for (Room r: rooms){
 			System.out.println(r.getName());
-		}
+		}*/
 
 	}
 

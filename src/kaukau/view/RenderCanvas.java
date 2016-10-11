@@ -35,6 +35,11 @@ public class RenderCanvas extends JPanel {
 	private final int tileWidth = 50;
 	private final int tileHeight = 50;
 
+	// compass image
+	private BufferedImage compass;
+	// compass counter
+	private int compassCount=0;
+
 	// Field to store all the walls & tiles in the current level
 	private List<RenderTile> allTiles = new ArrayList<RenderTile>();
 	private List<Wall> allWalls = new ArrayList<Wall>();
@@ -51,6 +56,13 @@ public class RenderCanvas extends JPanel {
 	private Player player;
 	private Client client;
 
+	// fields for the viewport of the rendering
+	private int VIEWPORT_SIZE_Y = 400;
+	private int VIEWPORT_SIZE_X = 500;
+	// fields for the camera position for rendering
+	int camX;
+	int camY;
+
 	/**This class take a gameworld parameter and
 	 * creates a rendering based on the state of
 	 * the game.
@@ -63,8 +75,16 @@ public class RenderCanvas extends JPanel {
 		this.game = gameWorld;
 		this.setPlayers(game.getAllPlayers());
 		this.player = user;
-
+		
+		this.setCamera();
+		
 		this.setBackground(new Color(79,100,90));
+
+		try {
+			this.compass = ImageIO.read(new File("images/compassNORTH.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		initBlocks(game);
 		attachBindings();
@@ -72,6 +92,17 @@ public class RenderCanvas extends JPanel {
 		this.setFocusable(true);
 		repaint();
 
+	}
+
+	private void setCamera() {
+		// getting player location
+		Tile loc = player.getLocation();
+		Point p = new Point(loc.X(), loc.Y());
+		// get player 2d position
+		Point play = RenderWindow.get2dFromTileCoordinates(p, 50);
+		// adjust camera
+		camX = play.x - VIEWPORT_SIZE_X / 2;
+		camY = play.y - VIEWPORT_SIZE_Y / 2;
 	}
 
 	private void setPlayers(HashMap<Integer, Player> all){
@@ -117,6 +148,11 @@ public class RenderCanvas extends JPanel {
 				// the block to be created
 				Block b = null;
 
+				if(tile==null){
+					System.out.println(r + " " + c);
+					continue;
+				}
+				
 				// Creating a Tile block for rendering
 				if(tile.getTileType() == GameMap.TileType.TILE){
 
@@ -201,8 +237,18 @@ public class RenderCanvas extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
+		// translate graphics to follow player
+		g.translate(-camY+300, -camX+65);
 		paintBlocks(g);
+		paintCompass(g);
+	}
+
+	/**
+	 * @param g
+	 * paints compass onto render canvas
+	 */
+	private void paintCompass(Graphics g) {
+		g.drawImage(compass,0,0,this);
 
 	}
 
@@ -300,6 +346,7 @@ public class RenderCanvas extends JPanel {
 		this.getActionMap().put("rotate", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				rotateWorld();
+				rotateCompass();
 				repaint();
 			}
 		});
@@ -328,7 +375,8 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
+				setCamera();
 				repaint();
 			}
 		});
@@ -356,7 +404,8 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
+				setCamera();
 				repaint();
 			}
 		});
@@ -383,7 +432,8 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
+				setCamera();
 				repaint();
 			}
 		});
@@ -410,11 +460,11 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				initBlocks(game);
+				//initBlocks(game);
+				setCamera();
 				repaint();
 			}
 		});
-		
 		// enter door, if not possible give message
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_E, 0), "enter");
@@ -424,7 +474,7 @@ public class RenderCanvas extends JPanel {
 				game.openDoor(player.getUserId());
 			}
 		});
-		
+
 		//pick up object in front if possible
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_P, 0), "pickup");
@@ -438,7 +488,53 @@ public class RenderCanvas extends JPanel {
 				//TODO: see above comment
 			}
 		});
-		
+	}
+
+	/**
+	 * rotate compass image
+	 */
+	protected void rotateCompass() {
+		//update compass counter for compass image to choose
+		if (compassCount>=3){
+			compassCount = 0;
+		} else {
+			compassCount++;
+		}
+		System.out.println("Compass Count: "+compassCount);
+
+
+		//update image
+		String compassString = "";
+		if (compassCount == 0) {
+			try {
+				compass = ImageIO.read(new File("images/compassNORTH.png"));
+				compassString = "images/compassN";
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (compassCount == 1) {
+			try {
+				compass = ImageIO.read(new File("images/compassEAST.png"));
+				compassString = "images/compassE";
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (compassCount == 2) {
+			try {
+				compass = ImageIO.read(new File("images/compassSOUTH.png"));
+				compassString = "images/compassS";
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (compassCount == 3) {
+			try {
+				compass = ImageIO.read(new File("images/compassWEST.png"));
+				compassString = "images/compassW";
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Compass image: "+compassString);
 	}
 
 	/**Rotates the current game level by applying

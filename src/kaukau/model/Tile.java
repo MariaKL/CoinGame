@@ -42,7 +42,7 @@ public class Tile implements Serializable {
 	 */
 	public boolean setItem(Item addItem) {
 		if (item == null && player == null) {
-			item = addItem;
+			this.item = addItem;
 			checkType();
 			return true;
 		}
@@ -208,9 +208,7 @@ public class Tile implements Serializable {
 	 */
 	@XmlAnyElement
 	public Item getItem() {
-		if (item instanceof PickupableItem)
-			return item;
-		return null;
+		return item;
 	}
 
 	/**
