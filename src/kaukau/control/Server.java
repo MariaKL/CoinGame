@@ -107,6 +107,7 @@ public class Server{
 								case Client.dropItem:
 									int index = input.readInt();
 									game.dropAnItem(uid, index);
+									break;
 							}
 							System.out.println("Updated game");
 							// listen to other players
