@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -88,12 +90,13 @@ public class Player implements Serializable {
 	 * adds item to players bag
 	 */
 	public boolean addToBag(Item item) {
-		if (item instanceof Coin && !coinbox.isStorageFull())
+		if (item instanceof Coin && !coinbox.isStorageFull()) {
 			return coinbox.addCoin(item);
-		else if (item instanceof CoinBox && coinbox != null) // player only
-																// allow one
-																// coinbox
+		} else if (item instanceof CoinBox && coinbox != null) { // player only
+																	// allow one
+																	// coinbox
 			return false;
+		}
 		return inventory.addItem(item);
 	}
 
@@ -111,7 +114,7 @@ public class Player implements Serializable {
 	 * adds item to players bag
 	 */
 	@XmlElementWrapper(name = "inventory")
-	@XmlElements({ @XmlElement(name = "item") })
+	@XmlElement(name = "item")
 	public ArrayList<PickupableItem> getInventory() {
 		return inventory.getStorage();
 	}
@@ -156,6 +159,17 @@ public class Player implements Serializable {
 	 */
 	public String toString() {
 		return "Player " + this.name + " at position " + this.location.toString();
+	}
+
+	public boolean containsKey(Door door){
+		for(PickupableItem item : inventory.getStorage()){
+			if (item instanceof Key){
+				if (((Key) item).getCode() == door.getDoorCode()){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

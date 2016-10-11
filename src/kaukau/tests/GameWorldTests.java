@@ -172,20 +172,17 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-<<<<<<< HEAD
 		Tile oldPos = board.getTileAt(new Point(8, 15));
 		Tile newPos = board.getTileAt(new Point(10, 15));
 		Tile door = board.getTileAt(new Point(9,15));
 		player.setLocation(oldPos);
-		player.setFacingDirection(Direction.SOUTH);
+		player.setfacingDirection(Direction.SOUTH);
 		assertTrue(oldPos.addPlayer(player));
 		assertTrue(oldPos.isTileOccupied());
 		assertTrue(door.getTileType() == TileType.DOOR);
-=======
 		player.setLocation(board.getTileAt(new Point(15,8)));
 		player.setfacingDirection(Direction.SOUTH);
 		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
->>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
 		assertTrue(game.openDoor(uid));
 		assertTrue(newPos.isTileOccupied()); 		// player's location should be updated by two tiles
 		assertTrue(player.getLocation().getX() == 10);
@@ -202,15 +199,10 @@ public class GameWorldTests {
 		GameMap board = game.getGameMap();
 		int uid = game.addPlayer();
 		Player player = game.player(uid);
-<<<<<<< HEAD
 		player.setLocation(board.getTileAt(new Point(8,15)));
-		player.setFacingDirection(Direction.WEST);
-		assertTrue(board.getTileAt(new Point(9,15)).getTileType() == TileType.DOOR);
-=======
-		player.setLocation(board.getTileAt(new Point(15,8)));
 		player.setfacingDirection(Direction.WEST);
+		assertTrue(board.getTileAt(new Point(9,15)).getTileType() == TileType.DOOR);
 		assertTrue(board.getTileAt(new Point(15,9)).getTileType() == TileType.DOOR);
->>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
 		assertFalse(game.openDoor(uid));
 	}
 
