@@ -472,7 +472,7 @@ public class RenderCanvas extends JPanel {
 		} else {
 			compassCount++;
 		}
-		System.out.println("Compass Count: "+compassCount);
+		//System.out.println("Compass Count: "+compassCount);
 
 
 		//update image
@@ -487,8 +487,8 @@ public class RenderCanvas extends JPanel {
 			}
 		} else if (compassCount == 1) {
 			try {
-				compass = ImageIO.read(new File("images/compassEAST.png"));
-				compassString = "images/compassE";
+				compass = ImageIO.read(new File("images/compassWEST.png"));
+				compassString = "images/compassW";
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -503,14 +503,14 @@ public class RenderCanvas extends JPanel {
 			}
 		} else if (compassCount == 3) {
 			try {
-				compass = ImageIO.read(new File("images/compassWEST.png"));
-				compassString = "images/compassW";
+				compass = ImageIO.read(new File("images/compassEAST.png"));
+				compassString = "images/compassE";
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Compass image: "+compassString);
+		//System.out.println("Compass image: "+compassString);
 	}
 
 	/**Rotates the current game level by applying
