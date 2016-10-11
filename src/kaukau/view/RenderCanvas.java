@@ -524,7 +524,7 @@ public class RenderCanvas extends JPanel {
 		} else {
 			compassCount++;
 		}
-		System.out.println("Compass Count: "+compassCount);
+		//System.out.println("Compass Count: "+compassCount);
 
 
 		//update image
@@ -538,8 +538,8 @@ public class RenderCanvas extends JPanel {
 			}
 		} else if (compassCount == 1) {
 			try {
-				compass = ImageIO.read(new File("images/compassEAST.png"));
-				compassString = "images/compassE";
+				compass = ImageIO.read(new File("images/compassWEST.png"));
+				compassString = "images/compassW";
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -552,13 +552,44 @@ public class RenderCanvas extends JPanel {
 			}
 		} else if (compassCount == 3) {
 			try {
-				compass = ImageIO.read(new File("images/compassWEST.png"));
-				compassString = "images/compassW";
+				compass = ImageIO.read(new File("images/compassEAST.png"));
+				compassString = "images/compassE";
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Compass image: "+compassString);
+		//System.out.println("Compass image: "+compassString);
+	}
+	
+	public void dropItem(kaukau.model.PickupableItem item) {
+		Tile oloc = player.getLocation();
+		Direction dir = player.getfacingDirection();
+		// find block player is facing
+		Block rold = null;
+		switch(dir){
+			case EAST:
+				rold = levelBlocks[oloc.Y()+1][oloc.X()];
+				break;
+			case NORTH:
+				rold = levelBlocks[oloc.Y()][oloc.X()-1];
+				break;
+			case SOUTH:
+				rold = levelBlocks[oloc.Y()][oloc.X()+1];
+				break;
+			case WEST:
+				rold = levelBlocks[oloc.Y()-1][oloc.X()];
+				break;
+		}
+		// add item to block
+		if(rold != null){
+			((RenderTile)rold).setItem(item);
+		}
+		// wait for updates from server
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {	}
+		// update rendering
+		repaint();
 	}
 
 	/**Rotates the current game level by applying

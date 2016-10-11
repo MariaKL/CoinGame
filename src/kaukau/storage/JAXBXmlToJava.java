@@ -18,6 +18,7 @@ import kaukau.model.GameWorld;
 import kaukau.model.Key;
 import kaukau.model.PickupableItem;
 import kaukau.model.Player;
+import kaukau.model.Row;
 
 public class JAXBXmlToJava {
 
@@ -29,7 +30,8 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
-			File XMLfile = new File("Player"+playerID+".xml");
+			// File XMLfile = new File("Player"+playerID+".xml");
+			File XMLfile = new File("Player.xml");
 			// this will create Java object - country from the XML file
 			player = (Player) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {
@@ -41,7 +43,7 @@ public class JAXBXmlToJava {
 
 	}
 
-	public GameMap unmarshalMap() {
+	public GameMap unmarshalMap(int playerID) {
 		GameMap map = null;
 		try {
 			// create JAXB context and initializing Marshaller
@@ -49,7 +51,8 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
-			File XMLfile = new File("Map.xml");
+			// File XMLfile = new File("Map"+playerID+".xml");
+			File XMLfile = new File("MapAltered.xml");
 			// this will create Java object - country from the XML file
 			map = (GameMap) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {
@@ -87,15 +90,12 @@ public class JAXBXmlToJava {
 
 	public static void testUnmarshalledMap(GameMap map) {
 		if (map != null) {
-			for (Door d : map.getAllDoors()) {
-				System.out.println("Door code: " + d.getDoorCode());
-				System.out.println("Door is locked?: " + d.isLocked());
-				if (d.getLocation() == null) {
-					System.out.println("Door location is null!");
+			for (Row r : map.getBoardTiles()) {				
+				if (r == null) {
+					System.out.println("row is null!");
 				} else {
-					System.out.println("Door location: " + d.getLocation().toString());
+					System.out.println("row unmarshalled sucessfully");
 				}
-
 			}
 		}
 	}
@@ -103,8 +103,8 @@ public class JAXBXmlToJava {
 	public static void main(String[] args) {
 		JAXBXmlToJava unmarshaling = new JAXBXmlToJava();
 		Player player = unmarshaling.unmarshalPlayer(1);
-		// testUnmarshalledPlayer(player);
-		GameMap map = unmarshaling.unmarshalMap();
+		//testUnmarshalledPlayer(player);
+		GameMap map = unmarshaling.unmarshalMap(1);
 		testUnmarshalledMap(map);
 	}
 

@@ -7,13 +7,13 @@
     <L1>WTTTTTTTTW</L1>
     <L2>WTTTTTCTTW</L2>
     <L3>WTTTTCCCTW</L3>
-    <L4>WTTTTTCTTD</L4>
+    <L4>WTTTTTCTTC</L4>
     <L5>WTTCTTKTTW</L5>
     <L6>WTCCCTTTTW</L6>
     <L7>WTTCTTXTTW</L7>
     <L8>WTTTTTTTTW</L8>
     <L9>WWTTTTTTCW</L9>
-    <Door0>123</Door0>
+    <Door0>0</Door0>
     <Door1>0</Door1>
     <Door2>0</Door2>
     <Key0>123</Key0>
@@ -32,7 +32,7 @@
     <L6>CCTCCCCCCW</L6>
     <L7>CTTTCCCCCW</L7>
     <L8>CCTCCCCCCW</L8>
-    <L9>WWWWWDWWWW</L9>
+    <L9>WWWWWCWWWW</L9>
     <Door0>0</Door0>
     <Coin0>50</Coin0>
   </room>

@@ -31,7 +31,7 @@ public class JAXBJavaToXml {
 
 	private GameWorld game;
 	private static GameMap map;
-	private static Player currentPlayer;	
+	private static Player currentPlayer;
 
 	/**
 	 * FOR TESTING
@@ -54,7 +54,7 @@ public class JAXBJavaToXml {
 		this.game.movePlayer(this.currentPlayer.getUserId(), Direction.NORTH);
 		this.map = this.game.getGameMap();
 	}
-	
+
 	/**
 	 * Returns the dummy player
 	 * @return Player
@@ -62,7 +62,7 @@ public class JAXBJavaToXml {
 	private static Player getPlayer(){
 		return currentPlayer;
 	}
-	
+
 	/**
 	 * Returns the dummy Map
 	 * @return GameMap
@@ -79,7 +79,8 @@ public class JAXBJavaToXml {
 		// marshal player
 		marshalPlayer(player);
 		// marshal gameMap
-		marshalMap(map);		
+		marshalMap(map, player.getUserId());
+		//marshalGame();
 	}
 
 	/**
@@ -98,8 +99,8 @@ public class JAXBJavaToXml {
 
 			// specify the location and name of xml file to be created
 			// for testing at uni
-			File XMLfile = new File("Player"+player.getUserId()+".xml");
-
+			//File XMLfile = new File("Player"+player.getUserId()+".xml");
+			File XMLfile = new File("Player.xml");
 			// Writing to XML file
 			jaxbMarshaller.marshal(player, XMLfile);
 
@@ -110,13 +111,13 @@ public class JAXBJavaToXml {
 			// some exception occured
 			e.printStackTrace();
 		}
-	}	
+	}
 
 	/**
 	 * Marshal's the GameMap passed in the argument to xml format
 	 * @param GameMap
 	 * */
-	private void marshalMap(GameMap map) {
+	private void marshalMap(GameMap map, int id) {
 		try {
 			// create JAXB context and initializing Marshaller
 			JAXBContext jaxbContext = JAXBContext.newInstance(GameMap.class);
@@ -128,6 +129,7 @@ public class JAXBJavaToXml {
 
 			// specify the location and name of xml file to be created
 			// for testing at uni
+			//File XMLfile = new File("Map"+id+".xml");
 			File XMLfile = new File("Map.xml");
 
 			// Writing to XML file
@@ -164,7 +166,7 @@ public class JAXBJavaToXml {
 			jaxbMarshaller.marshal(game, XMLfile);
 
 			// Writing to console
-			jaxbMarshaller.marshal(game, System.out);
+			//jaxbMarshaller.marshal(game, System.out);
 
 		} catch (JAXBException e) {
 			// some exception occured

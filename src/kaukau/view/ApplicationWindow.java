@@ -161,7 +161,7 @@ public class ApplicationWindow extends JFrame {
 	 */
 	public void setGame(GameWorld game){
 		this.game = game;
-		this.player = game.getAllPlayers().get(player.getUserId());
+		this.player = game.getAllPlayers().get(client.getUID());
 		rc.setGame(game);
 	}
 
@@ -351,7 +351,7 @@ public class ApplicationWindow extends JFrame {
 
 			if(x < inv.size()) {
 				createActionMenu(e,inv.get(x), x);
-				System.out.println("You clicked item "+ x);
+				//System.out.println("You clicked item "+ x);
 
 			}
 			this.repaint();
@@ -381,26 +381,20 @@ public class ApplicationWindow extends JFrame {
 					int result = JOptionPane.showConfirmDialog(ApplicationWindow.this, msg,
 					        "Alert", JOptionPane.OK_CANCEL_OPTION);
 					if(result==0){
-						//game.dropAnItem(tempouid, index);
-						//client.sendAction(Client.dropItem);
+						game.dropAnItem(tempouid, index);
+						rc.dropItem(item);
+						client.sendAction(client.dropItem, index);
+						inventory.repaint();
 						//update game object here and repaint
-						updateGame();
 					}
 				}
 			});
+			if (!item.getName().equals("Coin Box")){
+				actionMenu.add(drop);
+			}
 			actionMenu.add(mi);
-			actionMenu.add(drop);
 
 			actionMenu.show(e.getComponent(), e.getX(), e.getY());
-		}
-
-		/**
-		 *
-		 */
-		protected void updateGame() {
-
-			this.repaint();
-
 		}
 
 		@Override
@@ -450,6 +444,7 @@ public class ApplicationWindow extends JFrame {
 		if (result == 0) {
 			JAXBJavaToXml toXml = new JAXBJavaToXml();
 			toXml.marshal(player, game.getGameMap());
+			System.out.println(player.getUserId());
 			//dispose();
 		}
 		if (result == 1) {
