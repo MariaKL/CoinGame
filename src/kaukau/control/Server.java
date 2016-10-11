@@ -95,7 +95,7 @@ public class Server{
 									sockets.remove(uid);
 									in.remove(uid);
 									out.remove(uid);
-									game.removePlayer(uid);
+//									game.removePlayer(uid);
 									break;
 							}
 							// send back to clients
