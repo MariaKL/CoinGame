@@ -23,15 +23,18 @@ public class Container implements Item, Serializable{
 	private int storageLimit;
 	private ArrayList <PickupableItem> storage =  new ArrayList <PickupableItem>( );
 
-	public Container (String name, Tile loc){
-		if (name != null && loc != null){
+	public Container (String name){
+//		if (name != null && loc != null){
+//			this.name = name;
+//		}
+		if (name != null){
 			this.name = name;
 		}
 	}
 
 	@SuppressWarnings("unused")
 	public Container(){
-		this(null, null);
+		this(null);
 	}
 
 	/**
@@ -125,6 +128,10 @@ public class Container implements Item, Serializable{
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	public void setStorage(ArrayList<PickupableItem> items) {
+		this.storage = items;		
 	}
 
 }
