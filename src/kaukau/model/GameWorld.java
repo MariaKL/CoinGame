@@ -123,7 +123,9 @@ public class GameWorld implements Serializable{
 			System.out.println("Test");
 			Tile tile = board.getTileAt(pos);
 			if (!tile.isTileOccupied() && (tile.getTileType() == TileType.TILE || tile.getTileType() == TileType.TILE_CRACKED)){
-				return player.removeFromBag(index);
+				if (player.removeFromBag(index)){
+//					tile.setItem(addItem)
+				return true;}
 			}
 		}
 		return false;

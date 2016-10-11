@@ -383,7 +383,7 @@ public class ApplicationWindow extends JFrame {
 					if(result==0){
 						game.dropAnItem(tempouid, index);
 						rc.dropItem(item);
-						client.sendAction(client.dropItem);
+						client.sendAction(client.dropItem, index);
 						inventory.repaint();
 						//update game object here and repaint
 					}
