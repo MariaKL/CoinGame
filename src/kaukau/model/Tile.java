@@ -209,9 +209,7 @@ public class Tile implements Serializable {
 	 */
 	@XmlAnyElement
 	public Item getItem() {
-		if (item instanceof PickupableItem)
-			return item;
-		return null;
+		return item;
 	}
 
 	/**
