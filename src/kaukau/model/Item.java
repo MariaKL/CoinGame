@@ -1,5 +1,6 @@
 package kaukau.model;
 
+import java.awt.Graphics;
 import java.io.Serializable;
 
 /**
@@ -12,5 +13,4 @@ public interface Item extends Serializable{
 	 * @return the name of this item
 	 */
 	public String getName();
-
 }
