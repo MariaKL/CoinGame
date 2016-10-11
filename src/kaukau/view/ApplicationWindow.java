@@ -85,6 +85,11 @@ public class ApplicationWindow extends JFrame {
 	public ApplicationWindow(GameWorld game){
 */
 
+	/**
+	 * constructor for app window
+	 * @param gameWorld keep instance of game world for the window to communicate with client
+	 * @param user keep instance of game world for the window to communicate with client
+	 */
 	public ApplicationWindow(GameWorld gameWorld, Player user){
 		super("Kaukau");
 
@@ -133,6 +138,10 @@ public class ApplicationWindow extends JFrame {
 	}
 
 
+	/**
+	 * creates rendinging panel for rendercanvas
+	 * @return panel to house rendercanvas
+	 */
 	private JPanel createCenterPanel() {
 		//MainDisplay display = new MainDisplay();
 
@@ -146,6 +155,10 @@ public class ApplicationWindow extends JFrame {
 		return centerPanel;
 	}
 
+	/**
+	 * creates inventory panel
+	 * @return returns the jpanel to house inventory
+	 */
 	private JPanel createBottomPanel() {
 		JPanel bottomPanel = new JPanel();
 		Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -247,7 +260,7 @@ public class ApplicationWindow extends JFrame {
 	}
 
 	/**
-	 *
+	 * display the keyboard shortcuts
 	 */
 	protected void displayHelp() {
 
@@ -282,12 +295,20 @@ public class ApplicationWindow extends JFrame {
 		inventory.repaint();
 	}
 
+	/**
+	 * inventory canvas used to house player inventory which holds items
+	 * @author Matthias
+	 *
+	 */
 	public class Inventory extends Canvas implements MouseListener {
 
 
 		private final int SIZE_DIVISOR = 6;
 		private final int NUM_ITEMS = 8;
 
+		/**
+		 * constructor for inventory
+		 */
 		public Inventory() {
 			setBounds(0, 0, (WINDOW_WIDTH*NUM_ITEMS)/SIZE_DIVISOR, (INVENTORY_HEIGHT)/SIZE_DIVISOR);
 			addMouseListener(this);
@@ -295,6 +316,9 @@ public class ApplicationWindow extends JFrame {
 			this.setFocusable(false);
 		}
 
+		/**
+		 * painting method for inventory
+		 */
 		public void paint (Graphics g){
 			//get Player and his inventory
 			//paint
@@ -334,8 +358,8 @@ public class ApplicationWindow extends JFrame {
 
 		}
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+		/**
+		 * click action method in inventory
 		 */
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -346,21 +370,23 @@ public class ApplicationWindow extends JFrame {
 			//get the uid of player in hashmap
 			int tempuid = temp.iterator().next();
 			ArrayList<kaukau.model.PickupableItem> inv = players.get(tempuid).getInventory();
-			System.out.println("Inventory size: "+inv.size());
-
-
 			if(x < inv.size()) {
 				createActionMenu(e,inv.get(x), x);
-				//System.out.println("You clicked item "+ x);
-
 			}
 			this.repaint();
 		}
 
+		/**
+		 * makes a popup menu of options for the specified item
+		 * @param e mouse event
+		 * @param item item clicked
+		 * @param index index of item clicked in inventory
+		 */
 		private void createActionMenu(MouseEvent e, kaukau.model.PickupableItem item, int index) {
 			JPopupMenu actionMenu = new JPopupMenu();
 			//String[] actions = item.getActions();
 
+			//description pop up menu option
 			JMenuItem mi = new JMenuItem("Description");
 			mi.addActionListener(new ActionListener() {
 				@Override
@@ -373,6 +399,7 @@ public class ApplicationWindow extends JFrame {
 				}
 			});
 
+			//drop item menu option
 			JMenuItem drop = new JMenuItem("Drop Item");
 			drop.addActionListener(new ActionListener() {
 				@Override
@@ -411,14 +438,21 @@ public class ApplicationWindow extends JFrame {
 
 	} //end of inventory window class
 
-	//TODO: fix the image file read and get files for item icons
+	/**
+	 * 
+	 * @param x position to draw
+	 * @param y position to draw
+	 * @param width how wide to draw
+	 * @param height how high to draw
+	 * @param item item to be drawn
+	 * @param g graphics instance to draw
+	 */
 	private void drawLocation(int x, int y, int width, int height, kaukau.model.PickupableItem item, Graphics g) {
 		g.translate(x*width,y*height);
 		g.setClip(0,0,width,height);
 		if(item != null) {
 			try {
 				String name = item.getName();
-				//TODO: find coinbox asset and change hardcode here, replace with name
 				if (name.equals("Coin Box")){
 					name = "cube4";
 				}
@@ -426,7 +460,6 @@ public class ApplicationWindow extends JFrame {
 					name = "cube2";
 				}
 				name.toLowerCase();
-				//System.out.println(name);
 				BufferedImage image = ImageIO.read(new File("images/" + name + ".png"));
 				if(image != null){
 	    			g.drawImage(image, x, y, this);
@@ -438,6 +471,9 @@ public class ApplicationWindow extends JFrame {
 		g.translate(-(x*width), -(y*height));
 	}
 
+	/**
+	 * confirmation window to save to xml
+	 */
 	private void confirmSave() {
 		int result = JOptionPane.showConfirmDialog(this, "Save current Game State?", "Alert",
 				JOptionPane.OK_CANCEL_OPTION);
@@ -452,6 +488,9 @@ public class ApplicationWindow extends JFrame {
 		}
 	}
 
+	/**
+	 * confirmation window to load xml file
+	 */
 	private void confirmLoad() {
 		int result = JOptionPane.showConfirmDialog(this, "Load last Game State?", "Alert",
 				JOptionPane.OK_CANCEL_OPTION);
