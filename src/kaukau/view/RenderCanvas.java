@@ -307,16 +307,16 @@ public class RenderCanvas extends JPanel {
 			    		BufferedImage playerImg = null;
 			    		switch(user.getfacingDirection()){
 				    		case NORTH:
-				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar.png"));
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "east1-avatar"+user.getUserId()+".png"));
 				    			break;
 				    		case EAST:
-				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "south1-avatar.png"));
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "south1-avatar"+user.getUserId()+".png"));
 				    			break;
 				    		case SOUTH:
-				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "west1-avatar.png"));
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "west1-avatar"+user.getUserId()+".png"));
 				    			break;
 				    		case WEST:
-				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "north1-avatar.png"));
+				    			playerImg = ImageIO.read(new File(IMAGE_PATH + "north1-avatar"+user.getUserId()+".png"));
 				    			break;
 			    		}
 			    		// draw the item image if not null

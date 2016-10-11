@@ -34,9 +34,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
 
 import kaukau.control.Client;
+import kaukau.model.GameMap;
 import kaukau.model.GameWorld;
 import kaukau.model.Player;
 import kaukau.storage.JAXBJavaToXml;
+import kaukau.storage.JAXBXmlToJava;
 
 /**
  * This class is in charge of creating the application window for the Kaukau
@@ -480,12 +482,9 @@ public class ApplicationWindow extends JFrame {
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == 0) {
 			JAXBJavaToXml toXml = new JAXBJavaToXml();
-			toXml.marshal(player, game.getGameMap());
-			System.out.println(player.getUserId());
-			//dispose();
+			toXml.marshal(player, game.getGameMap());					
 		}
 		if (result == 1) {
-			//dispose();
 		}
 	}
 
@@ -496,9 +495,18 @@ public class ApplicationWindow extends JFrame {
 		int result = JOptionPane.showConfirmDialog(this, "Load last Game State?", "Alert",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == 0) {
-			// JAXBJavaToXml toXml = new JAXBJavaToXml();
-			// toXml.marshal(game.player(1), game.getGameMap());
-			dispose();
+			 JAXBXmlToJava toJava = new JAXBXmlToJava();
+			 Player lastStatePlayer = toJava.unmarshalPlayer(player.getUserId());	
+			 GameMap lastStateMap = toJava.unmarshalMap(player.getUserId());	
+			 
+			 this.player.setInventory(lastStatePlayer.getInventory());
+			 this.player.setLocation(lastStatePlayer.getLocation());
+			 this.player.setfacingDirection(lastStatePlayer.getfacingDirection());
+			 
+			 this.game.getGameMap().setBoardTiles(lastStateMap.getBoardTiles());
+			 rc.setGame(this.game);
+			 rc.repaint();
+			 repaint();
 		}
 	}
 }

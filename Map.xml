@@ -472,15 +472,7 @@
                 <yCoord>8</yCoord>
             </tile>
             <tile>
-                <door>
-                    <doorCode>0</doorCode>
-                    <isLocked>false</isLocked>
-                </door>
-                <door>
-                    <doorCode>0</doorCode>
-                    <isLocked>false</isLocked>
-                </door>
-                <tileType>DOOR</tileType>
+                <tileType>TILE_CRACKED</tileType>
                 <xCoord>4</xCoord>
                 <yCoord>9</yCoord>
             </tile>
@@ -1044,15 +1036,7 @@
                 <yCoord>14</yCoord>
             </tile>
             <tile>
-                <door>
-                    <doorCode>0</doorCode>
-                    <isLocked>false</isLocked>
-                </door>
-                <door>
-                    <doorCode>0</doorCode>
-                    <isLocked>false</isLocked>
-                </door>
-                <tileType>DOOR</tileType>
+                <tileType>TILE_CRACKED</tileType>
                 <xCoord>9</xCoord>
                 <yCoord>15</yCoord>
             </tile>

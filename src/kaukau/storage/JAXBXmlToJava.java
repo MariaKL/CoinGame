@@ -21,8 +21,19 @@ import kaukau.model.Player;
 import kaukau.model.Row;
 import kaukau.model.Tile;
 
-public class JAXBXmlToJava {
+/**This class is used to unmarshal the xml files of player and game map into player and GameMap objects.
+ * Uses JAXB to create instances with the players id to pick which file for which player.
+ * 
+ * @author Shaika*/
+public class JAXBXmlToJava {	
 
+	/**
+	 * Unmarshals the player xml file depending on the id passed in.
+	 * instantizes a new player object from the xml and returns it.
+	 * 
+	 * @return Player player
+	 * @param int playerID
+	 * */
 	public Player unmarshalPlayer(int playerID) {
 		Player player = null;
 		try {
@@ -31,8 +42,8 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
-			// File XMLfile = new File("Player"+playerID+".xml");
-			File XMLfile = new File("Player.xml");
+			File XMLfile = new File("Player"+playerID+".xml");
+			//File XMLfile = new File("Player.xml");
 			// this will create Java object - country from the XML file
 			player = (Player) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {
@@ -44,6 +55,13 @@ public class JAXBXmlToJava {
 
 	}
 
+	/**
+	 * Unmarshals the gameMap xml file depending on the id passed in.
+	 * instantizes a new gameMap object from the xml and returns it.
+	 * 
+	 * @return GameMap map
+	 * @param int playerID
+	 * */
 	public GameMap unmarshalMap(int playerID) {
 		GameMap map = null;
 		try {
@@ -52,8 +70,8 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
-			// File XMLfile = new File("Map"+playerID+".xml");
-			File XMLfile = new File("Map.xml");
+			 File XMLfile = new File("Map"+playerID+".xml");
+			//File XMLfile = new File("Map.xml");
 			// this will create Java object - country from the XML file
 			map = (GameMap) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {
@@ -61,59 +79,6 @@ public class JAXBXmlToJava {
 			e.printStackTrace();
 		}
 		return map;
-
-	}
-
-	public static void testUnmarshalledPlayer(Player player) {
-		if (player != null) {
-			System.out.println("Player name: " + player.getName());
-			System.out.println("Player id: " + player.getUserId());
-			System.out.println("Player direction: " + player.getfacingDirection());
-			System.out.println("Player location: " + player.getLocation().toString() + " with tile type: "
-					+ player.getLocation().getTileType());
-			System.out.println("Player inventory limit: " + player.getStorageSize());
-			for (PickupableItem p : player.getInventory()) {
-				if (p instanceof Key) {
-					Key k = (Key) p;
-					System.out.println("Player inventory key code: " + k.getCode());
-				} else if (p instanceof CoinBox) {
-					CoinBox cb = (CoinBox) p;
-					for (PickupableItem pi : cb.getStorage()) {
-						Coin c = (Coin) pi;
-						System.out.println("Coin : " + c.getAmount());
-					}
-					System.out.println("Player coinbox ammount: " + cb.totalCoins());
-					System.out.println("Player coinbox is full?: " + cb.isStorageFull());
-				}
-			}
-		}
-	}
-
-	public static void testUnmarshalledMap(GameMap map) {
-		if (map != null) {
-
-			for (Row r : map.getBoardTiles()) {				
-				if (r == null) {
-					System.out.println("row is null!");
-				} else {					
-					for(Tile t : r.getRows()){
-						if(t.containsPickupItem()){
-							System.out.println("Tile location: "+t.toString());
-							System.out.println("Tile type: "+t.getTileType());						
-							System.out.println("Tile item: "+t.getItem().getName());
-						}						
-					}
-				}
-			}
-		}
-	}
-
-	public static void main(String[] args) {
-		JAXBXmlToJava unmarshaling = new JAXBXmlToJava();
-		Player player = unmarshaling.unmarshalPlayer(1);
-		//testUnmarshalledPlayer(player);
-		GameMap map = unmarshaling.unmarshalMap(1);
-		testUnmarshalledMap(map);
 	}
 
 }

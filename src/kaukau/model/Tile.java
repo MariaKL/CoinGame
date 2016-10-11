@@ -14,7 +14,6 @@ import kaukau.model.GameMap.TileType;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Tile implements Serializable {
 
-	// private Item item;
 	private Key itemIsKey;
 	private CoinBox itemIsCoinBox;
 	private Coin itemIsCoin;
@@ -37,7 +36,6 @@ public class Tile implements Serializable {
 		this.type = type;
 		this.x = x;
 		this.y = y;
-		// item = null;
 		player = null;
 	}
 
@@ -57,11 +55,6 @@ public class Tile implements Serializable {
 	 * @return true if it is successfully added, otherwise false;
 	 */
 	public boolean setItem(Item addItem) {
-		// if (item == null && player == null) {
-		// this.item = addItem;
-		// return true;
-		// }
-		// return false;
 		if (addItem instanceof Key && addItem != null) {
 			this.itemIsKey = (Key) addItem;
 			return true;
@@ -75,13 +68,7 @@ public class Tile implements Serializable {
 			this.itemIsDoor = (Door) addItem;
 			return true;
 		}
-		// else if (addItem == null) {
-		// this.itemIsKey = null;
-		// this.itemIsCoinBox = null;
-		// this.itemIsCoin = null;
-		// this.itemIsDoor = null;
 		return false;
-		// }
 	}
 
 	/**
@@ -92,7 +79,6 @@ public class Tile implements Serializable {
 	 * @return true if the player successfully added, otherwise false.
 	 */
 	public boolean addPlayer(Player player) {
-		// if (this.player == null && this.item == null) {
 		if (this.player == null) {
 			this.player = player;
 			return true;
@@ -135,10 +121,6 @@ public class Tile implements Serializable {
 	 *         false.
 	 */
 	public boolean dropItem(PickupableItem dropItem) {
-		// if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item
-		// == null && player == null
-		// && dropItem instanceof PickupableItem) {
-		// this.item = dropItem;
 		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && player == null
 				&& dropItem instanceof PickupableItem) {
 			setItem(dropItem);
@@ -154,13 +136,6 @@ public class Tile implements Serializable {
 	 *         fields are NULL, otherwise false .
 	 */
 	public boolean removeItem() {
-		// if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item
-		// != null) {
-		// item = null;
-		// checkType();
-		// return true;
-		// }
-		// return false;
 		if ((type == TileType.TILE || type == TileType.TILE_CRACKED)) {
 			if (itemIsKey != null) {
 				itemIsKey = null;
@@ -187,12 +162,6 @@ public class Tile implements Serializable {
 	 *         false.
 	 */
 	public boolean containsPickupItem() {
-		// if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item
-		// != null
-		// && item instanceof PickupableItem) {
-		// return true;
-		// }
-		// return false;
 		if ((type == TileType.TILE || type == TileType.TILE_CRACKED)) {
 			if (itemIsDoor == null && (itemIsKey != null || itemIsCoinBox != null || itemIsCoin != null)) {
 				itemIsDoor = null;
@@ -202,45 +171,26 @@ public class Tile implements Serializable {
 		return false;
 	}
 
-	// /**
-	// * Separate the item into key, coinbox and coin objects. This method is
-	// uses
-	// * for load and save XML file.
-	// */
-	// private void checkType(Item item) {
-	// if (item instanceof Key && item != null) {
-	// this.itemIsKey = (Key) item;
-	// } else if (item instanceof CoinBox && item != null) {
-	// this.itemIsCoinBox = (CoinBox) item;
-	// } else if (item instanceof Coin && item != null) {
-	// this.itemIsCoin = (Coin) item;
-	// } else if (item instanceof Door && item != null) {
-	// this.itemIsDoor = (Door) item;
-	// } else if (item == null) {
-	// this.itemIsKey = null;
-	// this.itemIsCoinBox = null;
-	// this.itemIsCoin = null;
-	// this.itemIsDoor = null;
-	// }
-	//
-	// }
-
+	
 	/**
 	 * Return the key item on this tile. This method is uses for load and save
 	 * XML file.
 	 * 
 	 * @return a Key object
-	 */
-	//@XmlElement(name = "getKey")
+	 */	
 	public Key getKey() {
 		if (this.itemIsKey != null)
 			return this.itemIsKey;
 		return null;
 	}
 
+	/**
+	 * Sets the Key item at this tile IF the tile is a empty /cracked tile with no objects on it
+	 * 
+	 * @param Key key
+	 * */
 	public void setKey(Key key) {
 		if (!isTileOccupied()) {
-			//this.item = key;
 			this.itemIsKey = key;
 		}
 	}
@@ -251,16 +201,19 @@ public class Tile implements Serializable {
 	 * 
 	 * @return a CoinBox object
 	 */
-	//@XmlElement(name = "getCoinBox")
 	public CoinBox getCoinBox() {
 		if (this.itemIsCoinBox != null)
 			return this.itemIsCoinBox;
 		return null;
 	}
 
+	/**
+	 * Sets the CoinBox item at this tile IF the tile is a empty /cracked tile with no objects on it
+	 * 
+	 * @param CoinBox coinBox
+	 * */
 	public void setCoinBox(CoinBox coinbox) {
 		if (!isTileOccupied()) {
-			//this.item = coinbox;
 			this.itemIsCoinBox = coinbox;
 		}
 	}
@@ -271,30 +224,42 @@ public class Tile implements Serializable {
 	 * 
 	 * @return a Coin object
 	 */
-	//@XmlElement(name = "getCoin")
 	public Coin getCoin() {
 		if (this.itemIsCoin != null)
 			return this.itemIsCoin;
 		return null;
 	}
 
+	/**
+	 * Sets the Coin item at this tile IF the tile is a empty /cracked tile with no objects on it
+	 * 
+	 * @param Coin coin
+	 * */
 	public void setCoin(Coin coin) {
 		if (!isTileOccupied()) {
-			//this.item = coin;
 			this.itemIsCoin = coin;
 		}
 	}
 
-	//@XmlElement(name = "getDoor")
+	/**
+	 * Return the Door object on this tile. This method is uses for load and
+	 * save XML file.
+	 * 
+	 * @return a Door object
+	 */
 	public Door getDoor() {
 		if (this.itemIsDoor != null)
 			return this.itemIsDoor;
 		return null;
 	}
 
+	/**
+	 * Sets the Door item at this tile IF the tile is a empty /cracked tile with no objects on it
+	 * 
+	 * @param Door door
+	 * */
 	public void setDoor(Door door) {
 		if (!isTileOccupied()) {
-			//this.item = door;
 			this.itemIsDoor = door;
 		}
 	}
@@ -307,7 +272,6 @@ public class Tile implements Serializable {
 	 */
 	public boolean isTileOccupied() {
 		if (type == TileType.TILE || type == TileType.TILE_CRACKED) {
-			//if (player == null && item == null) {
 			if (itemIsDoor == null  && !containsPickupItem() && player == null) {
 				return false;
 			}
@@ -320,7 +284,6 @@ public class Tile implements Serializable {
 	 *
 	 * @return the type of this tile
 	 */
-	//@XmlElement(name = "tileType")
 	public TileType getTileType() {
 		return type;
 	}
@@ -343,7 +306,6 @@ public class Tile implements Serializable {
 	 */
 	@XmlAnyElement
 	public Item getItem() {
-		//return item;
 		if (itemIsKey != null) {			
 			return itemIsKey;
 		} else if (itemIsCoinBox != null) {
