@@ -101,13 +101,11 @@ public class Tile implements Serializable {
 	 */
 
 	public boolean dropItem(PickupableItem dropItem){
-		if (type != TileType.TILE || type != TileType.TILE_CRACKED) return false;
-		else {
-			if (item == null && player == null) {
-				item = dropItem;
-				checkType();
-				return true;
-			}
+		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && 
+			item == null && player == null && dropItem instanceof PickupableItem){
+			this.item = dropItem;
+			checkType();
+			return true;
 		}
 		return false;
 	}
@@ -119,15 +117,11 @@ public class Tile implements Serializable {
 	 *         fields are NULL, otherwise false .
 	 */
 	public boolean removeItem(){
-		if (type != TileType.TILE || type != TileType.TILE_CRACKED) return false;
-		else {
-			if (item == null) {
-				return false;
-			} else {
-				item = null;
-				checkType();
-			}
-		}
+		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item != null){
+			this.item = null;
+			checkType();
+			return true;
+		} 
 		return false;
 	}
 
@@ -138,11 +132,9 @@ public class Tile implements Serializable {
 	 *         false.
 	 */
 	public boolean containsPickupItem(){
-		if (type != TileType.TILE || type != TileType.TILE_CRACKED) return false;
-		else {
-			if (type == TileType.TILE && item instanceof PickupableItem){
-				return true;
-			}
+		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && 
+				item != null && item instanceof PickupableItem){
+			return true;
 		}
 		return false;
 	}
@@ -204,6 +196,10 @@ public class Tile implements Serializable {
 	public TileType getTileType() {
 		return type;
 	}
+	
+	public void setTileType(TileType type) {
+		this.type = type;
+	}
 
 	/**
 	 * Return the item that occupy this tile.
@@ -249,6 +245,14 @@ public class Tile implements Serializable {
 	@XmlElement(name = "yCoord")
 	public int getY() {
 		return y;
+	}
+	
+	public void setX(int x){
+		this.x = x;
+	}
+	
+	public void setY(int y){
+		this.y = y;
 	}
 
 	public String toString() {

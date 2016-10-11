@@ -26,7 +26,7 @@ public class Client extends Thread {
 	private GameWorld game;
 	private ApplicationWindow aw;
 
-	private int uid;
+	private int uid = 0;
 	private boolean initialRun = true;
 
 	private ObjectInputStream input;
@@ -104,7 +104,11 @@ public class Client extends Thread {
 				game.fromByteArray((byte[])input.readObject());
 				// update rendering
 				aw.setGame(game);
-				aw.rc.repaint();
+//				aw.rc.repaint();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e1) {	}
+				aw.repaint();
 				System.out.println("Received game update");
 				System.out.println("Players size after update: " + game.getAllPlayers().size());
 			}
