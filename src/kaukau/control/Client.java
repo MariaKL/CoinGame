@@ -99,7 +99,7 @@ public class Client extends Thread {
 				// update rendering
 				aw.setGame(game);
 				try {
-					Thread.sleep(500);
+					Thread.sleep(200);
 				} catch (InterruptedException e1) {	}
 				aw.repaint();
 			}
