@@ -161,7 +161,7 @@ public class ApplicationWindow extends JFrame {
 	 */
 	public void setGame(GameWorld game){
 		this.game = game;
-		this.player = game.getAllPlayers().get(player.getUserId());
+		this.player = game.getAllPlayers().get(client.getUID());
 		rc.setGame(game);
 	}
 
@@ -444,6 +444,7 @@ public class ApplicationWindow extends JFrame {
 		if (result == 0) {
 			JAXBJavaToXml toXml = new JAXBJavaToXml();
 			toXml.marshal(player, game.getGameMap());
+			System.out.println(player.getUserId());
 			//dispose();
 		}
 		if (result == 1) {
