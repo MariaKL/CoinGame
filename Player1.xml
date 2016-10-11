@@ -2,11 +2,11 @@
 <player>
     <name>Player</name>
     <userId>1</userId>
-    <getFacingDirection>NORTH</getFacingDirection>
+    <getFacingDirection>SOUTH</getFacingDirection>
     <getLocation>
-        <tileType>TILE_CRACKED</tileType>
-        <xCoord>11</xCoord>
-        <yCoord>3</yCoord>
+        <tileType>TILE</tileType>
+        <xCoord>8</xCoord>
+        <yCoord>4</yCoord>
     </getLocation>
     <inventory>
         <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="coinBox">

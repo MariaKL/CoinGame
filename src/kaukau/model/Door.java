@@ -22,7 +22,7 @@ public class Door implements Item, Serializable{
 	 * @param key code to match with a key if it is locked
 	 * @param location the location of this door
 	 */
-	public Door(int key){
+	public Door(int key){		
 		this.keyCode = key;
 		if (keyCode > 0) this.locked = true;
 		else this.locked = false;

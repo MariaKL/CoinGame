@@ -16,6 +16,7 @@ public class Tile implements Serializable {
 	private Key itemIsKey;
 	private CoinBox itemIsCoinBox;
 	private Coin itemIsCoin;
+	private Door itemIsDoor;
 	private Player player;
 	private TileType type;
 	private int x, y;
@@ -152,10 +153,13 @@ public class Tile implements Serializable {
 			this.itemIsCoinBox = (CoinBox) this.item;
 		} else if (this.item instanceof Coin && this.item != null) {
 			this.itemIsCoin = (Coin) this.item;
+		} else if (this.item instanceof Door && this.item != null) {
+			this.itemIsDoor = (Door) this.item;
 		} else if (this.item == null) {
 			this.itemIsKey = null;
 			this.itemIsCoinBox = null;
 			this.itemIsCoin = null;
+			this.itemIsDoor = null;
 		}
 
 	}
@@ -187,6 +191,12 @@ public class Tile implements Serializable {
 	@XmlElement(name = "getCoin")
 	public Coin getCoin(){
 		if (this.itemIsCoin != null) return this.itemIsCoin;
+		return null;
+	}
+	
+	@XmlElement(name = "getDoor")
+	public Door getDoor(){
+		if (this.itemIsDoor != null) return this.itemIsDoor;
 		return null;
 	}
 
