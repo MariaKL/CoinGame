@@ -56,12 +56,9 @@ public class RenderCanvas extends JPanel {
 	private Player player;
 	private Client client;
 
-	// fields for the viewport of the rendering
-	private int VIEWPORT_SIZE_Y = 400;
-	private int VIEWPORT_SIZE_X = 500;
-	// fields for the camera position for rendering
-	int camX;
-	int camY;
+	// fields for the camera offset for rendering
+	int camX = 0;
+	int camY = 0;
 
 	/**This class take a gameworld parameter and
 	 * creates a rendering based on the state of
@@ -75,8 +72,6 @@ public class RenderCanvas extends JPanel {
 		this.game = gameWorld;
 		this.setPlayers(game.getAllPlayers());
 		this.player = user;
-		
-		this.setCamera();
 		
 		this.setBackground(new Color(79,100,90));
 
@@ -92,17 +87,6 @@ public class RenderCanvas extends JPanel {
 		this.setFocusable(true);
 		repaint();
 
-	}
-
-	private void setCamera() {
-		// getting player location
-		Tile loc = player.getLocation();
-		Point p = new Point(loc.X(), loc.Y());
-		// get player 2d position
-		Point play = RenderWindow.get2dFromTileCoordinates(p, 50);
-		// adjust camera
-		camX = play.x - VIEWPORT_SIZE_X / 2;
-		camY = play.y - VIEWPORT_SIZE_Y / 2;
 	}
 
 	private void setPlayers(HashMap<Integer, Player> all){
@@ -131,7 +115,7 @@ public class RenderCanvas extends JPanel {
 	 *
 	 * @param game
 	 */
-	public void initBlocks(GameWorld game) {
+	private void initBlocks(GameWorld game) {
 
 		allWalls.clear();
 		allTiles.clear();
@@ -238,7 +222,7 @@ public class RenderCanvas extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// translate graphics to follow player
-		g.translate(-camY+300, -camX+65);
+		g.translate(-camY, -camX);
 		paintBlocks(g);
 		paintCompass(g);
 	}
@@ -261,6 +245,10 @@ public class RenderCanvas extends JPanel {
 		try{
 	    	BufferedImage image = null;
 		    for(Block b: blocks){
+		    	
+		    	//if((b.X()+(TILE_MARGIN) < -130 + camY || b.X()+(TILE_MARGIN) > 1130 - camY)
+		    	//||(b.Y()+(TILE_MARGIN/8) < -130 - camX || b.Y()+(TILE_MARGIN/8) > 930 + camX)) continue;
+		    	
 		    	// the level block is a wall tile
 		    	if(b instanceof Wall){
 		    		Wall w = ((Wall)b);
@@ -375,8 +363,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				//initBlocks(game);
-				setCamera();
+				camY = camY - 65;
 				repaint();
 			}
 		});
@@ -404,8 +391,7 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				//initBlocks(game);
-				setCamera();
+				camY = camY + 65;
 				repaint();
 			}
 		});
@@ -432,8 +418,8 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				//initBlocks(game);
-				setCamera();
+				camY = camY - 65;
+				camX = camX - 65;
 				repaint();
 			}
 		});
@@ -460,8 +446,8 @@ public class RenderCanvas extends JPanel {
 				Block rnew = levelBlocks[nloc.Y()][nloc.X()];
 				((RenderTile)rnew).setPlayer(player);
 				// update rendering
-				//initBlocks(game);
-				setCamera();
+				camY = camY + 65;
+				camX = camX + 65;
 				repaint();
 			}
 		});
@@ -624,4 +610,44 @@ public class RenderCanvas extends JPanel {
 	    	  for(int b=0; b<levelBlocks[0].length; b++)
 	    	    levelBlocks[a][b]=ret[a][b];
 	}
+	
+	/*
+	 * HELPER METHODS
+	 */
+	/**
+     * convert a 2d point to isometric
+     */
+	static Point twoDToIso (Point pt){
+		Point result = new Point(0,0);
+		result.x = pt.x - pt.y;
+		result.y = (pt.x + pt.y) / 2;
+		return(result);
+	}
+	/**
+     * convert an isometric point to 2D
+     * */
+	static Point isoTo2D(Point pt) {
+		Point result = new Point(0, 0);
+		result.x = (2 * pt.y + pt.x) / 2;
+		result.y = (2 * pt.y - pt.x) / 2;
+		return(result);
+	}
+    /**
+     * convert a 2d point to specific tile row/column
+     * */
+    static Point getTileCoordinates(Point pt, int tileHeight) {
+        Point result = new Point(0,0);
+        result.x=(int) Math.floor(pt.x/tileHeight);
+        result.y=(int) Math.floor(pt.y/tileHeight);
+        return(result);
+    }
+    /**
+     * convert specific tile row/column to 2d point
+     * */
+    static Point get2dFromTileCoordinates(Point pt, int tileHeight) {
+        Point result = new Point(0,0);
+        result.x=pt.x*tileHeight;
+        result.y=pt.y*tileHeight;
+        return(result);
+    }
 }
