@@ -163,6 +163,62 @@ public class GameWorldTests {
 	}
 
 	/**
+	 * Test a player to pick up a coin on the board but the coinbox is full so the coin should be added
+	 * to the player's inventory. Player only allow to pick up an item in front of them and
+	 * the pickup item must be pickupable type.
+	 */
+	@Test
+	public void testPickupItem_3() {
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		int uid = game.addPlayer();
+		Player player = game.player(uid);
+		player.addToBag(new Coin(120));
+		player.addToBag(new Coin(130));
+		assertTrue(player.getCoinBox().isStorageFull());
+		Tile coin = board.getTileAt(new Point(7,6));
+		Tile newPos = board.getTileAt(new Point(7,5));
+		int coinAmount = ((Coin) coin.getItem()).getAmount();
+		player.setLocation(newPos);
+		player.setfacingDirection(Direction.EAST);
+		assertTrue(coin.getTileType() == TileType.TILE || coin.getTileType() == TileType.TILE_CRACKED);
+		assertTrue(coin.getItem() instanceof Coin);
+		assertTrue(coin.containsPickupItem());  // the tile should contain the key
+		assertTrue(game.pickupAnItem(uid));   // player pick up the coin
+		assertFalse(coin.isTileOccupied());   // the tile should be not occupy after player pickup coin
+		assertTrue(game.dropAnItem(uid, 1));
+		assertTrue(coin.containsPickupItem());
+		assertTrue(coin.getItem() instanceof Coin);
+		int size = player.getInventory().size();
+		assertEquals("Player's inventory size is " + size + " players but should have 1 after pick up the three coin.", 1, size);
+	}
+
+	/**
+	 * Test a player to pick up a coin on the board but the coinbox is full so the coin should be added
+	 * to the player's inventory. Player only allow to pick up an item in front of them and
+	 * the pickup item must be pickupable type.
+	 */
+	@Test
+	public void testDropItem_1() {
+		GameWorld game = new GameWorld();
+		GameMap board = game.getGameMap();
+		int uid = game.addPlayer();
+		Player player = game.player(uid);
+		player.addToBag(new Coin(120));
+		player.addToBag(new Coin(130));
+		assertTrue(player.getCoinBox().isStorageFull());
+		Tile key = board.getTileAt(new Point(5,6));
+		Tile newPos = board.getTileAt(new Point(6,6));
+		player.setfacingDirection(Direction.NORTH);
+		player.setLocation(newPos);
+		assertTrue(game.pickupAnItem(uid));
+		assertFalse(key.containsPickupItem());
+		assertTrue(game.dropAnItem(uid, 1));
+		int size = player.getInventory().size();
+		assertEquals("Player's inventory size is " + size + " players but should have 1 after pick up the three coin.", 1, size);
+	}
+
+	/**
 	 * Test a player to open a door. Player only open a door when
 	 * facing direction contain a door.
 	 */

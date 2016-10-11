@@ -23,6 +23,9 @@ import java.io.Serializable;
 //@XmlType(propOrder = { "allPlayers"})
 public class GameWorld implements Serializable{
 
+	/**
+	 * The current board the game
+	 */
 	private GameMap board;
 
 	private boolean gameOver;
@@ -39,6 +42,9 @@ public class GameWorld implements Serializable{
 	 */
 	private static HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
+	/**
+	 * Create a new game.
+	 */
 	public GameWorld(){
 		board =  new GameMap();
 		gameOver = false;
@@ -56,6 +62,16 @@ public class GameWorld implements Serializable{
 		player.setLocation(tile);
 		GameWorld.players.put(uid, player);
 		return uid;
+	}
+
+	/**
+	 * Remove a player from the current game.
+	 * @param uid user id of the player
+	 */
+	public synchronized void removePlayer(int uid){
+		if (players.containsKey(uid)){
+			players.remove(uid);
+		}
 	}
 
 	/**
@@ -102,6 +118,7 @@ public class GameWorld implements Serializable{
 			Tile tile = board.getTileAt(pos);
 			if (tile.containsPickupItem()){
 				if (player.addToBag((PickupableItem)tile.getItem())){
+					System.out.println("TEST");
 					tile.removeItem();
 					return true;
 				}
@@ -120,12 +137,12 @@ public class GameWorld implements Serializable{
 		Player player = players.get(uid);
 		Point pos = getPointFromDirection(player, player.getfacingDirection());
 		if (validPoint(pos)){
-			System.out.println("Test");
 			Tile tile = board.getTileAt(pos);
-			if (!tile.isTileOccupied() && (tile.getTileType() == TileType.TILE || tile.getTileType() == TileType.TILE_CRACKED)){
-				if (player.removeFromBag(index)){
-//					tile.setItem(addItem)
-				return true;}
+			if (!tile.isTileOccupied() && player.containItemAtIndex(index) &&
+			    (tile.getTileType() == TileType.TILE || tile.getTileType() == TileType.TILE_CRACKED)){
+				Item item = player.getInventory().get(index);
+				tile.setItem(item);
+				return player.removeFromBag(index);
 			}
 		}
 		return false;
@@ -150,7 +167,7 @@ public class GameWorld implements Serializable{
 						Tile newTile = board.getTileAt(newPos);
 						if (!newTile.isTileOccupied()){
 							oldPos.removePlayer();        // remove player from a tile
-							player.setLocation(newTile);
+							player.setLocation(newTile);  // set the player new position
 							newTile.addPlayer(player);    // add player to this new location
 							return true;
 						}
@@ -176,7 +193,6 @@ public class GameWorld implements Serializable{
 		else if (player.getfacingDirection() == Direction.EAST)
 			return new Point(oldPos.X(), oldPos.Y()+2);
 		else return new Point(oldPos.X(), oldPos.Y()-2);
-
 	}
 
 	/**
@@ -184,7 +200,7 @@ public class GameWorld implements Serializable{
 	 * @param pos the given point
 	 * @return true if the x and y is within the board's size, otherwise false
 	 */
-	private boolean validPoint(Point pos){
+	public boolean validPoint(Point pos){
 		if (board.width() <= pos.x || board.height() <= pos.y ||
 				pos.x < 0 || pos.y < 0) {
 			return false;
@@ -198,25 +214,22 @@ public class GameWorld implements Serializable{
 	 * @param direct facing direction of the player
 	 * @return new point from the facing direction of the player
 	 */
-	private Point getPointFromDirection(Player player, Direction direct){
+	public Point getPointFromDirection(Player player, Direction direct){
 		Tile oldPos = player.getLocation();
 		if (direct == Direction.NORTH)
 			return new Point(oldPos.X()-1, oldPos.Y());
-			//return new Point(oldPos.X(), oldPos.Y() - 1);
 		else if (direct == Direction.SOUTH)
 			return new Point(oldPos.X()+1, oldPos.Y());
-			//return new Point(oldPos.X(), oldPos.Y() + 1);
 		else if (direct == Direction.EAST)
 			return new Point(oldPos.X(), oldPos.Y()+1);
-			//return new Point(oldPos.X()+1, oldPos.Y());
-		else return new Point(oldPos.X(), oldPos.Y()-1); //return new Point(oldPos.X()-1, oldPos.Y());
+		else return new Point(oldPos.X(), oldPos.Y()-1);
 	}
 
 	/**
 	 * The following method converts the current state of the game into a byte
 	 * array, such that it can be shipped across a connection to an awaiting client.
 	 *
-	 * @return
+	 * @return the byte array of the current state of the game
 	 * @throws IOException
 	 */
 	public synchronized byte[] toByteArray() throws IOException {
@@ -235,8 +248,8 @@ public class GameWorld implements Serializable{
 	 * game; this state will be broadcast by a master connection, and is
 	 * then used to overwrite the current state (since it should be more up to date).
 	 *
-	 * @param bytes
-	 * @throws IOException
+	 * @param bytes the objects that need to be read
+	 * @throws IOException if the class object is not matched
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized void fromByteArray(byte[] bytes) throws IOException{
@@ -275,7 +288,7 @@ public class GameWorld implements Serializable{
 
 	/**
 	 * Return the current board of the game.
-	 * @return
+	 * @return the current board of the game
 	 */
 	@XmlElement(name="map")
 	public GameMap getGameMap(){
@@ -284,7 +297,7 @@ public class GameWorld implements Serializable{
 
 	/**
 	 * Return the current players of the game.
-	 * @return
+	 * @return all the players in the game
 	 */
 	@XmlElementWrapper(name="allPlayers")
     @XmlElements({
@@ -296,7 +309,7 @@ public class GameWorld implements Serializable{
 
 	/**
 	 * Return the current state of the game.
-	 * @return
+	 * @return true if the game is over, otherwise false.
 	 */
 	@XmlElement(name="isGameOver")
 	public boolean isOver(){
@@ -304,34 +317,11 @@ public class GameWorld implements Serializable{
 	}
 
 	/**
-	 * Return the current board of the game.
-	 * @return
+	 * Return all the tiles of the current board game.
+	 * @return all the tiles of the current board
 	 */
 	public Tile[][] getGameTiles(){
 		return board.getBoard();
-	}
-
-	// testing
-	public static void main (String[] args) throws IOException{
-		/*GameWorld game = new GameWorld();
-		GameMap board = game.getGameMap();
-		Tile[][] tiles = board.getBoard();
-
-		for (int x = 0; x < board.BOARD_WIDTH; x++){
-			for (int y = 0; y < board.BOARD_HEIGHT; y++){
-				Tile tile = tiles[x][y];
-				//System.out.println(tile.containsPickupItem());
-				if(tile.containsPickupItem()) System.out.print(tile.getItem().getName().charAt(0));
-				else System.out.print(tiles[x][y].getTileType().toString().charAt(0));
-			}
-			System.out.println();
-		}
-
-		ArrayList<Room> rooms = board.getAllRooms();
-		for (Room r: rooms){
-			System.out.println(r.getName());
-		}*/
-
 	}
 
 }
