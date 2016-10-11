@@ -437,8 +437,6 @@ public class RenderCanvas extends JPanel {
 			}
 		});
 		
-<<<<<<< HEAD
-=======
 		// enter door, if not possible give message
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_E, 0), "enter");
@@ -462,8 +460,6 @@ public class RenderCanvas extends JPanel {
 				//TODO: see above comment
 			}
 		});
-		
->>>>>>> 2e9c578f2ba853d6cbd3754621db063163b4e363
 	}
 
 	/**
