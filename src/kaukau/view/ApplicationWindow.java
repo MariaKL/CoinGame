@@ -365,7 +365,11 @@ public class ApplicationWindow extends JFrame {
 			mi.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(ApplicationWindow.this,item.getName());
+					String msg = item.getName();
+					if (msg.equals("Coin Box")){
+						msg = msg + "\nYou currently have "+ player.getCoinBox().totalCoins() +" coins.";
+					}
+					JOptionPane.showMessageDialog(ApplicationWindow.this,msg);
 				}			
 			});
 			
