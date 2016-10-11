@@ -29,48 +29,6 @@ import kaukau.model.Player;
  * */
 public class JAXBJavaToXml {
 
-	private GameWorld game;
-	private static GameMap map;
-	private static Player currentPlayer;
-
-	/**
-	 * FOR TESTING
-	 * Initializes a dummy game to set the current player and map
-	 * */
-	public void createDummyGame() {
-		// create dummy game world
-		this.game = new GameWorld();
-		// create 2 players
-		this.game.addPlayer();
-		this.game.addPlayer();
-		// add items already in inventory including coinBox
-		HashMap<Integer, Player> players = this.game.getAllPlayers();
-		this.currentPlayer = this.game.player(1);
-		Player p2 = this.game.player(2);
-		this.currentPlayer.addToBag(new Coin(50));
-		this.currentPlayer.addToBag(new Coin(100));
-		this.currentPlayer.addToBag(new Key(7));
-		p2.addToBag(new Key(71));
-		this.game.movePlayer(this.currentPlayer.getUserId(), Direction.NORTH);
-		this.map = this.game.getGameMap();
-	}
-
-	/**
-	 * Returns the dummy player
-	 * @return Player
-	 * */
-	private static Player getPlayer(){
-		return currentPlayer;
-	}
-
-	/**
-	 * Returns the dummy Map
-	 * @return GameMap
-	 * */
-	private static GameMap getMap(){
-		return map;
-	}
-
 	/**
 	 * calls marshalPlayer() and marshalMap() to serialize them to xml
 	 * @param Player
@@ -144,11 +102,11 @@ public class JAXBJavaToXml {
 		}
 	}
 
-	/**
-	 * FOR TESTING
-	 * Marshal's the dummy Game to xml format
+	/**	 * 
+	 * Marshal's the Game to xml format
+	 * @param Gameworld game
 	 * */
-	private void marshalGame() {
+	private void marshalGame(GameWorld game, int id) {
 		try {
 			// create JAXB context and initializing Marshaller
 			JAXBContext jaxbContext = JAXBContext.newInstance(GameWorld.class);
@@ -160,7 +118,7 @@ public class JAXBJavaToXml {
 
 			// specify the location and name of xml file to be created
 			// for testing at uni
-			File XMLfile = new File("Game.xml");
+			File XMLfile = new File("Game"+id+".xml");
 
 			// Writing to XML file
 			jaxbMarshaller.marshal(game, XMLfile);
@@ -172,12 +130,6 @@ public class JAXBJavaToXml {
 			// some exception occured
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) {
-		JAXBJavaToXml marshaling = new JAXBJavaToXml();
-		marshaling.createDummyGame();
-		marshaling.marshal(getPlayer(), getMap());
-	}
+	}	
 
 }

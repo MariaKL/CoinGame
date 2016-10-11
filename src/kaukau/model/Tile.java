@@ -184,6 +184,11 @@ public class Tile implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Sets the Key item at this tile IF the tile is a empty /cracked tile with no objects on it
+	 * 
+	 * @param Key key
+	 * */
 	public void setKey(Key key) {
 		if (!isTileOccupied()) {
 			this.itemIsKey = key;
@@ -202,6 +207,11 @@ public class Tile implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Sets the CoinBox item at this tile IF the tile is a empty /cracked tile with no objects on it
+	 * 
+	 * @param CoinBox coinBox
+	 * */
 	public void setCoinBox(CoinBox coinbox) {
 		if (!isTileOccupied()) {
 			this.itemIsCoinBox = coinbox;
@@ -220,19 +230,34 @@ public class Tile implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Sets the Coin item at this tile IF the tile is a empty /cracked tile with no objects on it
+	 * 
+	 * @param Coin coin
+	 * */
 	public void setCoin(Coin coin) {
 		if (!isTileOccupied()) {
 			this.itemIsCoin = coin;
 		}
 	}
 
-	
+	/**
+	 * Return the Door object on this tile. This method is uses for load and
+	 * save XML file.
+	 * 
+	 * @return a Door object
+	 */
 	public Door getDoor() {
 		if (this.itemIsDoor != null)
 			return this.itemIsDoor;
 		return null;
 	}
 
+	/**
+	 * Sets the Door item at this tile IF the tile is a empty /cracked tile with no objects on it
+	 * 
+	 * @param Door door
+	 * */
 	public void setDoor(Door door) {
 		if (!isTileOccupied()) {
 			this.itemIsDoor = door;
