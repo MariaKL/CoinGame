@@ -6,10 +6,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -20,16 +23,13 @@ import org.w3c.dom.NodeList;
 
 import kaukau.model.GameMap.TileType;
 
-@XmlRootElement	//(namespace = "Team_24.kaukau.model.GameWorld")
+@XmlRootElement
+@XmlType(propOrder = {"allDoors", "boardTiles"})
 public class GameMap implements Serializable {
 
-	@XmlElement(name = "roomWidth")
 	public static final int ROOM_WIDTH = 10;
-	@XmlElement(name = "roomHeight")
 	public static final int ROOM_HEIGHT = 10;
-	@XmlElement(name = "boardWidth")
 	public static final int BOARD_WIDTH = 20;
-	@XmlElement(name = "boardHeight")
 	public static final int BOARD_HEIGHT = 20;
 
 	private Tile[][] board;
@@ -187,60 +187,52 @@ public class GameMap implements Serializable {
 		return board;
 	}
 
-	// @XmlElementWrapper(name="boardTiles")
-	// @XmlElements({
-	// @XmlElement(name="rowOfTiles") }
-	// )
-	// public ArrayList<ArrayList<Tile>> getBoardTiles() {
-	// ArrayList<ArrayList<Tile>> board = new ArrayList<ArrayList<Tile>>();
-	// ArrayList<Tile> row = new ArrayList<Tile>();
-	// for (int i = 0; i < getBoard().length; i++) {
-	// row = new ArrayList<Tile>();
-	// for (int j = 0; j < getBoard()[0].length; j++) {
-	// row.add(getBoard()[i][j]);
-	// }
-	// board.add(row);
-	// }
-	// return board;
-	// }
 
-	@XmlElementWrapper(name = "boardTiles")
-	@XmlElements({ @XmlElement(name = "rowOfTiles") })
+	@XmlElement(name = "boardTiles")
 	public ArrayList<Row> getBoardTiles() {
 		ArrayList<Row> board = new ArrayList<Row>();
-		ArrayList<Tile> row = new ArrayList<Tile>();
+		ArrayList<Tile> row;
 		for (int i = 0; i < getBoard().length; i++) {
 			row = new ArrayList<Tile>();
 			for (int j = 0; j < getBoard()[0].length; j++) {
 				row.add(getBoard()[i][j]);
 			}
-			Row r = new Row(row);
+			Row r = new Row();
+			r.setRow(row);
 			board.add(r);
 		}
 		return board;
 	}
 
-	@XmlRootElement
-	 private static class Row {
-		private ArrayList<Tile> row = new ArrayList<Tile>();
-
-		public Row(ArrayList<Tile> row2) {
-			this.row = row2;
-		}
-
-		public Row() {
-			this(null);
-		}
-
-		@XmlElementWrapper(name = "getRow")
-		@XmlElements({ @XmlElement(name = "tile") })
-		public ArrayList<Tile> getRow() {
-			return this.row;
+	public void setBoardTiles(ArrayList<Row> rows) {
+		for (int i = 0; i < getBoard().length; i++) {
+			Row row = rows.get(i);
+			for (int j = 0; j < getBoard()[0].length; j++) {
+				this.board[i][j] = row.getRows().get(j);
+			}
 		}
 	}
 
-	@XmlElementWrapper(name = "getAllRooms")
-	@XmlElements({ @XmlElement(name = "Room") })
+//	@XmlRootElement
+//	@XmlAccessorType(XmlAccessType.FIELD)
+//	 private static class Row {
+//		private ArrayList<Tile> row = new ArrayList<Tile>();
+//
+//		public Row(ArrayList<Tile> row2) {
+//			this.row = row2;
+//		}
+//
+//		public Row() {
+//			this(null);
+//		}
+//
+//		@XmlElementWrapper(name = "getRows")
+//		@XmlElements({ @XmlElement(name = "tile") })
+//		public ArrayList<Tile> getRows() {
+//			return this.row;
+//		}
+//	}
+
 	public ArrayList<Room> getAllRooms() {
 		return rooms;
 	}
