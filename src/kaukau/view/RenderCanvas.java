@@ -96,6 +96,10 @@ public class RenderCanvas extends JPanel {
 		repaint();
 	}
 
+	/**
+	 * Sets the map of all current players in the game
+	 * @param map of all players
+	 */
 	private void setPlayers(HashMap<Integer, Player> all){
 		this.players = all;
 	}
@@ -127,8 +131,6 @@ public class RenderCanvas extends JPanel {
 		allWalls.clear();
 		allTiles.clear();
 		blocks.clear();
-
-		//Tile loc = player.getLocation();
 
 		Tile[][] tiles = game.getGameTiles();
 		for(int r=0; r!=levelBlocks.length; r++){
@@ -254,9 +256,6 @@ public class RenderCanvas extends JPanel {
 	    	BufferedImage image = null;
 		    for(Block b: blocks){
 		    	
-		    	//if((b.X()+(TILE_MARGIN) < -130 + camY || b.X()+(TILE_MARGIN) > 1130 - camY)
-		    	//||(b.Y()+(TILE_MARGIN/8) < -130 - camX || b.Y()+(TILE_MARGIN/8) > 930 + camX)) continue;
-		    	
 		    	// the level block is a wall tile
 		    	if(b instanceof Wall){
 		    		Wall w = ((Wall)b);
@@ -354,6 +353,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_DOWN, 0), "moveDown");
 		this.getActionMap().put("moveDown", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				initBlocks(game);
 				player.setfacingDirection(Direction.SOUTH);
 				// getting players current location
 				Tile oloc = player.getLocation();
@@ -385,6 +385,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_UP, 0), "moveUp");
 		this.getActionMap().put("moveUp", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				initBlocks(game);
 				player.setfacingDirection(Direction.NORTH);
 				// getting players current location
 				Tile oloc = player.getLocation();
@@ -415,6 +416,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_LEFT, 0), "moveLeft");
 		this.getActionMap().put("moveLeft", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				initBlocks(game);
 				player.setfacingDirection(Direction.WEST);
 				// getting players current location
 				Tile oloc = player.getLocation();
@@ -446,6 +448,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_RIGHT, 0), "moveRight");
 		this.getActionMap().put("moveRight", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				initBlocks(game);
 				player.setfacingDirection(Direction.EAST);
 				// getting players current location
 				Tile oloc = player.getLocation();
@@ -466,7 +469,6 @@ public class RenderCanvas extends JPanel {
 				if(!rnew.equals(rold)){
 					camY = camY + 65;
 					camX = camX + 65;
-					
 				}
 				repaint();
 			}
@@ -568,6 +570,10 @@ public class RenderCanvas extends JPanel {
 		//System.out.println("Compass image: "+compassString);
 	}
 	
+	/**
+	 * Drops an item from the players inventory onto the map
+	 * @param item
+	 */
 	public void dropItem(kaukau.model.PickupableItem item) {
 		Tile oloc = player.getLocation();
 		Direction dir = player.getfacingDirection();
