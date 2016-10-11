@@ -119,6 +119,7 @@ public class GameMap implements Serializable {
 		int key = Integer.valueOf(element.getElementsByTagName("Door" + String.valueOf(count)).item(0).getTextContent());
 		Door door = new Door(key, tile);
 		doors.add(door);
+		tile.setItem(door);
 		room.addDoor(door);
 		board[x][y] = tile;
 		return ++count;
