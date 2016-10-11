@@ -24,7 +24,7 @@ import org.w3c.dom.NodeList;
 import kaukau.model.GameMap.TileType;
 
 @XmlRootElement
-@XmlType(propOrder = {"allDoors", "boardTiles"})
+@XmlType(propOrder = {"boardTiles"})
 public class GameMap implements Serializable {
 
 	public static final int ROOM_WIDTH = 10;
@@ -117,7 +117,7 @@ public class GameMap implements Serializable {
 	public int addDoor(Element element, int count, int x, int y, Room room){
 		Tile tile = new Tile(TileType.DOOR, x, y);
 		int key = Integer.valueOf(element.getElementsByTagName("Door" + String.valueOf(count)).item(0).getTextContent());
-		Door door = new Door(key, tile);
+		Door door = new Door(key);
 		doors.add(door);
 		tile.setItem(door);
 		room.addDoor(door);
@@ -237,8 +237,6 @@ public class GameMap implements Serializable {
 		return rooms;
 	}
 
-	@XmlElementWrapper(name = "getAllDoors")
-	@XmlElements({ @XmlElement(name = "Door") })
 	public ArrayList<Door> getAllDoors() {
 		return doors;
 	}

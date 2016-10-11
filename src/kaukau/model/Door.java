@@ -23,7 +23,7 @@ public class Door implements Item, Serializable{
 	 * @param key code to match with a key if it is locked
 	 * @param location the location of this door
 	 */
-	public Door(int key, Tile location){
+	public Door(int key){
 		this.location = location;
 		this.keyCode = key;
 		if (keyCode > 0) this.locked = true;
@@ -31,7 +31,7 @@ public class Door implements Item, Serializable{
 	}
 
 	public Door(){
-		this(-1, null);
+		this(-1);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class Door implements Item, Serializable{
 	public Tile getLocation(){
 		return this.location;
 	}
-	
+
 	public void setLocation(Tile t){
 		this.location = t;
 	}

@@ -29,7 +29,8 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
-			File XMLfile = new File("Player"+playerID+".xml");
+			// File XMLfile = new File("Player"+playerID+".xml");
+			File XMLfile = new File("Player.xml");
 			// this will create Java object - country from the XML file
 			player = (Player) jaxbUnmarshaller.unmarshal(XMLfile);
 		} catch (JAXBException e) {
@@ -41,7 +42,7 @@ public class JAXBXmlToJava {
 
 	}
 
-	public GameMap unmarshalMap() {
+	public GameMap unmarshalMap(int playerID) {
 		GameMap map = null;
 		try {
 			// create JAXB context and initializing Marshaller
@@ -49,6 +50,7 @@ public class JAXBXmlToJava {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 			// specify the location and name of xml file to be read
+			// File XMLfile = new File("Map"+playerID+".xml");
 			File XMLfile = new File("Map.xml");
 			// this will create Java object - country from the XML file
 			map = (GameMap) jaxbUnmarshaller.unmarshal(XMLfile);
@@ -103,9 +105,9 @@ public class JAXBXmlToJava {
 	public static void main(String[] args) {
 		JAXBXmlToJava unmarshaling = new JAXBXmlToJava();
 		Player player = unmarshaling.unmarshalPlayer(1);
-		// testUnmarshalledPlayer(player);
-		GameMap map = unmarshaling.unmarshalMap();
-		testUnmarshalledMap(map);
+		//testUnmarshalledPlayer(player);
+		GameMap map = unmarshaling.unmarshalMap(1);
+		// testUnmarshalledMap(map);
 	}
 
 }
