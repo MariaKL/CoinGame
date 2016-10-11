@@ -351,7 +351,7 @@ public class ApplicationWindow extends JFrame {
 
 			if(x < inv.size()) {
 				createActionMenu(e,inv.get(x), x);
-				System.out.println("You clicked item "+ x);
+				//System.out.println("You clicked item "+ x);
 
 			}
 			this.repaint();
@@ -382,8 +382,10 @@ public class ApplicationWindow extends JFrame {
 					        "Alert", JOptionPane.OK_CANCEL_OPTION);
 					if(result==0){
 						game.dropAnItem(tempouid, index);
+						rc.dropItem(item);
+						client.sendAction(client.dropItem, index);
+						inventory.repaint();
 						//update game object here and repaint
-						updateGame();
 					}
 				}
 			});
@@ -391,15 +393,6 @@ public class ApplicationWindow extends JFrame {
 			actionMenu.add(drop);
 
 			actionMenu.show(e.getComponent(), e.getX(), e.getY());
-		}
-
-		/**
-		 *
-		 */
-		protected void updateGame() {
-
-			this.repaint();
-
 		}
 
 		@Override

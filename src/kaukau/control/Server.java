@@ -92,11 +92,12 @@ public class Server{
 								case Client.dropItem:
 									int index = input.readInt();
 									game.dropAnItem(uid, index);
+									break;
 								case Client.leaveGame:
 									sockets.remove(uid);
 									in.remove(uid);
 									out.remove(uid);
-//									game.removePlayer(uid);
+									//game.removePlayer(uid);
 									break;
 							}
 							// send back to clients
