@@ -34,7 +34,7 @@ public class RenderCanvas extends JPanel {
 	// stores the width and height constants of the board tiles
 	private final int tileWidth = 50;
 	private final int tileHeight = 50;
-	
+
 	// compass image
 	private BufferedImage compass;
 	// compass counter
@@ -70,7 +70,7 @@ public class RenderCanvas extends JPanel {
 		this.player = user;
 
 		this.setBackground(new Color(79,100,90));
-		
+
 		try {
 			this.compass = ImageIO.read(new File("images/compassNORTH.png"));
 		} catch (IOException e) {
@@ -224,7 +224,7 @@ public class RenderCanvas extends JPanel {
 	 */
 	private void paintCompass(Graphics g) {
 		g.drawImage(compass,0,0,this);
-		
+
 	}
 
 	/**Paints the blocks which make up the current level.
@@ -436,7 +436,7 @@ public class RenderCanvas extends JPanel {
 				repaint();
 			}
 		});
-		
+
 		// enter door, if not possible give message
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_E, 0), "enter");
@@ -446,7 +446,7 @@ public class RenderCanvas extends JPanel {
 				game.openDoor(player.getUserId());
 			}
 		});
-		
+
 		//pick up object in front if possible
 		this.getInputMap().put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_P, 0), "pickup");
@@ -473,8 +473,8 @@ public class RenderCanvas extends JPanel {
 			compassCount++;
 		}
 		System.out.println("Compass Count: "+compassCount);
-		
-		
+
+
 		//update image
 		String compassString = "";
 		if (compassCount == 0) {
