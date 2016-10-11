@@ -98,7 +98,7 @@ public class JAXBJavaToXml {
 
 			// specify the location and name of xml file to be created
 			// for testing at uni
-			File XMLfile = new File("Player.xml");
+			File XMLfile = new File("Player"+player.getUserId()+".xml");
 
 			// Writing to XML file
 			jaxbMarshaller.marshal(player, XMLfile);

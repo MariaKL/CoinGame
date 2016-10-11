@@ -444,7 +444,7 @@ public class ApplicationWindow extends JFrame {
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == 0) {
 			JAXBJavaToXml toXml = new JAXBJavaToXml();
-			toXml.marshal(game.player(1), game.getGameMap());
+			toXml.marshal(player, game.getGameMap());
 			//dispose();
 		}
 		if (result == 1) {
