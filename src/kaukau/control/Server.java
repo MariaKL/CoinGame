@@ -43,8 +43,8 @@ public class Server{
 	public Server(){
 		this.game = new GameWorld();
         try {
-			listener = new ServerSocket(portNumber);
 			// start connecting and listening to clients
+			listener = new ServerSocket(portNumber);
 			listeningThread = makeListeningThread();
 			commandThread = makeCommandThread();
 			listeningThread.start();
@@ -146,16 +146,16 @@ public class Server{
 	            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 	            		ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 		            	if(sockets.size() > 2){
-//		            		ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+		            		System.out.println("Socket size: " +sockets.size());
 		    				output.writeBoolean(false);
-//		    				output.writeUTF("Cannot accept another player");
 				        	output.flush();
 		            	}
 		            	// otherwise accept a new player
 		            	else{
+		            		output.writeBoolean(true);
 							// accept a new client
 							int uid = game.addPlayer();
-//		            		sockets.put(uid, socket);
+		            		sockets.put(uid, socket);
 							out.put(uid, output);
 							in.put(uid, input);
 							System.out.println("New socket: " + socket.getPort() + ", UID: " + uid);
@@ -213,7 +213,7 @@ public class Server{
         		  continue;
         	  // sends game to byte array to each client
         	  ObjectOutputStream output = getOutputStream(sock);
-        	  if(out==null){
+        	  if(output==null){
         		  System.out.println("No output stream initialised for this sock " + getUID(sock));
         	  }
         	  output.writeObject(game.toByteArray());
