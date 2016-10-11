@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 /**
  * A CoinBox is a pickupable item which can be carry by player. This CoinBox
  * object can be stored in Player's inventory and CoinBox can used to store Coin
@@ -49,6 +48,7 @@ public class CoinBox extends PickupableItem implements Serializable {
 	 *         false
 	 */
 	public boolean addCoin(Item item) {
+
 		if (item instanceof Coin) {
 			Coin coin = (Coin) item;
 			if (storage.addItem(item) && !storage.isStorageFull()) {
@@ -64,21 +64,9 @@ public class CoinBox extends PickupableItem implements Serializable {
 	 *
 	 * @return return all the coin objects
 	 */
-	@XmlElementWrapper(name = "coins")
-	@XmlElements({ @XmlElement(name = "coin") })
-	public ArrayList<Coin> getStorage() {
-		ArrayList<Coin> coins = new ArrayList<Coin>();
-		for (PickupableItem p : this.storage.getStorage()) {
-			coins.add((Coin) p);
-		}
-		return coins;
-	}
-
-	public void setStorage(ArrayList<Coin> coins) {
-		System.out.println("setStorage list");
-		for (Coin c : coins) {
-			addCoin(c);
-		}
+	@XmlElement(name = "coins")
+	public ArrayList<PickupableItem> getStorage() {
+		return this.storage.getStorage();
 	}
 
 	/**
@@ -87,7 +75,13 @@ public class CoinBox extends PickupableItem implements Serializable {
 	 * @return
 	 */
 	public int totalCoins() {
-		return totalCoinAmount;
+		int total = 0;
+		for (PickupableItem p : getStorage()) {
+			System.out.println("IN");
+			Coin c = (Coin) p;
+			total += c.getAmount();
+		}
+		return total;
 	}
 
 	/**

@@ -79,7 +79,7 @@ public class JAXBJavaToXml {
 		// marshal player
 		marshalPlayer(player);
 		// marshal gameMap
-		marshalMap(map);
+		//marshalMap(map);
 		
 		//test
 		marshalCoin(new Coin(7));

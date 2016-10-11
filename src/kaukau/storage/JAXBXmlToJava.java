@@ -39,7 +39,7 @@ public class JAXBXmlToJava {
 		return player;
 
 	}
-	
+
 	public CoinBox unmarshalCoinBox() {
 		CoinBox cb = null;
 		try {
@@ -59,7 +59,7 @@ public class JAXBXmlToJava {
 		return cb;
 
 	}
-	
+
 	public Coin unmarshalCoin() {
 		Coin c = null;
 		try {
@@ -108,13 +108,15 @@ public class JAXBXmlToJava {
 			System.out.println("Player direction: " + player.getfacingDirection());
 			System.out.println("Player location: " + player.getLocation().toString() + " with tile type: "
 					+ player.getLocation().getTileType());
+			System.out.println("Player inventory limit: " + player.getStorageSize());
 			for (PickupableItem p : player.getInventory()) {
 				if (p instanceof Key) {
 					Key k = (Key) p;
 					System.out.println("Player inventory key code: " + k.getCode());
 				} else if (p instanceof CoinBox) {
 					CoinBox cb = (CoinBox) p;
-					for (Coin c : cb.getStorage()) {
+					for (PickupableItem pi : cb.getStorage()) {
+						Coin c = (Coin)pi;
 						System.out.println("Coin : " + c.getAmount());
 					}
 					System.out.println("Player coinbox ammount: " + cb.totalCoins());
@@ -122,8 +124,8 @@ public class JAXBXmlToJava {
 				}
 			}
 		}
-		//GameMap map = unmarshaling.unmarshalMap();		
-		
+		// GameMap map = unmarshaling.unmarshalMap();
+
 		Coin coin = unmarshaling.unmarshalCoin();
 		System.out.println("coin ammount: " + coin.getAmount());
 	}
