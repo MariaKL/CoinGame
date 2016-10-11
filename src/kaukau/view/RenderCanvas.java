@@ -61,6 +61,7 @@ public class RenderCanvas extends JPanel {
 	private int camX = 0;
 	private int camY = 0;
 	
+	// field to store the current board direction for rotation
 	private char gameDir = 'E';
 
 	/**This class take a gameworld parameter and
@@ -88,8 +89,11 @@ public class RenderCanvas extends JPanel {
 		attachBindings();
 		//set focus
 		this.setFocusable(true);
+		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {	}
 		repaint();
-
 	}
 
 	private void setPlayers(HashMap<Integer, Player> all){
@@ -350,7 +354,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_DOWN, 0), "moveDown");
 		this.getActionMap().put("moveDown", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				//System.out.println("DOWN");
+				player.setfacingDirection(Direction.SOUTH);
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -369,8 +373,8 @@ public class RenderCanvas extends JPanel {
 				// update rendering if player has moved
 				if(!rnew.equals(rold)){
 					camY = camY - 65;
-					repaint();
 				}
+				repaint();
 			}
 		});
 
@@ -381,6 +385,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_UP, 0), "moveUp");
 		this.getActionMap().put("moveUp", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				player.setfacingDirection(Direction.NORTH);
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -399,9 +404,8 @@ public class RenderCanvas extends JPanel {
 				// update rendering if player has moved
 				if(!rnew.equals(rold)){
 					camY = camY + 65;
-					repaint();
 				}
-				
+				repaint();
 			}
 		});
 		// player move left
@@ -411,6 +415,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_LEFT, 0), "moveLeft");
 		this.getActionMap().put("moveLeft", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				player.setfacingDirection(Direction.WEST);
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -430,8 +435,8 @@ public class RenderCanvas extends JPanel {
 				if(!rnew.equals(rold)){
 					camY = camY - 65;
 					camX = camX - 65;	
-					repaint();
 				}	
+				repaint();
 			}
 		});
 		// player move right
@@ -441,6 +446,7 @@ public class RenderCanvas extends JPanel {
                 KeyEvent.VK_RIGHT, 0), "moveRight");
 		this.getActionMap().put("moveRight", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
+				player.setfacingDirection(Direction.EAST);
 				// getting players current location
 				Tile oloc = player.getLocation();
 				// remove player from old tile
@@ -460,8 +466,9 @@ public class RenderCanvas extends JPanel {
 				if(!rnew.equals(rold)){
 					camY = camY + 65;
 					camX = camX + 65;
-					repaint();
+					
 				}
+				repaint();
 			}
 		});
 		// enter door, if not possible give message
@@ -501,7 +508,7 @@ public class RenderCanvas extends JPanel {
 						break;
 				}
 				// remove item from block
-				if(rold != null){
+				if(rold != null && rold instanceof RenderTile){
 					((RenderTile)rold).setItem(null);
 				}
 				// wait for updates from server
