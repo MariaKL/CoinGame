@@ -43,7 +43,7 @@ public class Tile implements Serializable {
 	public boolean setItem(Item addItem) {
 		if (item == null && player == null) {
 			this.item = addItem;
-			checkType();
+			//checkType();
 			return true;
 		}
 		return false;
@@ -103,7 +103,7 @@ public class Tile implements Serializable {
 		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && 
 			item == null && player == null && dropItem instanceof PickupableItem){
 			this.item = dropItem;
-			checkType();
+			//checkType();
 			return true;
 		}
 		return false;
@@ -116,11 +116,10 @@ public class Tile implements Serializable {
 	 *         fields are NULL, otherwise false .
 	 */
 	public boolean removeItem(){
-		if ((type == TileType.TILE || type == TileType.TILE_CRACKED) && item != null){
+		if(this.item!=null){
 			this.item = null;
-			checkType();
 			return true;
-		} 
+		}
 		return false;
 	}
 
