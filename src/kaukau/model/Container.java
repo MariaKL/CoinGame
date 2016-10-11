@@ -24,9 +24,6 @@ public class Container implements Item, Serializable{
 	private ArrayList <PickupableItem> storage =  new ArrayList <PickupableItem>( );
 
 	public Container (String name){
-//		if (name != null && loc != null){
-//			this.name = name;
-//		}
 		if (name != null){
 			this.name = name;
 		}
