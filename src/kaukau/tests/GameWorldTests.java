@@ -128,7 +128,7 @@ public class GameWorldTests {
 		Tile item = board.getTileAt(new Point(5, 6));
 		assertTrue(player.getInventory().size() == 1);
 		player.setLocation(board.getTileAt(new Point(5, 5)));
-		player.setFacingDirection(Direction.EAST);
+		player.setfacingDirection(Direction.EAST);
 		assertTrue(item.containsPickupItem());
 		assertTrue(game.pickupAnItem(uid));
 		assertTrue(player.getInventory().size() == 2);
@@ -228,7 +228,7 @@ public class GameWorldTests {
 		Tile newPos = board.getTileAt(new Point(3, 8));
 		Tile wall = board.getTileAt(new Point(3, 9));
 		player.setLocation(newPos);
-		player.setFacingDirection(Direction.EAST);
+		player.setfacingDirection(Direction.EAST);
 		assertTrue(wall.getTileType() == TileType.WALL);
 		assertFalse(game.movePlayer(uid, Direction.EAST));
 		assertTrue(player.getLocation().X() == newPos.X());
